@@ -1,0 +1,33 @@
+.toggle-wrap {
+    border-radius: 10px;
+    overflow: hidden;
+    display: inline-flex;
+}
+.toggle-option {
+    padding: 0.5rem 1rem;
+    background-color: #e5e7eb;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.toggle-option.selected {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.content {
+    display: none;
+    overflow: visible; 
+    height: auto; 
+    padding-bottom: 20px;
+}
+
+.content.active {
+    display: block;
+}
+
+.login-container{
+    min-height: 100vh;
+    padding-top: 20px; 
+}
