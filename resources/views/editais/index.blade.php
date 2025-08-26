@@ -5,77 +5,7 @@
 @push('head')
     <!-- Estilos AG Grid -->
     <link rel="stylesheet" href="{{ asset('ag-grid/styles/ag-theme-alpine.css') }}">
-
-    <style>
-        .modal {
-            display: block; /*mudar aqui*/
-            position: fixed;
-            z-index: 1000;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 5px;
-            width: 400px;
-            position: relative;
-        }
-        .close {
-            position: absolute;
-            right: 10px; top: 10px;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .btn-grp{
-            margin-bottom: 15px;
-            padding: 5px;
-        }
-
-        .btn {
-            padding: 5px 8px;
-            margin-right: 5px;
-            cursor: pointer;
-            border: 0.5px solid gray;
-            border-radius: 5px;
-            background-color: #ccebdbff;
-        }
-
-        button svg {
-            margin-right: 5px; /* distância entre o ícone e o texto */
-            vertical-align: top; /* alinha ao centro do texto */
-        }
-
-        #btn-adicionar{
-            background-color: #26D07C;
-        }
-
-        #btn-excluir{
-            background-color: #FF7276;
-            
-        }
-
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        #tabela-vigente {
-            width: 100%;  /* faz a tabela caber no conteúdo */
-        }
-
-        .container{
-            width: 1310px;
-            max-width: 90%;
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        #ag-Grid-SelectionColumn{
-            width: 40;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/visualizacao_dados.css') }}">
 @endpush
 
 @section('content')
@@ -127,16 +57,7 @@
     </div>
 
     <!-- Modal -->
-    <div id="modalVisualizar" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Detalhes do Edital</h2>
-            <p><strong>Nome: </strong> <span id="modal-nome">Teste</span></p>
-            <hr/>
-            <p><strong>Início das incrições: </strong> <span id="modal-inicio">Teste</span></p>
-            <p><strong>Fim das incrições: </strong> <span id="modal-fim">Teste</span></p>
-        </div>
-    </div>
+    @include('partials.modal-editais')
 @endsection
 
 @push('scripts')
