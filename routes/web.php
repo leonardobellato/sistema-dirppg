@@ -7,8 +7,20 @@ Route::get('/', function () {
 })->name('dashboard');;
 
 Route::get('/login', function () {
-    return view('autenticacao.autenticacao');
-})->name('autenticacao');
+    return redirect('/login/candidato');
+});
+
+Route::get('/login/candidato', function () {
+    return view('autenticacao.login.candidato');
+})->name('login.candidato');
+
+Route::get('/login/restrito', function () {
+    return view('autenticacao.login.restrito');
+})->name('login.restrito');
+
+Route::get('/cadastro', function () {
+    return view('autenticacao.cadastro');
+})->name('cadastro');
 
 Route::get('/editais', function () {
     $editais = [
