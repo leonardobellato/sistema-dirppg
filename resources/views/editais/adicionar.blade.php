@@ -118,7 +118,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<button type="button"><a href={{ route('editais.index') }}>Cancelar</a></button>
+				<a href={{ route('editais.index') }}>Cancelar</a>
 				<button type="submit">Cadastrar</button>
 			</div>
 		</form>
