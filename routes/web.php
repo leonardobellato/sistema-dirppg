@@ -34,9 +34,9 @@ Route::get('/editais/adicionar', function () {
     return view('editais.adicionar');
 })->name('editais.adicionar');
 
-Route::get('/editais/editar', function () {
-    return view('editais.editar');
-})->name('editais.editar');
+Route::get('/editais/alterar/{id}', function ($id) {
+    return view('editais.alterar', ['id' => $id]);
+})->name('editais.alterar');
 
 Route::get('/editais/excluir', function () {
     return view('editais.excluir');

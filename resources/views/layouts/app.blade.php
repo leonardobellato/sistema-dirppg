@@ -11,11 +11,11 @@
 </head>
 <body>
     <!-- Cabeçalho -->
-    @include('partials.header')
+    @include('components.header')
     
     <div class="app">
         <!-- Sidebar -->
-        @include('partials.sidebar')
+        @include('components.sidebar')
 
         <!-- Conteúdo principal -->
         <main>

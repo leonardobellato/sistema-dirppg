@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-    <h1>Adicionar edital</h1>
+    <h1>Alterar edital</h1>
 
     <div class="container-form">
 		<form>
@@ -118,7 +118,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<button type="button"><a href={{ route('editais.index') }}>Cancelar</a></button>
+				<a href={{ route('editais.index') }}>Cancelar</a>
 				<button type="submit">Cadastrar</button>
 			</div>
 		</form>

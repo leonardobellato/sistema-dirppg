@@ -14,7 +14,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a href="{{ route('editais.index') }}" class="{{ request()->routeIs('editais.index') ? 'active' : '' }}">
+                <a href="{{ route('editais.index') }}" class="{{ request()->routeIs('editais.*') ? 'active' : '' }}">
                     <span class="navlink-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16">
                         <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z"/>
@@ -25,7 +25,7 @@
             </li>
 
             <li class="sidebar-item">
-                <a href="{{ route('analise-inscricoes.index') }}" class="{{ request()->routeIs('analise-inscricoes.index') ? 'active' : '' }}">
+                <a href="{{ route('analise-inscricoes.index') }}" class="{{ request()->routeIs('analise-inscricoes.*') ? 'active' : '' }}">
                     <span class="navlink-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-check-fill" viewBox="0 0 16 16">
                     <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m1.354 4.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="sidebar-dropdown-subitems">
-                    <a href="{{ route('pos.programas.index') }}" class="{{ request()->routeIs('pos.programas.index') ? 'active' : '' }}">Programas</a>
+                    <a href="{{ route('pos.programas.index') }}" class="{{ request()->routeIs('pos.programas.*') ? 'active' : '' }}">Programas</a>
                     <a href="{{ route('pos.cursos.index') }}" class="{{ request()->routeIs('pos.cursos.index') ? 'active' : '' }}">Cursos</a>
                     <a href="{{ route('pos.areas-concentracao.index') }}" class="{{ request()->routeIs('pos.areas-concentracao.index') ? 'active' : '' }}">Áreas de Concentração</a>
                     <a href="{{ route('pos.linhas-pesquisa.index') }}" class="{{ request()->routeIs('pos.linhas-pesquisa.index') ? 'active' : '' }}">Linhas de Pesquisa</a>
@@ -62,7 +62,7 @@
             </li>
     
             <li class="sidebar-item">
-                <a href="{{ route('professores.index') }}" class="{{ request()->routeIs('professores.index') ? 'active' : '' }}">
+                <a href="{{ route('professores.index') }}" class="{{ request()->routeIs('professores.*') ? 'active' : '' }}">
                     <span class="navlink-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                         <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>

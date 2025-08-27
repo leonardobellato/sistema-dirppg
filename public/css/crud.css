@@ -1,0 +1,342 @@
+/* Formulários CRUD */
+
+.container-form{
+    width: 1310px;
+    max-width: 90%;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form{
+    width: 800px;
+    max-width: 100%;
+    background-color: rgba(255, 255, 255, 0.65);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 30px 25px 30px;
+}
+
+form *{
+    color: #272727;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+
+form label{
+    display: block;
+    font-weight: 500;
+}
+
+.radio-group {
+    display: flex;
+    gap: 30px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 15px;
+}
+
+form input[type="radio"] {
+    all: unset; /* remove todos os estilos herdados */
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    transition: border 0.2s ease-in-out;
+    background-color: transparent;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+form input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #0076df; 
+}
+
+::placeholder{
+    color: #757575;
+}
+
+form button{
+    margin-top: 12px;
+    width: 100%;
+    background-color: #0076df;
+    color: #ffffff;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form input{
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid rgb(224, 224, 224);
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #272727;
+    margin-top: 12px;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+form input:focus{
+    background-color: #ffffff;
+}
+
+form select {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid rgb(224, 224, 224);
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #272727;
+    margin-top: 12px;
+    font-weight: 400;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23757575' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    margin-bottom: 30px;
+}
+
+form select:focus {
+    background-color: #ffffff;
+    border-color: #0076df;
+    outline: none;
+}
+
+form input[type="date"] {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid rgb(224, 224, 224);
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #272727;
+    margin-top: 12px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+form input[type="date"]:focus {
+    background-color: #ffffff;
+    border-color: #0076df;
+    outline: none;
+}
+
+form h3 {
+    margin-top: 30px;
+    color: #646464;
+}
+
+form hr {
+    border: none;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 10px 0 30px 0;
+    border-radius: 5px;
+}
+
+form fieldset {
+    border: 2px solid rgba(15, 14, 14, 0.1);
+    border-radius: 10px;
+    padding: 20px 20px 0 20px;
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.65);
+}
+
+form legend {
+    font-weight: 600;
+    padding: 0 10px;
+    color: #272727;
+    font-size: 16px;
+}
+
+.field-linha {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.field-linha .campo-data {
+    display: flex;
+    flex-direction: column; 
+    flex: 1; 
+}
+
+.field-linha input[type="date"] {
+    max-width: 350px; 
+}
+
+.required-content {
+    color: red;
+    margin-left: 4px;
+}
+
+.pos-form{
+    margin-top: 35px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;        
+}
+
+.pos-form p{
+    color: #696969;
+    margin-bottom: 10px;
+}
+
+.btn-grp-form{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.btn-grp-form a:first-child{
+    background-color: #dddddd;
+    color: #272727;
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+}
+
+/* Tabelas */
+.container-tabela{
+    width: 1310px;
+    max-width: 90%;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#tabela-vigente {
+    width: 100%; 
+}
+
+#ag-Grid-SelectionColumn{
+    width: 40;
+}
+
+.btn-grp-tabela {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.btn-grp-principal, .btn-grp-secundario {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-grp-tabela button {
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-grp-tabela a {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-grp-tabela button a{ 
+    all: unset; 
+    vertical-align: center; 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    width: 100%;
+} 
+
+.btn-grp-tabela button svg, a svg{ 
+    margin-right: 5px; 
+    vertical-align: center; 
+}
+
+#btn-adicionar { background-color: #21b169; color: white; }
+#btn-alterar { background-color: #4da6ff; color: white; }
+#btn-excluir { background-color: #fc5459; color: white; }
+#btn-visualizar { background-color: #f0ad4e; color: white; }
+#btn-limpar-filtros { background-color: #bbbbbb; color: white; }
+
+.btn-grp-tabela button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.disabled-link {
+    pointer-events: none;  
+    opacity: 0.5;  
+    cursor: default;
+    text-decoration: none;
+    color: gray;
+}
+
+/* Janelas modais */
+.modal {
+    display: none; /*mudar aqui*/
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    position: relative;
+}
+.close {
+    position: absolute;
+    right: 10px; top: 10px;
+    font-size: 30px;
+    cursor: pointer;
+}
