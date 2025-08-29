@@ -29,13 +29,11 @@ body{
 main{
 	width: calc(100% - 265px);
     margin-left: 265px;
-    height: calc(100% - 60px);
+    min-height: calc(100vh - 60px);
     margin-top: 60px;
-    padding: 20px;
     transition: all 0.3s ease;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 }
 
 main h1{
@@ -43,6 +41,13 @@ main h1{
 	text-align: center;
 }
 
+.content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+}
 
 /* header */
 .header {
@@ -56,7 +61,7 @@ main h1{
 	justify-content: space-between;
 	padding: 10px 15px 10px 10px;
 	z-index: 1000;
-	box-shadow: 0 0 2px var(--grey-color-light);
+	box-shadow: 0 0 1px #272727;
 }
 
 .header-brand {
@@ -69,15 +74,16 @@ main h1{
 }
 
 .header-content {
-	display: flex;
-	align-items: center;
-	padding: 5px 10px 5px 5px;
-	background-color: rgba(255, 255, 255, 0.4);
-	border-radius: 20px;
-	gap: 5px;
-	position: relative;
-  	cursor: pointer;
-	user-select: none;
+  display: flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: rgba(255,255,255,0.15);
+  color: #ffffff;
+  border-radius: 8px;
+  gap: 5px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
 }
 
 .header-content svg{
@@ -293,4 +299,18 @@ main h1{
     width: 100% !important;
     margin-left: 0 !important;
   }
+}
+
+
+/* footer */
+.footer{
+	padding: 20px 30px;
+	background-color: rgba(0, 0, 0, 0.024);
+	width: 100%;
+	margin-top: auto;
+	border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.footer-content{
+	font-size: 12px;
 }

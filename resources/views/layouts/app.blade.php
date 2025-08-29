@@ -19,7 +19,9 @@
 
         <!-- Conteúdo principal -->
         <main>
-            @yield('content')
+            <div class="content"> @yield('content') </div>
+
+            @include('components.footer')
         </main>
     </div>
 

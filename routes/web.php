@@ -71,5 +71,9 @@ Route::get('/disciplinas-aluno-externo', function () {
 })->name('pos.disciplinas-aluno-externo.index');
 
 Route::get('/professores', function () {
-    return view('professores.index');
-})->name('professores.index');
+    return view('pessoas.professores');
+})->name('pessoas.professores');
+
+Route::get('/secretarios', function () {
+    return view('pessoas.secretarios');
+})->name('pessoas.secretarios');

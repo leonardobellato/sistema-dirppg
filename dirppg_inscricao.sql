@@ -1,103 +1,124 @@
-CREATE TABLE `programa` (
+CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `nome` VARCHAR(100) NOT NULL,
+  `nome`        VARCHAR(100) NOT NULL,
 );
 
 
-CREATE TABLE `curso` (
-  `id_curso` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE `cursos` (
+  `id_curso`    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_programa` INT UNSIGNED NOT NULL,
-  `tipo` VARCHAR(20) NOT NULL
+  `tipo`        VARCHAR(20) NOT NULL
 );
 
-ALTER TABLE `curso` 
+ALTER TABLE `cursos` 
   ADD CONSTRAINT fk_curso_programa 
   FOREIGN KEY (`id_programa`) 
-  REFERENCES `programa`(`id_programa`)
+  REFERENCES `programas`(`id_programa`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
 
-CREATE TABLE `area_concentracao` (
+CREATE TABLE `areas_concentracao` (
   `id_area_concentracao` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_curso` INT UNSIGNED NOT NULL,
-  `nome` VARCHAR(150) NOT NULL,
-  `ativo` TINYINT(1) DEFAULT 1
+  `id_curso`             INT UNSIGNED NOT NULL,
+  `nome`                 VARCHAR(150) NOT NULL,
+  `ativo`                TINYINT(1) NOT NULL DEFAULT 1
 );
 
-ALTER TABLE `area_concentracao` 
+ALTER TABLE `areas_concentracao` 
   ADD CONSTRAINT fk_ac_curso 
   FOREIGN KEY (`id_curso`) 
-  REFERENCES `curso`(`id_curso`)
+  REFERENCES `cursos`(`id_curso`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
 
-CREATE TABLE `linha_pesquisa` (
-  `id_linha_pesquisa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE `linhas_pesquisa` (
+  `id_linha_pesquisa`    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_area_concentracao` INT UNSIGNED NOT NULL,
-  `nome` VARCHAR(150) NOT NULL,
-  `ativo` TINYINT(1) DEFAULT 1
+  `nome`                 VARCHAR(150) NOT NULL,
+  `ativo`                TINYINT(1) NOT NULL DEFAULT 1
 );
 
-ALTER TABLE `linha_pesquisa`
+ALTER TABLE `linhas_pesquisa`
   ADD CONSTRAINT fk_lp_ac 
   FOREIGN KEY (`id_area_concentracao`) 
-  REFERENCES `area_concentracao`(`id_area_concentracao`)
+  REFERENCES `areas_concentracao`(`id_area_concentracao`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
 
-CREATE TABLE `sublinha` (
-  `id_sublinha` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE `sublinhas` (
+  `id_sublinha`       INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_linha_pesquisa` INT UNSIGNED NOT NULL,
-  `nome` VARCHAR(150) NOT NULL,
-  `ativo` TINYINT(1) DEFAULT 1
+  `nome`              VARCHAR(150) NOT NULL,
+  `ativo`             TINYINT(1) NOT NULL DEFAULT 1
 );
 
-ALTER TABLE `sublinha`
+ALTER TABLE `sublinhas`
   ADD CONSTRAINT fk_sublinha_lp 
   FOREIGN KEY (`id_linha_pesquisa`) 
-  REFERENCES `linha_pesquisa`(`id_linha_pesquisa`)
+  REFERENCES `linhas_pesquisa`(`id_linha_pesquisa`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
 
-CREATE TABLE `disciplina` (
+CREATE TABLE `disciplinas` (
   `id_disciplina` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_curso` INT UNSIGNED NOT NULL,
-  `nome` VARCHAR(200) NOT NULL,
-  `ativo` tinyint(1) DEFAULT 1
+  `id_curso`      INT UNSIGNED NOT NULL,
+  `nome`          VARCHAR(200) NOT NULL,
+  `ativo`         TINYINT(1) NOT NULL DEFAULT 1
 );
 
-ALTER TABLE `disciplina`
+ALTER TABLE `disciplinas`
   ADD CONSTRAINT fk_disciplina_curso 
   FOREIGN KEY (`id_curso`) 
-  REFERENCES `curso`(`id_curso`)
+  REFERENCES `cursos`(`id_curso`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
 
-
-
-
-
-CREATE TABLE `professor` (
-  `id_professor` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `nome` VARCHAR(100) NOT NULL,
-  `nivel_acesso` VARCHAR(1) DEFAULT NULL,
-  `email` VARCHAR(100) DEFAULT NULL,
-  `senha` VARCHAR(255) NOT NULL
+CREATE TABLE `usuarios` (
+  `id_usuario`    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `nome`          VARCHAR(100) NOT NULL,
+  `email`         VARCHAR(100) NOT NULL UNIQUE,
+  `senha`         VARCHAR(255) NOT NULL,
+  `tipo`          ENUM('candidato','professor','admin') NOT NULL DEFAULT 'candidato'
 );
+
+
+CREATE TABLE `candidatos` (
+  `id_usuario` INT UNSIGNED PRIMARY KEY,
+  `cpf`        CHAR(14) NOT NULL UNIQUE,
+  `telefone`   VARCHAR(14) NOT NULL
+);
+
+ALTER TABLE `candidatos`
+  ADD CONSTRAINT fk_candidato_usuario 
+  FOREIGN KEY (`id_usuario`) 
+  REFERENCES `usuarios`(`id_usuario`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
 
 CREATE TABLE `professor_programa` (
-  `cod_programa` int(11) DEFAULT NULL,
-  `cod_professor` int(11) DEFAULT NULL
+  `id_usuario` INT UNSIGNED NOT NULL,
+  `id_programa` INT UNSIGNED NOT NULL
 );
 
+ALTER TABLE `professor_programa`
+  ADD CONSTRAINT fk_pp_usuario 
+  FOREIGN KEY (`id_usuario`) 
+  REFERENCES `usuarios`(`id_usuario`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
-
+ALTER TABLE `professor_programa`
+  ADD CONSTRAINT fk_pp_programa 
+  FOREIGN KEY (`id_programa`) 
+  REFERENCES `programas`(`id_programa`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
 
 
@@ -130,18 +151,6 @@ ALTER TABLE `edital`
   REFERENCES `curso`(`id_curso`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
-
-
-CREATE TABLE `admin_secretario` (
-  `cod_user` int(11) NOT NULL,
-  `nome` VARCHAR(100) DEFAULT NULL,
-  `email` VARCHAR(100) DEFAULT NULL,
-  `senha` VARCHAR(150) DEFAULT NULL,
-  `nivel_acesso` VARCHAR(1) DEFAULT NULL,
-  `profAvaliador` int(1) DEFAULT '1'
-);
-
-
 
 
 
@@ -191,17 +200,6 @@ CREATE TABLE `avaliacao` (
 
 
 
-CREATE TABLE `candidato` (
-  `cod_candidato` int(11) NOT NULL,
-  `nome_candidato` VARCHAR(100) DEFAULT NULL,
-  `cpf` VARCHAR(11) DEFAULT NULL,
-  `rg` VARCHAR(15) DEFAULT NULL,
-  `email` VARCHAR(100) DEFAULT NULL,
-  `telefone` VARCHAR(14) DEFAULT NULL,
-  `nivel_acesso` VARCHAR(1) DEFAULT NULL,
-  `senha` VARCHAR(150) DEFAULT NULL
-);
-
 
 CREATE TABLE `comprovante` (
   `cod_comprovante` bigint(20) NOT NULL,
@@ -216,7 +214,6 @@ CREATE TABLE `documento` (
   `cod_inscricao` int(11) DEFAULT NULL,
   `documento` VARCHAR(200) DEFAULT NULL
 );
-
 
 
 
