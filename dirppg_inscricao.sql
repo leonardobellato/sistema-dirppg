@@ -1,6 +1,6 @@
 CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `nome`        VARCHAR(100) NOT NULL,
+  `nome`        VARCHAR(100) NOT NULL
 );
 
 
@@ -142,7 +142,7 @@ CREATE TABLE `fases_edital` (
   `tipo` ENUM('inscricao','recurso','homologacao') NOT NULL,
   `ordem` TINYINT NOT NULL,
   `data_inicio` DATE NOT NULL,
-  `data_fim` DATE NOT NULL,
+  `data_fim` DATE NOT NULL
 );
 
 ALTER TABLE `fases_edital` 
@@ -170,7 +170,7 @@ CREATE TABLE `inscricoes` (
 ALTER TABLE `inscricoes` 
   ADD CONSTRAINT fk_inscricao_candidato 
   FOREIGN KEY (`id_candidato`) 
-  REFERENCES `usuarios`(`id_usuario`)
+  REFERENCES `candidatos`(`id_usuario`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
@@ -248,14 +248,14 @@ ALTER TABLE `documentos`
   ON UPDATE CASCADE;
 
 
-CREATE TABLE recurso (
+CREATE TABLE recursos (
   `id_recurso`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_documento`      INT UNSIGNED NOT NULL,
   `versao_submetida`  INT UNSIGNED NOT NULL,
   `data_submissao`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `recurso` 
+ALTER TABLE `recursos` 
   ADD CONSTRAINT fk_recurso_documento
   FOREIGN KEY (`id_documento`) 
   REFERENCES `documentos`(`id_documento`)
@@ -265,13 +265,13 @@ ALTER TABLE `recurso`
 
 CREATE TABLE `entrevistas` (
   `id_entrevista` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_inscricao` INT UNSIGNED NOT NULL,
-  `id_agendador` INT UNSIGNED NULL, -- secretário/professor que agendou
-  `data_hora` DATETIME NOT NULL,
-  `local` VARCHAR(200) NOT NULL,
-  `status` ENUM('agendada','realizada','ausente','cancelada') DEFAULT 'agendada',
-  `observacoes` VARCHAR(600) DEFAULT NULL,
-  `criado_em` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  `id_inscricao`  INT UNSIGNED NOT NULL,
+  `id_agendador`  INT UNSIGNED NULL, -- secretário/professor que agendou
+  `data_hora`     DATETIME NOT NULL,
+  `local`         VARCHAR(200) NOT NULL,
+  `status`        ENUM('agendada','realizada','ausente','cancelada') NOT NULL DEFAULT 'agendada',
+  `observacoes`   VARCHAR(600) DEFAULT NULL,
+  `criado_em`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE `entrevistas` 
@@ -289,18 +289,207 @@ ALTER TABLE `entrevistas`
   ON UPDATE CASCADE;
 
 
-CREATE TABLE auditoria (
+CREATE TABLE `auditorias` (
   `id_auditoria` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_usuario`   INT UNSIGNED NULL,
   `tipo`         VARCHAR(50) NOT NULL, -- 'inscricao', 'documento'
   `operacao`     VARCHAR(50) NOT NULL, -- created, updated, deleted, login, erro_upload
   `sucesso`      BOOLEAN NOT NULL DEFAULT 0,
-  `detalhes`     JSON NULL,
+  `detalhes`     TEXT NULL,
   `ip`           VARCHAR(45) NULL,
   `navegador`    VARCHAR(150) NULL,
   `criado_em`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `auditorias` 
+  ADD CONSTRAINT fk_auditoria_usuario
+  FOREIGN KEY (`id_usuario`) 
+  REFERENCES `usuarios`(`id_usuario`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
 
 
+-- --------------------------------------------------
+-- POPULANDO TABELAS - VALORES PADRÃO
+
+INSERT INTO `programas` (`nome`) VALUES
+('Programa de Pós-Graduação em Ciência da Computação'),
+('Programa de Pós-Graduação em Ensino de Ciência e Tecnologia'),
+('Programa de Pós-Graduação em Engenharia Mecânica'),
+('Programa de Pós-Graduação em Engenharia Elétrica'),
+('Programa de Pós-Graduação em Engenharia de Produção'),
+('Programa de Pós-Graduação em Biotecnologia'),
+('Programa de Pós-Graduação em Engenharia Química');
+
+INSERT INTO `cursos` (`id_programa`, `tipo`) VALUES
+(1, 'Aluno Externo'),
+(1, 'Mestrado'),
+(1, 'PAPOS'),
+(2, 'Aluno Externo'),
+(2, 'Doutorado'),
+(2, 'Mestrado'),
+(2, 'PAPOS'),
+(3, 'Aluno Externo'),
+(3, 'Mestrado'),
+(3, 'PAPOS'),
+(4, 'Aluno Externo'),
+(4, 'Mestrado'),
+(4, 'PAPOS'),
+(5, 'Aluno Externo'),
+(5, 'Doutorado'),
+(5, 'Mestrado'),
+(5, 'PAPOS'),
+(6, 'Aluno Externo'),
+(6, 'Mestrado'),
+(6, 'PAPOS'),
+(7, 'Aluno Externo'),
+(7, 'Mestrado'),
+(7, 'PAPOS');
+
+INSERT INTO `areas_concentracao` ( `id_curso`, `nome`) VALUES
+(2, 'Sistemas e Métodos de Computação'),
+(5, 'Ciência, Tecnologia e Ensino'),
+(6, 'Ciência, Tecnologia e Ensino'),
+(8, 'Fenômenos de Transporte e Mecânica dos Sólidos'),
+(8, 'Materiais e Processos de Fabricação'),
+(9, 'Desenvolvimento de Processos'),
+(9, 'Materiais e Processos de Fabricação'),
+(9, 'Fenômenos de Transporte e Mecânica dos Sólidos'),
+(10, 'Materiais e Processos de Fabricação'),
+(10, 'Fenômenos de Transporte e Mecânica dos Sólidos'),
+(12, 'Controle e Processamento de Energia'),
+(15, 'Gestão Industrial'),
+(16, 'Gestão Industrial'),
+(19, 'Biotecnologia'),
+(22, 'Desenvolvimento de Processos'),
+(23, 'Desenvolvimento de Processos');
+
+INSERT INTO `linhas_pesquisa` (`id_area_concentracao`, `nome`) VALUES
+1(14, 'Biomoléculas Naturais'),
+2(14, 'Bioprocessos Industriais'),
+3(14, 'Biotecnologia Aplicada à Agropecuária'),
+4(6, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+5(9, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+6(5, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+7(7, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+8(2, 'Educação Tecnológica'),
+9(3, 'Educação Tecnológica'),
+10(4, 'Energia e Engenharia de Sistemas Térmicos'),
+11(8, 'Energia e Engenharia de Sistemas Térmicos'),
+12(10, 'Energia e Engenharia de Sistemas Térmicos'),
+13(7, 'Energia e Engenharia de Sistemas Térmicos'),
+14(2, 'Fundamentos e Metodologias para o Ensino de Ciências e Matemática'),
+15(3, 'Fundamentos e Metodologias para o Ensino de Ciências e Matemática'),
+16(13, 'Gestão da Produção e Manutenção'),
+17(12, 'Gestão do Conhecimento e Inovação'),
+18(13, 'Gestão do Conhecimento e Inovação'),
+19(11, 'Instrumentação e Controle'),
+20(11, 'Processamento de Energia'),
+21(4, 'Mecânica dos Sólidos e Vibrações'),
+22(8, 'Mecânica dos Sólidos e Vibrações'),
+23(10, 'Mecânica dos Sólidos e Vibrações'),
+24(7, 'Mecânica dos Sólidos e Vibrações'),
+25(1, 'Processamento de Imagens, Visão Computacional e Aprendizado de Máquina'),
+26(1, 'Sistemas de Informação e Computação'),
+27(1, 'Sistemas Inteligentes, Simulação e Jogos Computacionais'),
+28(1, 'Teoria da Computação'),
+29(6, 'Processos de Fabricação'),
+30(7, 'Processos de Fabricação'),
+31(9, 'Processos de Fabricação'),
+32(5, 'Processos de Fabricação'),
+33(15, 'Processos de Separação, Tecnologia Ambiental e Materiais'),
+34(16, 'Processos de Separação, Tecnologia Ambiental e Materiais'),
+35(15, 'Reatores e Biocombustíveis'),
+36(16, 'Reatores e Biocombustíveis');
+
+
+INSERT INTO `sublinhas`(`id_linha_pesquisa`, `nome`) VALUES
+(15, 'Ensino de Ciências'),
+(15, 'Ensino de Estatística'),
+(15, 'Ensino de Física'),
+(15, 'Ensino de Matemática'),
+(15, 'Ensino de Química'),
+(15, 'Ciência, Arte e Teknè: diálogos interdisciplinares'),
+(15, 'Ensino de Biologia'),
+(15, 'Ensino e Inclusão'),
+(9, 'Desenvolvimento de material instrucional para a Educação Tecnológica'),
+(9, 'Ensino nas Engenharias e nas Tecnologias'),
+(9, 'Informática no Ensino das Ciências e da Tecnologia'),
+(9, 'Linguagem e Cognição no Ensino de Ciências e Tecnologia'),
+(9, 'Relações entre Ciência, Tecnologia e Sociedade no Ensino-aprendizagem'),
+
+-- Linha: Fundamentos e Metodologias para o Ensino de Ciências e Matemática (Doutorado, id=8)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(8, 'Ensino de Ciências Naturais'),
+(8, 'Ensino de Estatística'),
+(8, 'Ensino de Física'),
+(8, 'Ensino de Matemática'),
+(8, 'Ensino e Inclusão');
+
+-- Linha: Educação Tecnológica (Doutorado, id=14)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(14, 'Desenvolvimento de produtos para a Educação Tecnológica'),
+(14, 'Ensino nas Engenharias e nas Tecnologias'),
+(14, 'Informática no Ensino das Ciências e da Tecnologia'),
+(14, 'Linguagem e Cognição no Ensino de Ciências e Tecnologia'),
+(14, 'Relações entre Ciência, Tecnologia e Sociedade no Ensino-aprendizagem');
+
+-- ==============================================================
+-- PROGRAMA: Engenharia de Produção
+-- ==============================================================
+-- Linha: Gestão do Conhecimento e Inovação (Mestrado, id=18)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(18, 'Criação de Novos Produtos, seus Processos e suas Patentes'),
+(18, 'Gestão da Inovação Agroindustrial'),
+(18, 'Gestão de Transferência de Tecnologia'),
+(18, 'Dinâmica e Controle de Sistemas Dinâmicos Lineares e Não Lineares'),
+(18, 'Sistemas Produtivos Sustentáveis'),
+(18, 'Sustentabilidade em Sistemas Produtivos - LESP'),
+(18, 'Gestão de Recursos Humanos para o Ambiente Produtivo - GRHAP'),
+(18, 'Engenharia Organizacional e Rede de Empresas'),
+(18, 'Organizações e Sociedade'),
+(18, 'EORE: Indústria 4.0 na Engenharia Organizacional e Redes de Empresas'),
+(18, 'Processos de Geração de Energia Provenientes de Fontes Renováveis e suas Aplicações'),
+(18, 'Apoio à Decisão em Manutenção Industrial'),
+(18, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade');
+
+-- Linha: Gestão da Produção e Manutenção (Mestrado, id=16)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(16, 'Apoio à Decisão em Manutenção Industrial - ADMI'),
+(16, 'Bioprodução - BIOP'),
+(16, 'Desenvolvimento de Produtos e Processos Sustentáveis para Geração de Bioenergia'),
+(16, 'Ergonomia e Segurança do Trabalho'),
+(16, 'Otimização e Tomada de Decisão - OTP'),
+(16, 'Organizações e Sociedade'),
+(16, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade');
+
+-- Linha: Gestão do Conhecimento e Inovação (Doutorado, id=17)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(17, 'Bioprodução'),
+(17, 'Gestão de Transferência de Tecnologia - GTT'),
+(17, 'Otimização e Tomada de Decisão - OTP'),
+(17, 'Engenharia Organizacional e Rede de Empresas'),
+(17, 'Apoio à Decisão em Manutenção Industrial'),
+(17, 'Criação de Novos Produtos, seus Processos e suas Patentes'),
+(17, 'Desenvolvimento de Produtos e Processos Sustentáveis para Geração de Bioenergia'),
+(17, 'Ergonomia e Segurança do Trabalho'),
+(17, 'Organizações e Sociedade'),
+(17, 'Processos de Geração de Energia Provenientes de Fontes Renováveis e suas Aplicações'),
+(17, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade'),
+(17, 'Sistemas Produtivos Sustentáveis');
+
+-- ==============================================================
+-- PROGRAMA: Engenharia Química
+-- ==============================================================
+-- Linha: Reatores e Biocombustíveis (Mestrado, id=33)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(33, 'Caracterização dos Materiais, Relação Estrutura-Propriedades e Transformação de Fases'),
+(33, 'Desenvolvimento de Algoritmo de Controle para Reatores Tipo CSTR'),
+(33, 'Estudo de Processos de Extração e Purificação de Óleos Vegetais');
+
+-- Linha: Processos de Separação, Tecnologia Ambiental e Materiais (Mestrado, id=35)
+INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(35, 'Tratamento de Água em Processo Contínuo por Fotocatálise Heterogênea'),
+(35, 'Tratamentos Alternativos para Resíduos Industriais'),
+(35, 'Determinação de Compostos Potencialmente Tóxicos em Amostras Ambientais e de Alimentos');
 
