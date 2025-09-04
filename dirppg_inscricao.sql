@@ -22,7 +22,7 @@ CREATE TABLE `areas_concentracao` (
   `id_area_concentracao` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_curso`             INT UNSIGNED NOT NULL,
   `nome`                 VARCHAR(150) NOT NULL,
-  `inativa`              TINYINT(1) NOT NULL DEFAULT 0
+  `inativo`              TINYINT(1) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE `areas_concentracao` 
@@ -37,7 +37,7 @@ CREATE TABLE `linhas_pesquisa` (
   `id_linha_pesquisa`    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_area_concentracao` INT UNSIGNED NOT NULL,
   `nome`                 VARCHAR(150) NOT NULL,
-  `inativa`              TINYINT(1) NOT NULL DEFAULT 0
+  `inativo`              TINYINT(1) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE `linhas_pesquisa`
@@ -52,7 +52,7 @@ CREATE TABLE `sublinhas` (
   `id_sublinha`       INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_linha_pesquisa` INT UNSIGNED NOT NULL,
   `nome`              VARCHAR(150) NOT NULL,
-  `inativa`           TINYINT(1) NOT NULL DEFAULT 0
+  `inativo`           TINYINT(1) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE `sublinhas`
@@ -67,7 +67,7 @@ CREATE TABLE `disciplinas` (
   `id_disciplina` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_curso`      INT UNSIGNED NOT NULL,
   `nome`          VARCHAR(200) NOT NULL,
-  `inativa`       TINYINT(1) NOT NULL DEFAULT 0
+  `inativo`       TINYINT(1) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE `disciplinas`
@@ -125,17 +125,7 @@ CREATE TABLE `editais` (
   `id_edital`                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_curso`                  INT UNSIGNED NOT NULL,
   `nome`                      VARCHAR(200) NOT NULL,
-  `vigente`                   TINYINT(1) NOT NULL DEFAULT 1,
-  `data_inscricao_inicio`     DATE NOT NULL,
-  `data_inscricao_fim`        DATE NOT NULL,
-  `data_recurso1_inicio`      DATE NOT NULL,
-  `data_recurso1_fim`         DATE NOT NULL,
-  `data_homologacao1_inicio`  DATE NOT NULL,
-  `data_homologacao1_fim`     DATE NOT NULL,
-  `data_recurso2_inicio`      DATE NOT NULL,
-  `data_recurso2_fim`         DATE NOT NULL,
-  `data_homologacao2_inicio`  DATE NOT NULL,
-  `data_homologacao2_fim`     DATE NOT NULL
+  `vigente`                   TINYINT(1) NOT NULL DEFAULT 1
 );
 
 ALTER TABLE `editais` 
@@ -146,24 +136,49 @@ ALTER TABLE `editais`
   ON UPDATE CASCADE;
 
 
+CREATE TABLE `fases_edital` (
+  `id_fase` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `id_edital` INT UNSIGNED NOT NULL,
+  `tipo` ENUM('inscricao','recurso','homologacao') NOT NULL,
+  `ordem` TINYINT NOT NULL,
+  `data_inicio` DATE NOT NULL,
+  `data_fim` DATE NOT NULL,
+);
+
+ALTER TABLE `fases_edital` 
+  ADD CONSTRAINT fk_fases_edital
+  FOREIGN KEY (`id_edital`) 
+  REFERENCES `editais`(`id_edital`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
 CREATE TABLE `inscricoes` (
   `id_inscricao`         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_usuario`           INT UNSIGNED NOT NULL,
+  `id_candidato`         INT UNSIGNED NOT NULL,
+  `id_avaliador`         INT UNSIGNED DEFAULT NULL,
   `id_edital`            INT UNSIGNED NOT NULL,
   `id_linha_pesquisa`    INT UNSIGNED NULL,
   `id_sublinha`          INT UNSIGNED NULL,
   `deferido`             TINYINT(1) DEFAULT NULL,
   `motivo_indeferimento` VARCHAR(600) DEFAULT NULL,
-  `data_criacao`         DATE DEFAULT CURRENT_DATE,
   `nome_orientador`      VARCHAR(100) DEFAULT NULL,
-  `observacao`           VARCHAR(600) DEFAULT NULL
+  `observacao`           VARCHAR(600) DEFAULT NULL,
+  `criado_em`            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE `inscricoes` 
-  ADD CONSTRAINT fk_inscricao_usuario 
-  FOREIGN KEY (`id_usuario`) 
+  ADD CONSTRAINT fk_inscricao_candidato 
+  FOREIGN KEY (`id_candidato`) 
   REFERENCES `usuarios`(`id_usuario`)
   ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `inscricoes` 
+  ADD CONSTRAINT fk_inscricao_avaliador 
+  FOREIGN KEY (`id_avaliador`) 
+  REFERENCES `usuarios`(`id_usuario`)
+  ON DELETE SET NULL
   ON UPDATE CASCADE;
 
 ALTER TABLE `inscricoes` 
@@ -192,8 +207,12 @@ CREATE TABLE `inscricao_disciplina` (
   `id_inscricao`         INT UNSIGNED NOT NULL,
   `id_disciplina`        INT UNSIGNED NOT NULL,
   `deferido`             TINYINT(1) DEFAULT NULL,
-  `motivo_indeferimento` VARCHAR(600) DEFAULT NULL,
+  `motivo_indeferimento` VARCHAR(600) DEFAULT NULL
 );
+
+ALTER TABLE `inscricao_disciplina`
+  ADD CONSTRAINT pk_inscricao_disciplina 
+  PRIMARY KEY (`id_inscricao`, `id_disciplina`);
 
 ALTER TABLE `inscricao_disciplina` 
   ADD CONSTRAINT fk_isd_inscricao
@@ -210,15 +229,18 @@ ALTER TABLE `inscricao_disciplina`
   ON UPDATE CASCADE;
 
 
-CREATE TABLE `documento` (
-  `id_documento`       INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_inscricao`       INT UNSIGNED NOT NULL,
-  `caminho_servidor`   VARCHAR(200) DEFAULT NULL,
-  `tipo`               VARCHAR(30) NOT NULL,
-  
+CREATE TABLE `documentos` (
+  `id_documento`         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `id_inscricao`         INT UNSIGNED NOT NULL,
+  `caminho_servidor`     VARCHAR(200) DEFAULT NULL,
+  `tipo`                 VARCHAR(50) NOT NULL,
+  `versao`               INT UNSIGNED DEFAULT 1,
+  `deferido`             TINYINT(1) DEFAULT NULL,
+  `motivo_indeferimento` VARCHAR(600) DEFAULT NULL,
+  `criado_em`            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `documento` 
+ALTER TABLE `documentos` 
   ADD CONSTRAINT fk_documento_inscricao
   FOREIGN KEY (`id_inscricao`) 
   REFERENCES `inscricoes`(`id_inscricao`)
@@ -226,72 +248,58 @@ ALTER TABLE `documento`
   ON UPDATE CASCADE;
 
 
-
-
-CREATE TABLE `aud_tentativa_inscricao` (
-  `aud_cod_tentativa_inscricao` int(11) NOT NULL,
-  `cod_candidato` int(11) DEFAULT NULL,
-  `ip` VARCHAR(150) DEFAULT NULL,
-  `navegador` VARCHAR(100) DEFAULT NULL,
-  `memoria_disponivel_servidor` VARCHAR(600) DEFAULT NULL,
-  `data_hora` datetime DEFAULT NULL,
-  `cod_edital` int(11) DEFAULT NULL,
-  `cod_linha_pes` int(11) DEFAULT NULL,
-  `cod_sublinha` int(11) DEFAULT NULL,
-  `observacao` VARCHAR(2000) DEFAULT NULL
+CREATE TABLE recurso (
+  `id_recurso`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `id_documento`      INT UNSIGNED NOT NULL,
+  `versao_submetida`  INT UNSIGNED NOT NULL,
+  `data_submissao`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `recurso` 
+  ADD CONSTRAINT fk_recurso_documento
+  FOREIGN KEY (`id_documento`) 
+  REFERENCES `documentos`(`id_documento`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
 
 
-CREATE TABLE `aud_tentativa_inscricao_disciplina` (
-  `aud_cod_tentativa_inscricao_disciplina` int(11) NOT NULL,
-  `aud_cod_tentativa_inscricao` int(11) DEFAULT NULL,
-  `cod_disciplina` bigint(20) DEFAULT NULL
+CREATE TABLE `entrevistas` (
+  `id_entrevista` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `id_inscricao` INT UNSIGNED NOT NULL,
+  `id_agendador` INT UNSIGNED NULL, -- secretário/professor que agendou
+  `data_hora` DATETIME NOT NULL,
+  `local` VARCHAR(200) NOT NULL,
+  `status` ENUM('agendada','realizada','ausente','cancelada') DEFAULT 'agendada',
+  `observacoes` VARCHAR(600) DEFAULT NULL,
+  `criado_em` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `entrevistas` 
+  ADD CONSTRAINT fk_entrevista_inscricao
+  FOREIGN KEY (`id_inscricao`) 
+  REFERENCES `inscricoes`(`id_inscricao`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `entrevistas` 
+  ADD CONSTRAINT fk_entrevista_agendador
+  FOREIGN KEY (`id_agendador`) 
+  REFERENCES `usuarios`(`id_usuario`)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE;
 
 
-CREATE TABLE `aud_tentativa_submeter_documento` (
-  `aud_cod_tentativa_submeter_documento` int(11) NOT NULL,
-  `aud_cod_tentativa_inscricao` int(11) DEFAULT NULL,
-  `nome_arquivo` VARCHAR(300) DEFAULT NULL,
-  `tipo_arquivo` VARCHAR(150) DEFAULT NULL,
-  `tamanho_arquivo_em_bytes` int(11) DEFAULT NULL,
-  `cod_erro` int(11) DEFAULT NULL
+CREATE TABLE auditoria (
+  `id_auditoria` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `id_usuario`   INT UNSIGNED NULL,
+  `tipo`         VARCHAR(50) NOT NULL, -- 'inscricao', 'documento'
+  `operacao`     VARCHAR(50) NOT NULL, -- created, updated, deleted, login, erro_upload
+  `sucesso`      BOOLEAN NOT NULL DEFAULT 0,
+  `detalhes`     JSON NULL,
+  `ip`           VARCHAR(45) NULL,
+  `navegador`    VARCHAR(150) NULL,
+  `criado_em`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
-
-CREATE TABLE `avaliacao` (
-  `idAvaliacao` int(4) NOT NULL,
-  `ip` VARCHAR(30) DEFAULT NULL,
-  `admin_secretario` int(4) NOT NULL,
-  `cod_edital` int(4) NOT NULL,
-  `cod_candidato` int(4) NOT NULL,
-  `tipoAvaliacao` int(4) NOT NULL,
-  `dataAlteracao` date DEFAULT NULL
-);
-
-
-
-
-CREATE TABLE `comprovante` (
-  `cod_comprovante` bigint(20) NOT NULL,
-  `codigo_validacao` VARCHAR(35) CHARACTER SET utf8 NOT NULL,
-  `data_comprovante` datetime NOT NULL,
-  `cod_inscricao` int(11) NOT NULL,
-  `tipo_comprovante` VARCHAR(30) DEFAULT NULL
-);
-
-CREATE TABLE `documento` (
-  `id_documento` int(11) NOT NULL,
-  `cod_inscricao` int(11) DEFAULT NULL,
-  `documento` VARCHAR(200) DEFAULT NULL
-);
-
-
-
-
 
 
 

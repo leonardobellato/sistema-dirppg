@@ -77,3 +77,7 @@ Route::get('/professores', function () {
 Route::get('/secretarios', function () {
     return view('pessoas.secretarios');
 })->name('pessoas.secretarios');
+
+Route::get('/entrevistas', function () {
+    return view('entrevistas.index');
+})->name('entrevistas.index');
