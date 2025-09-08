@@ -365,45 +365,45 @@ INSERT INTO `areas_concentracao` ( `id_curso`, `nome`) VALUES
 (23, 'Desenvolvimento de Processos');
 
 INSERT INTO `linhas_pesquisa` (`id_area_concentracao`, `nome`) VALUES
-1(14, 'Biomoléculas Naturais'),
-2(14, 'Bioprocessos Industriais'),
-3(14, 'Biotecnologia Aplicada à Agropecuária'),
-4(6, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
-5(9, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
-6(5, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
-7(7, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
-8(2, 'Educação Tecnológica'),
-9(3, 'Educação Tecnológica'),
-10(4, 'Energia e Engenharia de Sistemas Térmicos'),
-11(8, 'Energia e Engenharia de Sistemas Térmicos'),
-12(10, 'Energia e Engenharia de Sistemas Térmicos'),
-13(7, 'Energia e Engenharia de Sistemas Térmicos'),
-14(2, 'Fundamentos e Metodologias para o Ensino de Ciências e Matemática'),
-15(3, 'Fundamentos e Metodologias para o Ensino de Ciências e Matemática'),
-16(13, 'Gestão da Produção e Manutenção'),
-17(12, 'Gestão do Conhecimento e Inovação'),
-18(13, 'Gestão do Conhecimento e Inovação'),
-19(11, 'Instrumentação e Controle'),
-20(11, 'Processamento de Energia'),
-21(4, 'Mecânica dos Sólidos e Vibrações'),
-22(8, 'Mecânica dos Sólidos e Vibrações'),
-23(10, 'Mecânica dos Sólidos e Vibrações'),
-24(7, 'Mecânica dos Sólidos e Vibrações'),
-25(1, 'Processamento de Imagens, Visão Computacional e Aprendizado de Máquina'),
-26(1, 'Sistemas de Informação e Computação'),
-27(1, 'Sistemas Inteligentes, Simulação e Jogos Computacionais'),
-28(1, 'Teoria da Computação'),
-29(6, 'Processos de Fabricação'),
-30(7, 'Processos de Fabricação'),
-31(9, 'Processos de Fabricação'),
-32(5, 'Processos de Fabricação'),
-33(15, 'Processos de Separação, Tecnologia Ambiental e Materiais'),
-34(16, 'Processos de Separação, Tecnologia Ambiental e Materiais'),
-35(15, 'Reatores e Biocombustíveis'),
-36(16, 'Reatores e Biocombustíveis');
+(14, 'Biomoléculas Naturais'),
+(14, 'Bioprocessos Industriais'),
+(14, 'Biotecnologia Aplicada à Agropecuária'),
+(6, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+(9, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+(5, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+(7, 'Desenvolvimento e Aplicação de Materiais em Ciências Mecânicas'),
+(2, 'Educação Tecnológica'),
+(3, 'Educação Tecnológica'),
+(4, 'Energia e Engenharia de Sistemas Térmicos'),
+(8, 'Energia e Engenharia de Sistemas Térmicos'),
+(10, 'Energia e Engenharia de Sistemas Térmicos'),
+(7, 'Energia e Engenharia de Sistemas Térmicos'),
+(2, 'Fundamentos e Metodologias para o Ensino de Ciências e Matemática'),
+(3, 'Fundamentos e Metodologias para o Ensino de Ciências e Matemática'),
+(13, 'Gestão da Produção e Manutenção'),
+(12, 'Gestão do Conhecimento e Inovação'),
+(13, 'Gestão do Conhecimento e Inovação'),
+(11, 'Instrumentação e Controle'),
+(11, 'Processamento de Energia'),
+(4, 'Mecânica dos Sólidos e Vibrações'),
+(8, 'Mecânica dos Sólidos e Vibrações'),
+(10, 'Mecânica dos Sólidos e Vibrações'),
+(7, 'Mecânica dos Sólidos e Vibrações'),
+(1, 'Processamento de Imagens, Visão Computacional e Aprendizado de Máquina'),
+(1, 'Sistemas de Informação e Computação'),
+(1, 'Sistemas Inteligentes, Simulação e Jogos Computacionais'),
+(1, 'Teoria da Computação'),
+(6, 'Processos de Fabricação'),
+(7, 'Processos de Fabricação'),
+(9, 'Processos de Fabricação'),
+(5, 'Processos de Fabricação'),
+(15, 'Processos de Separação, Tecnologia Ambiental e Materiais'),
+(16, 'Processos de Separação, Tecnologia Ambiental e Materiais'),
+(15, 'Reatores e Biocombustíveis'),
+(16, 'Reatores e Biocombustíveis');
 
 
-INSERT INTO `sublinhas`(`id_linha_pesquisa`, `nome`) VALUES
+INSERT INTO `sublinhas` (`id_linha_pesquisa`, `nome`, `inativo`) VALUES
 (15, 'Ensino de Ciências'),
 (15, 'Ensino de Estatística'),
 (15, 'Ensino de Física'),
@@ -417,28 +417,16 @@ INSERT INTO `sublinhas`(`id_linha_pesquisa`, `nome`) VALUES
 (9, 'Informática no Ensino das Ciências e da Tecnologia'),
 (9, 'Linguagem e Cognição no Ensino de Ciências e Tecnologia'),
 (9, 'Relações entre Ciência, Tecnologia e Sociedade no Ensino-aprendizagem'),
-
--- Linha: Fundamentos e Metodologias para o Ensino de Ciências e Matemática (Doutorado, id=8)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
-(8, 'Ensino de Ciências Naturais'),
-(8, 'Ensino de Estatística'),
-(8, 'Ensino de Física'),
-(8, 'Ensino de Matemática'),
-(8, 'Ensino e Inclusão');
-
--- Linha: Educação Tecnológica (Doutorado, id=14)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
-(14, 'Desenvolvimento de produtos para a Educação Tecnológica'),
-(14, 'Ensino nas Engenharias e nas Tecnologias'),
-(14, 'Informática no Ensino das Ciências e da Tecnologia'),
-(14, 'Linguagem e Cognição no Ensino de Ciências e Tecnologia'),
-(14, 'Relações entre Ciência, Tecnologia e Sociedade no Ensino-aprendizagem');
-
--- ==============================================================
--- PROGRAMA: Engenharia de Produção
--- ==============================================================
--- Linha: Gestão do Conhecimento e Inovação (Mestrado, id=18)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(14, 'Ensino de Ciências Naturais'),
+(14, 'Ensino de Estatística'),
+(14, 'Ensino de Física'),
+(14, 'Ensino de Matemática'),
+(14, 'Ensino e Inclusão'),
+(8, 'Desenvolvimento de produtos para a Educação Tecnológica'),
+(8, 'Ensino nas Engenharias e nas Tecnologias'),
+(8, 'Informática no Ensino das Ciências e da Tecnologia'),
+(8, 'Linguagem e Cognição no Ensino de Ciências e Tecnologia'),
+(8, 'Relações entre Ciência, Tecnologia e Sociedade no Ensino-aprendizagem'),
 (18, 'Criação de Novos Produtos, seus Processos e suas Patentes'),
 (18, 'Gestão da Inovação Agroindustrial'),
 (18, 'Gestão de Transferência de Tecnologia'),
@@ -451,20 +439,14 @@ INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
 (18, 'EORE: Indústria 4.0 na Engenharia Organizacional e Redes de Empresas'),
 (18, 'Processos de Geração de Energia Provenientes de Fontes Renováveis e suas Aplicações'),
 (18, 'Apoio à Decisão em Manutenção Industrial'),
-(18, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade');
-
--- Linha: Gestão da Produção e Manutenção (Mestrado, id=16)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(18, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade'),
 (16, 'Apoio à Decisão em Manutenção Industrial - ADMI'),
 (16, 'Bioprodução - BIOP'),
 (16, 'Desenvolvimento de Produtos e Processos Sustentáveis para Geração de Bioenergia'),
 (16, 'Ergonomia e Segurança do Trabalho'),
 (16, 'Otimização e Tomada de Decisão - OTP'),
 (16, 'Organizações e Sociedade'),
-(16, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade');
-
--- Linha: Gestão do Conhecimento e Inovação (Doutorado, id=17)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
+(16, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade'),
 (17, 'Bioprodução'),
 (17, 'Gestão de Transferência de Tecnologia - GTT'),
 (17, 'Otimização e Tomada de Decisão - OTP'),
@@ -476,20 +458,11 @@ INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
 (17, 'Organizações e Sociedade'),
 (17, 'Processos de Geração de Energia Provenientes de Fontes Renováveis e suas Aplicações'),
 (17, 'Qualidade Ambiental Interior para a Melhoria da Saúde e Produtividade'),
-(17, 'Sistemas Produtivos Sustentáveis');
-
--- ==============================================================
--- PROGRAMA: Engenharia Química
--- ==============================================================
--- Linha: Reatores e Biocombustíveis (Mestrado, id=33)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
-(33, 'Caracterização dos Materiais, Relação Estrutura-Propriedades e Transformação de Fases'),
-(33, 'Desenvolvimento de Algoritmo de Controle para Reatores Tipo CSTR'),
-(33, 'Estudo de Processos de Extração e Purificação de Óleos Vegetais');
-
--- Linha: Processos de Separação, Tecnologia Ambiental e Materiais (Mestrado, id=35)
-INSERT INTO sublinhas (id_linha_pesquisa, nome) VALUES
-(35, 'Tratamento de Água em Processo Contínuo por Fotocatálise Heterogênea'),
-(35, 'Tratamentos Alternativos para Resíduos Industriais'),
-(35, 'Determinação de Compostos Potencialmente Tóxicos em Amostras Ambientais e de Alimentos');
+(17, 'Sistemas Produtivos Sustentáveis'),
+(35, 'Caracterização dos Materiais, Relação Estrutura-Propriedades e Transformação de Fases'),
+(35, 'Desenvolvimento de Algoritmo de Controle para Reatores Tipo CSTR'),
+(35, 'Estudo de Processos de Extração e Purificação de Óleos Vegetais'),
+(33, 'Tratamento de Água em Processo Contínuo por Fotocatálise Heterogênea'),
+(33, 'Tratamentos Alternativos para Resíduos Industriais'),
+(33, 'Determinação de Compostos Potencialmente Tóxicos em Amostras Ambientais e de Alimentos');
 

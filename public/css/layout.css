@@ -181,6 +181,10 @@ main h1{
 	margin-bottom: 5px;
 }
 
+.sidebar-item span{
+	user-select: none;
+}
+
 .sidebar-item a {
 	display: flex;
 	align-items: center;
@@ -191,6 +195,7 @@ main h1{
 	color: #ffffff;
 	white-space: nowrap;
 	gap: 10px;
+	user-select: none;
 }
 
 .sidebar-item a:hover{

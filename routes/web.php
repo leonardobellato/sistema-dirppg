@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProgramaController;
 
 Route::get('/', function () {
     return view('dashboard.index');
@@ -46,9 +47,9 @@ Route::get('/analise-inscricoes', function () {
     return view('analise-inscricoes.index');
 })->name('analise-inscricoes.index');
 
-Route::get('/programas', function () {
-    return view('pos.programas.index');
-})->name('pos.programas.index');
+Route::get('/programas', [ProgramaController::class, 'index'])->name('pos.programas.index');
+Route::get('/programas/adicionar', [ProgramaController::class, 'index'])->name('pos.programas.adicionar');
+Route::get('/programas/alterar', [ProgramaController::class, 'index'])->name('pos.programas.alterar');
 
 Route::get('/cursos', function () {
     return view('pos.cursos.index');
