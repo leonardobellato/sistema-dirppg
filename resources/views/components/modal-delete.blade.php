@@ -7,14 +7,13 @@
         </div>
         
         <div class="modal-body">
-            <p>Você está prestes a excluir os seguintes registros:</p>
-            <ul>
-                @foreach ($items ?? [] as $item)
-                    <li>{{ $item }}</li>
-                @endforeach
-            </ul>
-            <p style="color:red; font-weight:bold;">
-                ATENÇÃO: Ao apagar estes dados, todos os demais registros do banco de dados que, de alguma forma, estão associados a esses dados também serão excluídos (exclusão em cascada).
+            <p>Você está prestes a excluir o seguinte item:</p>
+            
+            <span></span>
+
+            <p>
+                AVISO: Ao apagar este item, todos os demais registros do banco de dados que, de alguma forma, 
+                estão associados a este item também serão excluídos em sequência (exclusão em cascata).
             </p>
         </div>
 

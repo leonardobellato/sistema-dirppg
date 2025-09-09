@@ -1,6 +1,6 @@
 CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `nome`        VARCHAR(100) NOT NULL
+  `nome`        VARCHAR(100) NOT NULL UNIQUE
 );
 
 

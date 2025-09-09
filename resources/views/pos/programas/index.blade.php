@@ -8,6 +8,12 @@
 @endpush
 
 @section('content')
+    @if(session('success'))
+        <div class="aviso-sucesso">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <h1>Programas</h1>
 
     <div class="container-tabela">
@@ -49,8 +55,7 @@
     </div>
 
     <!-- Modal -->
-    <x-modal-delete>
-    </x-modal-delete>
+    @include('components.modal-delete')
 @endsection
 
 @push('scripts')
@@ -73,33 +78,27 @@
                 { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 1 }
             ],
             rowData: tableData,
-            rowSelection: { mode: "multiRow" },
+            rowSelection: { mode: "singleRow" },
             pagination: true,
             paginationPageSize: 20,
             domLayout: "autoHeight",
             onSelectionChanged: function(event) {
+                const btnExcluir = document.getElementById("btn-excluir");
+                const btnAlterar = document.getElementById("btn-alterar");
+
                 // Ao mudar a seleção, alguns botões são ativados/inativados
-                // Atualmente: pode excluir vários registros juntos, mas editar um por vez
-
-                const rowCount = event.selectedNodes.length;
-                let enableEdit = false, enableDelete = false;
-
-                if(rowCount > 0){
-                    enableDelete = true;
-                    if(rowCount == 1)
-                        enableEdit = true;
-                }
-
-                document.getElementById("btn-excluir").disabled = !enableDelete;
-
-                // Atualiza o link para alterar o objeto específico
-                let btnAlterar = document.getElementById("btn-alterar");
-                if(enableEdit)
+                if(event.selectedNodes.length > 0){
+                    btnExcluir.disabled = false;
+                    
+                    // Atualiza o link para alterar o objeto específico
                     btnAlterar.classList.remove("disabled-link");
-                else
+                    let baseUrl = "/programas/alterar/:ID"; // :ID é placeholder
+                    btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_programa);
+                } 
+                else{
+                    btnExcluir.disabled = true;
                     btnAlterar.classList.add("disabled-link");
-                let baseUrl = "{{ route('pos.programas.alterar', ['id' => ':ID']) }}"; // :ID é placeholder
-                btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_programa);
+                }                
             }
         };
 
@@ -112,18 +111,9 @@
         const modalCancel = modal.querySelector(".modal-cancel");
         const modalDelete = modal.querySelector(".modal-delete");
 
-        // Função para abrir modal com lista de itens
-        window.openDeleteModal = function(items, onConfirm) {
-            // Atualiza lista dinâmica
-            const ul = modal.querySelector(".modal-body ul");
-            ul.innerHTML = '';
-            items.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = item;
-                ul.appendChild(li);
-            });
-
-            // Mostra o modal
+        // Função para abrir modal com item selecionado
+        window.openDeleteModal = function(item, onConfirm) {
+            modal.querySelector(".modal-body span").innerText = item.nome;
             modal.style.display = 'flex';
 
             // Remove event listeners antigos do botão Excluir
@@ -142,6 +132,7 @@
         modalCancel.addEventListener("click", () => modal.style.display = 'none');
         window.addEventListener("click", e => { if(e.target === modal) modal.style.display = 'none'; });
 
+        // Remover filtros
         document.getElementById("btn-limpar-filtros").addEventListener("click", function () {
             gridApi.setFilterModel(null);
             gridApi.onFilterChanged();  
@@ -149,13 +140,21 @@
 
         // Excluir
         document.getElementById("btn-excluir").addEventListener("click", function () {
-            const objects = gridApi.getSelectedRows().map((obj) => obj.nome).join(", ");
-            if (objects === null) return; 
+            const object = gridApi.getSelectedRows()[0];
 
-            openDeleteModal(objects, () => {
-                // Aqui você pode enviar a requisição de exclusão para o backend
-                console.log("Excluir confirmado para:", objects);
-                // gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
+            openDeleteModal(object, () => {
+                fetch(`/programas/${object.id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao deletar");
+                    gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
+                    window.alert("Programa excluído!");
+                })
+                .catch(err => alert(err.message));
             });
         });
     });
