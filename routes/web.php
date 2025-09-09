@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramaController;
+use App\Http\Controllers\CursoController;
 
 Route::get('/', function () {
     return view('dashboard.index');
@@ -54,9 +55,12 @@ Route::post('/programas/salvar', [ProgramaController::class, 'store'])->name('po
 Route::put('/programas/{id}', [ProgramaController::class, 'update'])->name('pos.programas.atualizar');
 Route::delete('/programas/{id}', [ProgramaController::class, 'destroy'])->name('pos.programas.excluir');
 
-Route::get('/cursos', function () {
-    return view('pos.cursos.index');
-})->name('pos.cursos.index');
+Route::get('/cursos', [CursoController::class, 'index'])->name('pos.cursos.index');
+Route::get('/cursos/adicionar', [CursoController::class, 'create'])->name('pos.cursos.adicionar');
+Route::get('/cursos/alterar/{id}', [CursoController::class, 'edit'])->name('pos.cursos.alterar');
+Route::post('/cursos/salvar', [CursoController::class, 'store'])->name('pos.cursos.salvar');
+Route::put('/cursos/{id}', [CursoController::class, 'update'])->name('pos.cursos.atualizar');
+Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('pos.cursos.excluir');
 
 Route::get('/areas-concentracao', function () {
     return view('pos.areas-concentracao.index');

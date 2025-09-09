@@ -10,7 +10,7 @@
     <h1>Adicionar programa</h1>
 
     <div class="container-form">
-		<form action="{{ route('programas.salvar') }}" method="POST">
+		<form action="{{ route('pos.programas.salvar') }}" method="POST">
             @csrf
 
 			<label for="input-nome">Nome do programa:<span class="required-content">*</span></label>

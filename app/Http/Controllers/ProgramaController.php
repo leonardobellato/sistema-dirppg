@@ -10,7 +10,7 @@ class ProgramaController extends Controller
     // Método para listar objetos
     public function index()
     {
-        $programas = Programa::orderBy('nome', 'asc')->get(['id_programa', 'nome']);
+        $programas = Programa::orderBy('nome', 'asc')->get();
 
         return view('pos.programas.index', compact('programas'));
     }
@@ -25,11 +25,11 @@ class ProgramaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:100|unique:programas,nome',
+            'nome' => 'required|string|max:100|unique:programas,nome'
         ]);
 
         Programa::create([
-            'nome' => $request->nome,
+            'nome' => $request->input('nome')
         ]);
 
         return redirect()->route('pos.programas.index')->with('success', 'Programa criado com sucesso!');
@@ -48,11 +48,11 @@ class ProgramaController extends Controller
         $programa = Programa::where('id_programa', $id)->firstOrFail();
 
         $request->validate([
-            'nome' => 'required|string|max:100|unique:programas,nome,' . $programa->id_programa . ',id_programa',
+            'nome' => 'required|string|max:100|unique:programas,nome,' . $programa->id_programa . ',id_programa'
         ]);
 
         $programa->update([
-            'nome' => $request->nome,
+            'nome' => $request->input('nome')
         ]);
 
         return redirect()->route('pos.programas.index')

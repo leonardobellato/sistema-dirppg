@@ -11,4 +11,8 @@ class Programa extends Model
     public $timestamps = false;
 
     protected $fillable = ['nome'];
+
+    public function cursos(){
+        return $this->hasMany(Curso::class);
+    }
 }
