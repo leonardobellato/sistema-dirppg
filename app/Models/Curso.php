@@ -15,4 +15,16 @@ class Curso extends Model
     public function programa(){
         return $this->belongsTo(Programa::class, 'id_programa', 'id_programa');
     }
+
+    public function areasConcentracao(){
+        return $this->hasMany(AreaConcentracao::class);
+    }
+
+    public function disciplinas(){
+        return $this->hasMany(Disciplina::class);
+    }
+
+    public function editais(){
+        return $this->hasMany(Edital::class);
+    }
 }

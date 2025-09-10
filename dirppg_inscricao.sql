@@ -403,7 +403,7 @@ INSERT INTO `linhas_pesquisa` (`id_area_concentracao`, `nome`) VALUES
 (16, 'Reatores e Biocombustíveis');
 
 
-INSERT INTO `sublinhas` (`id_linha_pesquisa`, `nome`, `inativo`) VALUES
+INSERT INTO `sublinhas` (`id_linha_pesquisa`, `nome`) VALUES
 (15, 'Ensino de Ciências'),
 (15, 'Ensino de Estatística'),
 (15, 'Ensino de Física'),

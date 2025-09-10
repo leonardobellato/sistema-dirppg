@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Edital extends Model
+class Disciplina extends Model
 {
-    protected $table = 'editais';
-    protected $primaryKey = 'id_edital';
+    protected $table = 'disciplinas';
+    protected $primaryKey = 'id_disciplina';
     public $timestamps = false;
 
-    protected $fillable = ['nome', 'id_curso', 'vigente'];
+    protected $fillable = ['nome', 'id_curso', 'inativo'];
 
     public function curso(){
         return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');

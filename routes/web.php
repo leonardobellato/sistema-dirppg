@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\AreaConcentracaoController;
+use App\Http\Controllers\LinhaPesquisaController;
+use App\Http\Controllers\SublinhaController;
+use App\Http\Controllers\DisciplinaController;
 
 Route::get('/', function () {
     return view('dashboard.index');
@@ -57,14 +61,15 @@ Route::delete('/programas/{id}', [ProgramaController::class, 'destroy'])->name('
 
 Route::get('/cursos', [CursoController::class, 'index'])->name('pos.cursos.index');
 Route::get('/cursos/adicionar', [CursoController::class, 'create'])->name('pos.cursos.adicionar');
-Route::get('/cursos/alterar/{id}', [CursoController::class, 'edit'])->name('pos.cursos.alterar');
 Route::post('/cursos/salvar', [CursoController::class, 'store'])->name('pos.cursos.salvar');
-Route::put('/cursos/{id}', [CursoController::class, 'update'])->name('pos.cursos.atualizar');
 Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('pos.cursos.excluir');
 
-Route::get('/areas-concentracao', function () {
-    return view('pos.areas-concentracao.index');
-})->name('pos.areas-concentracao.index');
+Route::get('/areas-concentracao', [AreaConcentracaoController::class, 'index'])->name('pos.areas-concentracao.index');
+Route::get('/areas-concentracao/adicionar', [AreaConcentracaoController::class, 'create'])->name('pos.areas-concentracao.adicionar');
+Route::get('/areas-concentracao/alterar/{id}', [AreaConcentracaoController::class, 'edit'])->name('pos.areas-concentracao.alterar');
+Route::post('/areas-concentracao/salvar', [AreaConcentracaoController::class, 'store'])->name('pos.areas-concentracao.salvar');
+Route::put('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'update'])->name('pos.areas-concentracao.atualizar');
+Route::delete('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'destroy'])->name('pos.areas-concentracao.excluir');
 
 Route::get('/linhas-pesquisa', function () {
     return view('pos.linhas-pesquisa.index');

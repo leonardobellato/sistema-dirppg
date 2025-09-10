@@ -10,7 +10,7 @@ class ProgramaController extends Controller
     // Método para listar objetos
     public function index()
     {
-        $programas = Programa::orderBy('nome', 'asc')->get();
+        $programas = Programa::all();
 
         return view('pos.programas.index', compact('programas'));
     }

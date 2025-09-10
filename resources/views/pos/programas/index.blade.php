@@ -74,7 +74,7 @@
                     resizable: false
                 },
                 columnDefs: [
-                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 1 }
+                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: "asc" }
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
