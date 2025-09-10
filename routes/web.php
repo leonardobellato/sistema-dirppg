@@ -89,9 +89,12 @@ Route::post('/sublinhas/salvar', [SublinhaController::class, 'store'])->name('po
 Route::put('/sublinhas/{id}', [SublinhaController::class, 'update'])->name('pos.sublinhas.atualizar');
 Route::delete('/sublinhas/{id}', [SublinhaController::class, 'destroy'])->name('pos.sublinhas.excluir');
 
-Route::get('/disciplinas-aluno-externo', function () {
-    return view('pos.disciplinas-aluno-externo.index');
-})->name('pos.disciplinas-aluno-externo.index');
+Route::get('/disciplinas-aluno-externo', [DisciplinaController::class, 'index'])->name('pos.disciplinas-aluno-externo.index');
+Route::get('/disciplinas-aluno-externo/adicionar', [DisciplinaController::class, 'create'])->name('pos.disciplinas-aluno-externo.adicionar');
+Route::get('/disciplinas-aluno-externo/alterar/{id}', [DisciplinaController::class, 'edit'])->name('pos.disciplinas-aluno-externo.alterar');
+Route::post('/disciplinas-aluno-externo/salvar', [DisciplinaController::class, 'store'])->name('pos.disciplinas-aluno-externo.salvar');
+Route::put('/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'update'])->name('pos.disciplinas-aluno-externo.atualizar');
+Route::delete('/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'destroy'])->name('pos.disciplinas-aluno-externo.excluir');
 
 Route::get('/professores', function () {
     return view('pessoas.professores');
