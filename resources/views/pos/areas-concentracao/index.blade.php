@@ -72,7 +72,8 @@
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
-                    resizable: false,
+                    resizable: true,
+                    tooltipValueGetter: params => params.value,
                     comparator: (valueA, valueB) => {
                         if (valueA == null) return -1;
                         if (valueB == null) return 1;

@@ -66,6 +66,7 @@
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
                     resizable: false,
+                    tooltipValueGetter: params => params.value,
                     comparator: (valueA, valueB) => {
                         if (valueA == null) return -1;
                         if (valueB == null) return 1;

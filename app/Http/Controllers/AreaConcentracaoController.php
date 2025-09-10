@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Curso;
 use App\Models\Programa;
 use App\Models\AreaConcentracao;
 
@@ -22,6 +21,13 @@ class AreaConcentracaoController extends Controller
     {
         $programas = Programa::all();
         return view('pos.areas-concentracao.adicionar', compact('programas'));
+    }
+
+    // rota para AJAX
+    public function getAreasByCurso($idCurso)
+    {
+        $areas_concentracao = AreaConcentracao::where('id_curso', $idCurso)->get();
+        return response()->json($areas_concentracao);
     }
 
     // Método para salvar no banco

@@ -62,23 +62,32 @@ Route::delete('/programas/{id}', [ProgramaController::class, 'destroy'])->name('
 
 Route::get('/cursos', [CursoController::class, 'index'])->name('pos.cursos.index');
 Route::get('/cursos/adicionar', [CursoController::class, 'create'])->name('pos.cursos.adicionar');
+Route::get('/cursos/{id}/areas-concentracao', [AreaConcentracaoController::class, 'getAreasByCurso']);
 Route::post('/cursos/salvar', [CursoController::class, 'store'])->name('pos.cursos.salvar');
 Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('pos.cursos.excluir');
 
 Route::get('/areas-concentracao', [AreaConcentracaoController::class, 'index'])->name('pos.areas-concentracao.index');
 Route::get('/areas-concentracao/adicionar', [AreaConcentracaoController::class, 'create'])->name('pos.areas-concentracao.adicionar');
 Route::get('/areas-concentracao/alterar/{id}', [AreaConcentracaoController::class, 'edit'])->name('pos.areas-concentracao.alterar');
+Route::get('/areas-concentracao/{id}/linhas-pesquisa', [LinhaPesquisaController::class, 'getLinhasByArea']);
 Route::post('/areas-concentracao/salvar', [AreaConcentracaoController::class, 'store'])->name('pos.areas-concentracao.salvar');
 Route::put('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'update'])->name('pos.areas-concentracao.atualizar');
 Route::delete('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'destroy'])->name('pos.areas-concentracao.excluir');
 
-Route::get('/linhas-pesquisa', function () {
-    return view('pos.linhas-pesquisa.index');
-})->name('pos.linhas-pesquisa.index');
+Route::get('/linhas-pesquisa', [LinhaPesquisaController::class, 'index'])->name('pos.linhas-pesquisa.index');
+Route::get('/linhas-pesquisa/adicionar', [LinhaPesquisaController::class, 'create'])->name('pos.linhas-pesquisa.adicionar');
+Route::get('/linhas-pesquisa/alterar/{id}', [LinhaPesquisaController::class, 'edit'])->name('pos.linhas-pesquisa.alterar');
+Route::get('/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'getSublinhaByLinha']);
+Route::post('/linhas-pesquisa/salvar', [LinhaPesquisaController::class, 'store'])->name('pos.linhas-pesquisa.salvar');
+Route::put('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'update'])->name('pos.linhas-pesquisa.atualizar');
+Route::delete('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'destroy'])->name('pos.linhas-pesquisa.excluir');
 
-Route::get('/sublinhas', function () {
-    return view('pos.sublinhas.index');
-})->name('pos.sublinhas.index');
+Route::get('/sublinhas', [SublinhaController::class, 'index'])->name('pos.sublinhas.index');
+Route::get('/sublinhas/adicionar', [SublinhaController::class, 'create'])->name('pos.sublinhas.adicionar');
+Route::get('/sublinhas/alterar/{id}', [SublinhaController::class, 'edit'])->name('pos.sublinhas.alterar');
+Route::post('/sublinhas/salvar', [SublinhaController::class, 'store'])->name('pos.sublinhas.salvar');
+Route::put('/sublinhas/{id}', [SublinhaController::class, 'update'])->name('pos.sublinhas.atualizar');
+Route::delete('/sublinhas/{id}', [SublinhaController::class, 'destroy'])->name('pos.sublinhas.excluir');
 
 Route::get('/disciplinas-aluno-externo', function () {
     return view('pos.disciplinas-aluno-externo.index');

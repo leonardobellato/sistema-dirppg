@@ -15,7 +15,7 @@
             @method('PUT')
 
 			<label for="input-nome">Nome do programa:<span class="required-content">*</span></label>
-			<input type="text" id="input-nome" name="nome" placeholder="Digite o nome aqui" required
+			<input type="text" id="input-nome" name="nome" placeholder="Digite o nome aqui" required autofocus
                 value="{{ old('input-nome', $programa->nome)}}"
             >
 
