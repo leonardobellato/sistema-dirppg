@@ -23,6 +23,13 @@ class CursoController extends Controller
         return view('pos.cursos.adicionar', ['programas' => $programas]);
     }
 
+    // rota para AJAX
+    public function getCursosByPrograma($idPrograma)
+    {
+        $cursos = Curso::where('id_programa', $idPrograma)->get();
+        return response()->json($cursos);
+    }
+
     // Método para salvar no banco
     public function store(Request $request)
     {
@@ -38,7 +45,6 @@ class CursoController extends Controller
     public function destroy($id)
     {
         $curso = Curso::where('id_curso', $id)->firstOrFail();
-        $curso->delete();
 
         try {
             $curso->delete();

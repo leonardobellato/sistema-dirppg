@@ -63,7 +63,6 @@ class ProgramaController extends Controller
     public function destroy($id)
     {
         $programa = Programa::where('id_programa', $id)->firstOrFail();
-        $programa->delete();
 
         try {
             $programa->delete();

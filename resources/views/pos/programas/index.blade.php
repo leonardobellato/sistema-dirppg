@@ -62,6 +62,7 @@
     <!-- AG Grid -->
     <script src="{{ asset('ag-grid/ag-grid-community.min.js')}}"></script>
     <script src="{{ asset('ag-grid/pt-BR.js') }}"></script>
+    <script src="{{ asset('js/modal.js') }}"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -71,7 +72,12 @@
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
-                    resizable: false
+                    resizable: false,
+                    comparator: (valueA, valueB) => {
+                        if (valueA == null) return -1;
+                        if (valueB == null) return 1;
+                        return valueA.toString().localeCompare(valueB.toString(), 'pt-BR', { sensitivity: 'base' });
+                    }
                 },
                 columnDefs: [
                     { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: "asc" }
@@ -104,33 +110,6 @@
             const eGridDiv = document.querySelector("#tabela-vigente");
             gridApi = agGrid.createGrid(eGridDiv, gridOptions);
 
-            // Modal
-            const modal = document.getElementById("modal-delete");
-            const modalClose = modal.querySelector(".modal-close");
-            const modalCancel = modal.querySelector(".modal-cancel");
-            const modalDelete = modal.querySelector(".modal-delete");
-
-            // Função para abrir modal com item selecionado
-            window.openDeleteModal = function(item, onConfirm) {
-                modal.querySelector(".modal-body span").innerText = item.nome;
-                modal.style.display = 'flex';
-
-                // Remove event listeners antigos do botão Excluir
-                modalDelete.replaceWith(modalDelete.cloneNode(true));
-                const newmodalDelete = modal.querySelector(".modal-delete");
-
-                // Adiciona o confirm callback
-                newmodalDelete.addEventListener('click', function() {
-                    onConfirm();
-                    modal.style.display = 'none';
-                });
-            };
-
-            // Fechar modal
-            modalClose.addEventListener("click", () => modal.style.display = 'none');
-            modalCancel.addEventListener("click", () => modal.style.display = 'none');
-            window.addEventListener("click", e => { if(e.target === modal) modal.style.display = 'none'; });
-
             // Remover filtros
             document.getElementById("btn-limpar-filtros").addEventListener("click", function () {
                 gridApi.setFilterModel(null);
@@ -141,7 +120,7 @@
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                openDeleteModal(object, () => {
+                openDeleteModal(object.nome, () => {
                     fetch(`/programas/${object.id_programa}`, {
                         method: "DELETE",
                         headers: {

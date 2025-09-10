@@ -62,6 +62,7 @@
     <!-- AG Grid -->
     <script src="{{ asset('ag-grid/ag-grid-community.min.js')}}"></script>
     <script src="{{ asset('ag-grid/pt-BR.js') }}"></script>
+    <script src="{{ asset('js/modal.js') }}"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -71,12 +72,18 @@
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
-                    resizable: false
+                    resizable: false,
+                    comparator: (valueA, valueB) => {
+                        if (valueA == null) return -1;
+                        if (valueB == null) return 1;
+                        return valueA.toString().localeCompare(valueB.toString(), 'pt-BR', { sensitivity: 'base' });
+                    }
                 },
                 columnDefs: [
-                    { headerName: "Área", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc" },
+                    { headerName: "Área", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc"},
                     { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1 },
-                    { headerName: "Programa", field: "curso.programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2 }
+                    { headerName: "Programa", field: "curso.programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2 },
+                    { headerName: "Ativo", field: "inativo", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.inativo ? "Não" : "Sim" },
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
@@ -93,7 +100,7 @@
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/area-concentracao/alterar/:ID"; // :ID é placeholder
+                        let baseUrl = "/areas-concentracao/alterar/:ID"; // :ID é placeholder
                         btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_area_concentracao);
                     } 
                     else{
@@ -106,33 +113,6 @@
             const eGridDiv = document.querySelector("#tabela-vigente");
             gridApi = agGrid.createGrid(eGridDiv, gridOptions);
 
-            // Modal
-            const modal = document.getElementById("modal-delete");
-            const modalClose = modal.querySelector(".modal-close");
-            const modalCancel = modal.querySelector(".modal-cancel");
-            const modalDelete = modal.querySelector(".modal-delete");
-
-            // Função para abrir modal com item selecionado
-            window.openDeleteModal = function(item, onConfirm) {
-                modal.querySelector(".modal-body span").innerText = item.nome;
-                modal.style.display = 'flex';
-
-                // Remove event listeners antigos do botão Excluir
-                modalDelete.replaceWith(modalDelete.cloneNode(true));
-                const newmodalDelete = modal.querySelector(".modal-delete");
-
-                // Adiciona o confirm callback
-                newmodalDelete.addEventListener('click', function() {
-                    onConfirm();
-                    modal.style.display = 'none';
-                });
-            };
-
-            // Fechar modal
-            modalClose.addEventListener("click", () => modal.style.display = 'none');
-            modalCancel.addEventListener("click", () => modal.style.display = 'none');
-            window.addEventListener("click", e => { if(e.target === modal) modal.style.display = 'none'; });
-
             // Remover filtros
             document.getElementById("btn-limpar-filtros").addEventListener("click", function () {
                 gridApi.setFilterModel(null);
@@ -143,8 +123,8 @@
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                openDeleteModal(object, () => {
-                    fetch(`/area-concentracao/${object.id_area_concentracao}`, {
+                openDeleteModal(object.nome, () => {
+                    fetch(`/areas-concentracao/${object.id_area_concentracao}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content

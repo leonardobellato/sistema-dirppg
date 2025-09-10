@@ -55,6 +55,7 @@ Route::get('/analise-inscricoes', function () {
 Route::get('/programas', [ProgramaController::class, 'index'])->name('pos.programas.index');
 Route::get('/programas/adicionar', [ProgramaController::class, 'create'])->name('pos.programas.adicionar');
 Route::get('/programas/alterar/{id}', [ProgramaController::class, 'edit'])->name('pos.programas.alterar');
+Route::get('/programas/{id}/cursos', [CursoController::class, 'getCursosByPrograma']);
 Route::post('/programas/salvar', [ProgramaController::class, 'store'])->name('pos.programas.salvar');
 Route::put('/programas/{id}', [ProgramaController::class, 'update'])->name('pos.programas.atualizar');
 Route::delete('/programas/{id}', [ProgramaController::class, 'destroy'])->name('pos.programas.excluir');
