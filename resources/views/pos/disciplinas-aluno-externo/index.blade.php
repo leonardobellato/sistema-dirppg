@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <h1>Disciplinas de Aluno Externos</h1>
+    <h1>Disciplinas de Aluno Externo</h1>
 
     <div class="container-tabela">
         <div class="btn-grp-tabela">

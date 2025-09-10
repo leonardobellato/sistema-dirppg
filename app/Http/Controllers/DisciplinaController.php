@@ -26,22 +26,51 @@ class DisciplinaController extends Controller
     // Método para salvar no banco
     public function store(Request $request)
     {
-        Disciplina::create([
-            'tipo' => $request->input('tipo'),
-            'id_programa' => $request->input('programa')
+        $request->validate([
+            'nome' => 'required|string|max:200'
         ]);
 
-        return redirect()->route('pos.disciplinas-aluno-externo.index')->with('success', 'Curso criado com sucesso!');
+        Disciplina::create([
+            'nome' => $request->input('nome'),
+            'id_curso' => $request->input('curso')
+        ]);
+
+        return redirect()->route('pos.disciplinas-aluno-externo.index')->with('success', 'Disciplina criada com sucesso!');
+    }
+
+    // Mostrar formulário de edição
+    public function edit($id)
+    {
+        $disciplina = Disciplina::with('curso.programa')->where('id_disciplina', $id)->firstOrFail();
+        return view('pos.disciplinas-aluno-externo.alterar', compact('disciplina'));
+    }
+
+    // Atualizar objeto
+    public function update(Request $request, $id)
+    {
+        $disciplina = Disciplina::where('id_disciplina', $id)->firstOrFail();
+
+        $request->validate([
+            'nome' => 'required|string|max:200'
+        ]);
+
+        $disciplina->update([
+            'nome' => $request->input('nome'),
+            'inativo' => $request->has('ativo') ? 0 : 1
+        ]);
+
+        return redirect()->route('pos.disciplinas-aluno-externo.index')
+                         ->with('success', 'Disciplina atualizada com sucesso!');
     }
 
     // Método para remover um objeto
     public function destroy($id)
     {
-        $curso = Disciplina::where('id_curso', $id)->firstOrFail();
+        $disciplina = Disciplina::where('id_disciplina', $id)->firstOrFail();
 
         try {
-            $curso->delete();
-            return response()->json(['success' => true, 'message' => 'Curso removido com sucesso!']);
+            $disciplina->delete();
+            return response()->json(['success' => true, 'message' => 'Disciplina removida com sucesso!']);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['success' => false, 'message' => 'Erro ao excluir: ' . $e->getMessage()], 500);
         }
