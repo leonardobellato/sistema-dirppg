@@ -7,33 +7,46 @@
 @endpush
 
 @section('content')
-    <h1>Alterar edital</h1>
+    <h1>Adicionar edital</h1>
 
     <div class="container-form">
-		<form>
+		<form action="{{ route('editais.salvar') }}" method="POST">
+            @csrf
+
 			<label for="input-programa">Programa:<span class="required-content">*</span></label>
-			<select id="input-programa" name="input-programa" required>
+			<select id="input-programa" name="programa" required>
 				<option value="">Selecione...</option>
-				<option value="1">Opção 1</option>
-				<option value="2">Opção 2</option>
-				<option value="3">Opção 3</option>
-				{{--@foreach($estados as $estado)
-					<option value="{{ $estado->id }}">{{ $estado->nome }}</option>
-				@endforeach*/
-				--}}
+				
+                @foreach($programas as $programa)
+					<option value="{{ $programa->id_programa }}">{{ $programa->nome }}</option>
+				@endforeach
+			
 			</select>
 
 			<label for="input-curso">Curso:<span class="required-content">*</span></label>
-			<select id="input-curso" name="input-curso" disabled required>
-				<option value="">Selecione...</option>
+			<select id="input-curso" name="curso" disabled required>
+				<option value="">Selecione...</option>		
 			</select>
 
 			<label for="input-nome">Nome do edital:<span class="required-content">*</span></label>
-			<input type="text" id="input-nome" placeholder="Digite o nome aqui" required>
+			<input type="text" id="input-nome" name="nome" placeholder="Digite o nome aqui" required
+                value="{{ old('nome') }}" {{-- mantém o valor se der erro --}}
+            >
 
-			<label for="input-nome">Link do edital:</label>
-			<input type="text" id="input-nome" placeholder="Digite o link aqui">
+			{{-- erro específico do campo nome --}}
+            @error('nome')
+                <span class="campo-invalido">O nome deve ter até 200 caracteres.</span>
+            @enderror
 
+			<label for="input-link">Link do edital:</label>
+			<input type="text" id="input-link" name="link" placeholder="Digite o link aqui" required
+                value="{{ old('link') }}" {{-- mantém o valor se der erro --}}
+            >
+
+			{{-- erro específico do campo link --}}
+            @error('link')
+                <span class="campo-invalido">O link deve ter até 200 caracteres.</span>
+            @enderror
 
 			<h3>Cronograma do edital</h3>
 			<hr>
@@ -125,32 +138,33 @@
     </div>
 @endsection
 
-{{--
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('#estado').on('change', function () {
-        var estadoId = $(this).val();
-        var $cidade = $('#cidade');
+    <script>
+        document.getElementById('input-programa').addEventListener('change', function() {
+            const idPrograma = this.value;
+            const cursoSelect = document.getElementById('input-curso');
+            
+            // Desabilita o select enquanto carrega
+            cursoSelect.disabled = true;
+            cursoSelect.innerHTML = '<option>Carregando...</option>';
 
-        $cidade.prop('disabled', true).html('<option>Carregando...</option>');
-
-        if (estadoId) {
-            $.ajax({
-                url: '/cidades/' + estadoId,
-                type: 'GET',
-                success: function (data) {
-                    $cidade.prop('disabled', false).empty();
-                    $cidade.append('<option value="">Selecione uma cidade</option>');
-                    data.forEach(function (cidade) {
-                        $cidade.append('<option value="' + cidade.id + '">' + cidade.nome + '</option>');
+            if(idPrograma) {
+                fetch(`/programas/${idPrograma}/cursos`)
+                    .then(response => response.json())
+                    .then(data => {
+                        cursoSelect.innerHTML = '<option value="">Selecione...</option>';
+                        data.forEach(curso => {
+                            cursoSelect.innerHTML += `<option value="${curso.id_curso}">${curso.tipo}</option>`;
+                        });
+                        cursoSelect.disabled = false;
+                    })
+                    .catch(() => {
+                        cursoSelect.innerHTML = '<option value="">Erro ao carregar cursos</option>';
                     });
-                }
-            });
-        } else {
-            $cidade.prop('disabled', true).html('<option>Selecione um estado primeiro</option>');
-        }
-    });
-</script>
+            } else {
+                cursoSelect.innerHTML = '<option value="">Selecione...</option>';
+                cursoSelect.disabled = true;
+            }
+        });
+        </script>
 @endpush
---}}

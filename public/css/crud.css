@@ -153,6 +153,18 @@ form input[type="date"]:focus {
     outline: none;
 }
 
+form input:disabled{
+    background-color: rgb(236, 235, 235);
+    border: 1px solid rgb(194, 194, 194);
+    cursor: not-allowed;
+}
+
+form input:read-only{
+    background-color: rgb(236, 235, 235);
+    border: 1px solid rgb(194, 194, 194);
+    cursor: not-allowed;
+}
+
 form h3 {
     margin-top: 30px;
     color: #646464;
@@ -370,11 +382,10 @@ form legend {
 }
 
 .disabled-link {
-    pointer-events: none;  
     opacity: 0.5;  
-    cursor: default;
     text-decoration: none;
     color: gray;
+    cursor: not-allowed !important;
 }
 
 /* Janelas modais */

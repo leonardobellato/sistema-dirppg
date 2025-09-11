@@ -107,6 +107,7 @@
                     else{
                         btnExcluir.disabled = true;
                         btnAlterar.classList.add("disabled-link");
+                        btnAlterar.removeAttribute("href");
                     }                
                 }
             };

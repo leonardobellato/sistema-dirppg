@@ -68,7 +68,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             // Busca dados do banco
             const tableData = @json($disciplinas);
-
+            
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
@@ -106,6 +106,7 @@
                     else{
                         btnExcluir.disabled = true;
                         btnAlterar.classList.add("disabled-link");
+                        btnAlterar.removeAttribute("href");
                     }                
                 }
             };

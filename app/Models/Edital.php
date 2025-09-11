@@ -15,4 +15,8 @@ class Edital extends Model
     public function curso(){
         return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');
     }
+
+    public function fasesEdital(){
+        return $this->hasMany(FaseEdital::class, 'id_edital', 'id_edital');
+    }
 }

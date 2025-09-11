@@ -29,7 +29,7 @@ class SublinhaController extends Controller
     }
 
     // rota para AJAX
-    public function getSublinhaByLinha($idLinha)
+    public function getSublinhasByLinha($idLinha)
     {
         $sublinhas = Sublinha::where('id_linha_pesquisa', $idLinha)->get();
         return response()->json($sublinhas);

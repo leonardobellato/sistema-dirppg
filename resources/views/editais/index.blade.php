@@ -3,12 +3,17 @@
 @section('title', 'Editais')
 
 @push('head')
-    <!-- Estilos AG Grid -->
     <link rel="stylesheet" href="{{ asset('ag-grid/styles/ag-theme-alpine.css') }}">
     <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
 @endpush
 
 @section('content')
+    @if(session('success'))
+        <div class="aviso-sucesso">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <h1>Editais</h1>
 
     <div class="container-tabela">
@@ -20,14 +25,6 @@
                     </svg>
                     Adicionar
                 </a>
-                
-                <button id="btn-visualizar" disabled>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
-                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
-                    </svg>
-                    Visualizar
-                </button>
 
                 <a href="#" id="btn-alterar" class="disabled-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -57,121 +54,92 @@
         <div id="tabela-vigente" class="ag-theme"></div>
     </div>
 
+    {{ $pagination->links() }}
+
     <!-- Modal -->
-    @include('components.modal-editais')
+    @include('components.modal-delete')
 @endsection
 
 @push('scripts')
     <!-- AG Grid -->
     <script src="{{ asset('ag-grid/ag-grid-community.min.js')}}"></script>
     <script src="{{ asset('ag-grid/pt-BR.js') }}"></script>
+    <script src="{{ asset('js/modal.js') }}"></script>
 
     <script>
-    
-    document.addEventListener("DOMContentLoaded", function () {
-        const tableData = [
-            { id: 1, nome: "Seleção Mestrado 2025", programa: "PPGEM", tipo: "mestrado", inicio: "2025-03-01", fim: "2025-03-31", vigencia: true },
-            { id: 2, nome: "Seleção Doutorado 2025", programa: "PPGECT", tipo: "doutorado", inicio: "2025-04-01", fim: "2025-04-30", vigencia: false },
-            { id: 3, nome: "PAPOS Especial 2025", programa: "PPGEE", tipo: "PAPOS", inicio: "2025-05-01", fim: "2025-05-15", vigencia: false },
-            { id: 4, nome: "Aluno Externo 2025", programa: "PPGBIOTEC", tipo: "aluno externo", inicio: "2025-02-01", fim: "2025-02-20", vigencia: true },
-            { id: 5, nome: "Seleção Mestrado 2024", programa: "PPGEP", tipo: "mestrado", inicio: "2024-03-01", fim: "2024-03-31", vigencia: true },
-            { id: 6, nome: "Seleção Doutorado 2024", programa: "PPGEQ", tipo: "doutorado", inicio: "2024-04-01", fim: "2024-04-30", vigencia: true },
-            { id: 7, nome: "PAPOS Especial 2024", programa: "PROFIAP", tipo: "PAPOS", inicio: "2024-05-01", fim: "2024-05-15", vigencia: false },
-            { id: 8, nome: "Aluno Externo 2024", programa: "PPGCC", tipo: "aluno externo", inicio: "2024-02-01", fim: "2024-02-20", vigencia: true },
-            { id: 9, nome: "Seleção Mestrado 2023", programa: "PPGEM", tipo: "mestrado", inicio: "2023-03-01", fim: "2023-03-31", vigencia: false },
-            { id: 10, nome: "Seleção Doutorado 2023", programa: "PPGECT", tipo: "doutorado", inicio: "2023-04-01", fim: "2023-04-30", vigencia: false },
-            { id: 11, nome: "PAPOS Especial 2023", programa: "PPGEE", tipo: "PAPOS", inicio: "2023-05-01", fim: "2023-05-15", vigencia: false },
-            { id: 12, nome: "Aluno Externo 2023", programa: "PPGBIOTEC", tipo: "aluno externo", inicio: "2023-02-01", fim: "2023-02-20", vigencia: true },
-            { id: 13, nome: "Seleção Mestrado 2022", programa: "PPGEP", tipo: "mestrado", inicio: "2022-03-01", fim: "2022-03-31", vigencia: true },
-            { id: 14, nome: "Seleção Doutorado 2022", programa: "PPGEQ", tipo: "doutorado", inicio: "2022-04-01", fim: "2022-04-30", vigencia: false },
-            { id: 15, nome: "PAPOS Especial 2022", programa: "PROFIAP", tipo: "PAPOS", inicio: "2022-05-01", fim: "2022-05-15", vigencia: false },
-            { id: 16, nome: "Aluno Externo 2022", programa: "PPGCC", tipo: "aluno externo", inicio: "2022-02-01", fim: "2022-02-20", vigencia: false },
-            { id: 17, nome: "Seleção Mestrado 2021", programa: "PPGEM", tipo: "mestrado", inicio: "2021-03-01", fim: "2021-03-31", vigencia: false },
-            { id: 18, nome: "Seleção Doutorado 2021", programa: "PPGECT", tipo: "doutorado", inicio: "2021-04-01", fim: "2021-04-30", vigencia: false },
-            { id: 19, nome: "PAPOS Especial 2021", programa: "PPGEE", tipo: "PAPOS", inicio: "2021-05-01", fim: "2021-05-15", vigencia: false },
-            { id: 20, nome: "Aluno Externo 2021", programa: "PPGBIOTEC", tipo: "aluno externo", inicio: "2021-02-01", fim: "2021-02-20", vigencia: false },
-            { id: 21, nome: "Seleção Mestrado 2020", programa: "PPGEP", tipo: "mestrado", inicio: "2020-03-01", fim: "2020-03-31", vigencia: false },
-            { id: 22, nome: "Seleção Doutorado 2020", programa: "PPGEQ", tipo: "doutorado", inicio: "2020-04-01", fim: "2020-04-30", vigencia: false },
-            { id: 23, nome: "PAPOS Especial 2020", programa: "PROFIAP", tipo: "PAPOS", inicio: "2020-05-01", fim: "2020-05-15", vigencia: false },
-            { id: 24, nome: "Aluno Externo 2020", programa: "PPGCC", tipo: "aluno externo", inicio: "2020-02-01", fim: "2020-02-20", vigencia: false },
-            { id: 25, nome: "Seleção Extraordinária 2025", programa: "PPGEM", tipo: "mestrado", inicio: "2025-06-01", fim: "2025-06-30", vigencia: false }
-        ];
+        document.addEventListener("DOMContentLoaded", function () {
+            // Busca dados do banco
+            const tableData = @json($editais);
 
-        const gridOptions = {
-            localeText: AG_GRID_LOCALE_BR,
-            defaultColDef: {
-                resizable: false
-            },
-            columnDefs: [
-                { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, width: 400 },
-                { headerName: "Programa", field: "programa", filter: "agTextColumnFilter", sortable: true, maxWidth: 250 },
-                { headerName: "Tipo do Curso", field: "tipo", filter: "agTextColumnFilter", sortable: true, maxWidth: 250 },
-                { headerName: "Data da publicação", field: "inicio", filter: "agDateColumnFilter", sortable: true, maxWidth: 250, sort: "desc" },
-                { headerName: "Vigente", field: "vigencia", filter: "agTextColumnFilter", sortable: true, maxWidth: 150 }
-            ],
-            rowData: tableData,
-            rowSelection: { mode: "multiRow" },
-            pagination: true,
-            paginationPageSize: 20,
-            domLayout: "autoHeight",
-            onGridReady: (params) => { params.api.sizeColumnsToFit(); },
-            onSelectionChanged: function(event) {
-                const rowCount = event.selectedNodes.length;
-                
-                let enableEdit = false, enableDelete = false, enableView = false;
-                if(rowCount > 0){
-                    enableDelete = true;
-                    if(rowCount == 1){
-                        enableEdit = true;
-                        enableView = true;
+            const gridOptions = {
+                localeText: AG_GRID_LOCALE_BR,
+                defaultColDef: {
+                    resizable: true,
+                    tooltipValueGetter: params => params.value,
+                    comparator: (valueA, valueB) => {
+                        if (valueA == null) return -1;
+                        if (valueB == null) return 1;
+                        return valueA.toString().localeCompare(valueB.toString(), 'pt-BR', { sensitivity: 'base' });
                     }
+                },
+                columnDefs: [
+                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc"},
+                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1 },
+                    { headerName: "Programa", field: "curso.programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2 },
+                    { headerName: "Vigente", field: "vigente", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.vigente ? "Sim" : "Não" },
+                ],
+                rowData: tableData,
+                rowSelection: { mode: "singleRow" },
+                domLayout: "autoHeight",
+                onSelectionChanged: function(event) {
+                    const btnExcluir = document.getElementById("btn-excluir");
+                    const btnAlterar = document.getElementById("btn-alterar");
+
+                    // Ao mudar a seleção, alguns botões são ativados/inativados
+                    if(event.selectedNodes.length > 0){
+                        btnExcluir.disabled = false;
+                        
+                        // Atualiza o link para alterar o objeto específico
+                        btnAlterar.classList.remove("disabled-link");
+                        let baseUrl = "/editais/alterar/:ID"; // :ID é placeholder
+                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_edital);
+                    } 
+                    else{
+                        btnExcluir.disabled = true;
+                        btnAlterar.classList.add("disabled-link");
+                        btnAlterar.removeAttribute("href");
+                    }                
                 }
-                document.getElementById("btn-visualizar").disabled = !enableView;
-                document.getElementById("btn-excluir").disabled = !enableDelete;
+            };
 
-                let btnAlterar = document.getElementById("btn-alterar");
-                if(enableEdit)
-                    btnAlterar.classList.remove("disabled-link");
-                else
-                    btnAlterar.classList.add("disabled-link");
-                let baseUrl = "{{ route('editais.alterar', ['id' => ':ID']) }}"; // :ID é placeholder
-                btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id);
-            }
-        };
+            const eGridDiv = document.querySelector("#tabela-vigente");
+            gridApi = agGrid.createGrid(eGridDiv, gridOptions);
 
-        const eGridDiv = document.querySelector("#tabela-vigente");
-        gridApi = agGrid.createGrid(eGridDiv, gridOptions);
+            // Remover filtros
+            document.getElementById("btn-limpar-filtros").addEventListener("click", function () {
+                gridApi.setFilterModel(null);
+                gridApi.onFilterChanged();  
+            });
 
-    
-        // Modal
-        const modal = document.getElementById("modalVisualizar");
-        const spanClose = document.querySelector(".modal .close");
+            // Excluir
+            document.getElementById("btn-excluir").addEventListener("click", function () {
+                const object = gridApi.getSelectedRows()[0];
 
-        document.getElementById("btn-visualizar").addEventListener("click", function () {
-            const selected = gridApi.getSelectedRows()[0];
-            if (selected) {
-                document.getElementById("modal-nome").textContent = selected.nome;
-                document.getElementById("modal-inicio").textContent = selected.inicio;
-                document.getElementById("modal-fim").textContent = selected.fim;
-                modal.style.display = "block";
-            }
+                openDeleteModal(object.nome, () => {
+                    fetch(`/editais/${object.id_edital}`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error("Erro ao deletar");
+                        gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
+                        window.alert("Edital excluído!");
+                    })
+                    .catch(err => alert(err.message));
+                });
+            });
         });
-
-        spanClose.onclick = function () { modal.style.display = "none"; }
-        window.onclick = function (event) { if (event.target == modal) modal.style.display = "none"; }
-
-        document.getElementById("btn-limpar-filtros").addEventListener("click", function () {
-            gridApi.setFilterModel(null); // limpa todos os filtros
-            gridApi.onFilterChanged();    // atualiza a tabela
-        });
-
-        // Excluir
-        document.getElementById("btn-excluir").addEventListener("click", function () {
-            const selected = gridOptions.api.getSelectedRows()[0];
-            if (selected && confirm(`Deseja realmente excluir "${selected.nome}"?`)) {
-                gridOptions.api.applyTransaction({ remove: [selected] });
-            }
-        });
-    });
     </script>
 @endpush

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EditalController;
 use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\AreaConcentracaoController;
@@ -28,29 +29,19 @@ Route::get('/cadastro', function () {
     return view('autenticacao.cadastro');
 })->name('cadastro');
 
-Route::get('/editais', function () {
-    $editais = [
-        ['id'=> 1, 'nome' => 'Selecao 11/2025', 'data_publicacao' => '01/01/2025', 'vigencia' => false],
-        ['id'=> 2, 'nome' => 'Selecao 30/2025', 'data_publicacao' => '04/08/2025', 'vigencia' => true]
-    ];
-    return view('editais.index', ['editais' => $editais]);
-})->name('editais.index');
 
-Route::get('/editais/adicionar', function () {
-    return view('editais.adicionar');
-})->name('editais.adicionar');
-
-Route::get('/editais/alterar/{id}', function ($id) {
-    return view('editais.alterar', ['id' => $id]);
-})->name('editais.alterar');
-
-Route::get('/editais/excluir', function () {
-    return view('editais.excluir');
-})->name('editais.excluir');
 
 Route::get('/analise-inscricoes', function () {
     return view('analise-inscricoes.index');
 })->name('analise-inscricoes.index');
+
+
+Route::get('/editais', [EditalController::class, 'index'])->name('editais.index');
+Route::get('/editais/adicionar', [EditalController::class, 'create'])->name('editais.adicionar');
+Route::get('/editais/alterar/{id}', [EditalController::class, 'edit'])->name('editais.alterar');
+Route::post('/editais/salvar', [EditalController::class, 'store'])->name('editais.salvar');
+Route::put('/editais/{id}', [EditalController::class, 'update'])->name('editais.atualizar');
+Route::delete('/editais/{id}', [EditalController::class, 'destroy'])->name('editais.excluir');
 
 Route::get('/programas', [ProgramaController::class, 'index'])->name('pos.programas.index');
 Route::get('/programas/adicionar', [ProgramaController::class, 'create'])->name('pos.programas.adicionar');
@@ -63,6 +54,8 @@ Route::delete('/programas/{id}', [ProgramaController::class, 'destroy'])->name('
 Route::get('/cursos', [CursoController::class, 'index'])->name('pos.cursos.index');
 Route::get('/cursos/adicionar', [CursoController::class, 'create'])->name('pos.cursos.adicionar');
 Route::get('/cursos/{id}/areas-concentracao', [AreaConcentracaoController::class, 'getAreasByCurso']);
+Route::get('/cursos/{id}/disciplinas-aluno-externo', [DisciplinaController::class, 'getDisciplinasByCurso']);
+Route::get('/cursos/{id}/editais', [EditalController::class, 'getEditaisByCurso']);
 Route::post('/cursos/salvar', [CursoController::class, 'store'])->name('pos.cursos.salvar');
 Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('pos.cursos.excluir');
 
@@ -77,7 +70,7 @@ Route::delete('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'd
 Route::get('/linhas-pesquisa', [LinhaPesquisaController::class, 'index'])->name('pos.linhas-pesquisa.index');
 Route::get('/linhas-pesquisa/adicionar', [LinhaPesquisaController::class, 'create'])->name('pos.linhas-pesquisa.adicionar');
 Route::get('/linhas-pesquisa/alterar/{id}', [LinhaPesquisaController::class, 'edit'])->name('pos.linhas-pesquisa.alterar');
-Route::get('/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'getSublinhaByLinha']);
+Route::get('/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'getSublinhasByLinha']);
 Route::post('/linhas-pesquisa/salvar', [LinhaPesquisaController::class, 'store'])->name('pos.linhas-pesquisa.salvar');
 Route::put('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'update'])->name('pos.linhas-pesquisa.atualizar');
 Route::delete('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'destroy'])->name('pos.linhas-pesquisa.excluir');

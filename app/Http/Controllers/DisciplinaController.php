@@ -23,6 +23,13 @@ class DisciplinaController extends Controller
         return view('pos.disciplinas-aluno-externo.adicionar', ['programas' => $programas]);
     }
 
+    // rota para AJAX
+    public function getDisciplinasByCurso($idCurso)
+    {
+        $disciplinas = Disciplina::where('id_curso', $idCurso)->get();
+        return response()->json($disciplinas);
+    }
+
     // Método para salvar no banco
     public function store(Request $request)
     {

@@ -125,6 +125,7 @@ CREATE TABLE `editais` (
   `id_edital`                 INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_curso`                  INT UNSIGNED NOT NULL,
   `nome`                      VARCHAR(200) NOT NULL,
+  `link`                      VARCHAR(200) DEFAULT NULL,
   `vigente`                   TINYINT(1) NOT NULL DEFAULT 1
 );
 
