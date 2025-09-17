@@ -90,7 +90,8 @@ CREATE TABLE `usuarios` (
 CREATE TABLE `candidatos` (
   `id_usuario` INT UNSIGNED PRIMARY KEY,
   `cpf`        CHAR(14) NOT NULL UNIQUE,
-  `telefone`   VARCHAR(14) NOT NULL
+  `brasileiro` TINYINT(1) NOT NULL DEFAULT 1,
+  `telefone`   VARCHAR(20) NOT NULL
 );
 
 ALTER TABLE `candidatos`
@@ -683,3 +684,7 @@ INSERT INTO `disciplinas` (`id_curso`, `nome`) VALUES
 (21, 'EQ41X-Conversão Térmica dos Sólidos'),
 (21, 'EQ41U - Metodologia da Pesquisa Científica'),
 (21, 'EQ41N - Produção e Caracterização de Biocombustíveis');
+
+
+INSERT INTO `usuarios` (`nome`, `email`, `senha`, `tipo`) VALUES
+('Admin', 'admin', '$2a$12$Stn0r8socu00MUFSqmJj/.Al.2HBlyFxnrg7RlN0TTfaAlujyWXT2', 'admin');

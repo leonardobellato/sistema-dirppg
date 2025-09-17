@@ -189,3 +189,80 @@ form button{
 .simple-input:focus{
     background-color: #ffffff;
 }
+
+form h4 {
+    margin-top: 30px;
+    color: #646464;
+}
+
+form h4:nth-of-type(2){
+    margin-top: 50px;
+}
+
+form hr {
+    border: none;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 10px 0 0 0;
+    border-radius: 5px;
+}
+
+.campo-invalido{
+    font-weight: bold;
+    color: red;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.confirmacao{
+    display: none;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.information-container{
+    width: 550px;
+    max-width: 90%;
+    background-color: rgba(255, 255, 255, 0.65);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, .2), 0 0 0 1px rgba(0, 0, 0, .1);
+    padding: 30px 30px 25px 30px;
+}
+
+.information-container p{
+    text-align: center;
+    font-weight: 500;
+}
+
+.information-container a{
+    display: block;  /* <-- ESSENCIAL */
+    background-color: #dddddd;
+    color: #272727;
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.information-container a:hover{
+    background-color: #bdbdbd;
+}
+
+/* Avisos */
+.aviso-falha{
+    background-color: #f0525a;
+    color: rgb(51, 51, 51);
+    padding: 10px 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
+

@@ -20,14 +20,15 @@ Route::get('/login', function () {
 
 Route::get('/login/candidato', function () {
     return view('autenticacao.login.candidato');
-})->name('login.candidato');
+})->name('autenticacao.login.candidato');
 
 Route::get('/login/restrito', function () {
     return view('autenticacao.login.restrito');
-})->name('login.restrito');
+})->name('autenticacao.login.restrito');
 
 
 Route::get('/cadastro', [AutenticacaoController::class, 'index'])->name('autenticacao.cadastro.index');
+Route::get('/cadastro/confirmacao', function () { return view('autenticacao.cadastro.confirmacao');})->name('autenticacao.cadastro.confirmacao');
 Route::post('/cadastro/salvar', [AutenticacaoController::class, 'store'])->name('autenticacao.cadastro.salvar');
 
 

@@ -9,6 +9,12 @@
 <body>
     <main>
         <div class="login-container">
+            @if(session('failure'))
+                <div class="aviso-falha">
+                    {{ session('failure') }}
+                </div>
+            @endif
+
             <img src={{ asset("./logo_dirppg_preto.png") }} alt="logo" class="img-logo"/>
             <form action="POST">
                 <h3>Candidato</h3>
@@ -31,7 +37,7 @@
                 <button type="submit">Entrar</button>
 
                 <div class="actions">
-                    <a href="{{ route('cadastro') }}">Criar conta</a>
+                    <a href="{{ route('autenticacao.cadastro.index') }}">Criar conta</a>
                     <a href="#">Esqueci a senha</a>
                 </div>
             </form>
