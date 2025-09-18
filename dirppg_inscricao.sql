@@ -687,4 +687,4 @@ INSERT INTO `disciplinas` (`id_curso`, `nome`) VALUES
 
 
 INSERT INTO `usuarios` (`nome`, `email`, `senha`, `tipo`) VALUES
-('Admin', 'admin', '$2a$12$Stn0r8socu00MUFSqmJj/.Al.2HBlyFxnrg7RlN0TTfaAlujyWXT2', 'admin');
+('Admin', 'admin', '$2a$12$BEdfq7Zh.psuN30J3X8fAO1jtOA1v8Wug0X7Ax3wyjNqEaOrDawuy', 'admin');

@@ -34,19 +34,26 @@
                 @enderror
 
                 <label>Nacionalidade:<span class="required-content">*</span></label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="nacionalidade" value="brasileiro" id="input-nasc-br" checked>
-                            Brasileiro
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="nacionalidade" value="estrangeiro" id="input-nasc-es">
-                            Estrangeiro
-                        </label>
-                    </div>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="nacionalidade" value="brasileiro" id="input-nasc-br" checked>
+                        Brasileiro
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="nacionalidade" value="estrangeiro" id="input-nasc-es">
+                        Estrangeiro
+                    </label>
+                </div>
 
                 <label for="input-cpf">CPF:<span class="required-content">*</span></label>
-                <input oninput="mascara(this)" type="text" id="input-cpf" name="cpf" class="simple-input" placeholder="000.000.000-00" required>
+                <input oninput="mascara(this)" type="text" id="input-cpf" name="cpf" class="simple-input" placeholder="000.000.000-00" required
+                    value="{{ old('cpf') }}" {{-- mantém o valor se der erro --}}
+                >
+
+                {{-- erro específico do campo cpf --}}
+                @error('cpf')
+                    <span class="campo-invalido">O cpf deve ser único na base de dados.</span>
+                @enderror
 
                 <label for="input-telefone">Telefone/Celular<span class="required-content">*</span></label>
                 <input type="text" id="input-telefone" name="telefone" class="simple-input" placeholder="(00) 00000-0000" required
@@ -82,7 +89,7 @@
 
                 {{-- erro específico do campo senha --}}
                 @error('senha')
-                    <span class="campo-invalido confirmacao">A senha deve ter no mínimo 8 caracteres.</span>
+                    <span class="campo-invalido">A senha deve ter no mínimo 8 caracteres.</span>
                 @enderror
 
                 <label for="input-senha-confirm">Confirme a senha:<span class="required-content">*</span></label>

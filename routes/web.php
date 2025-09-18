@@ -8,7 +8,7 @@ use App\Http\Controllers\AreaConcentracaoController;
 use App\Http\Controllers\LinhaPesquisaController;
 use App\Http\Controllers\SublinhaController;
 use App\Http\Controllers\DisciplinaController;
-use App\Http\Controllers\AutenticacaoController;
+use App\Http\Controllers\UsuarioController;
 
 Route::get('/', function () {
     return view('dashboard.index');
@@ -27,9 +27,8 @@ Route::get('/login/restrito', function () {
 })->name('autenticacao.login.restrito');
 
 
-Route::get('/cadastro', [AutenticacaoController::class, 'index'])->name('autenticacao.cadastro.index');
-Route::get('/cadastro/confirmacao', function () { return view('autenticacao.cadastro.confirmacao');})->name('autenticacao.cadastro.confirmacao');
-Route::post('/cadastro/salvar', [AutenticacaoController::class, 'store'])->name('autenticacao.cadastro.salvar');
+Route::get('/cadastro', function () { return view('autenticacao.cadastro.index');})->name('autenticacao.cadastro.index');
+Route::post('/cadastro/salvar', [UsuarioController::class, 'store'])->name('autenticacao.cadastro.salvar');
 
 
 Route::get('/analise-inscricoes', function () {

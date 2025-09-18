@@ -17,6 +17,7 @@
 
             <img src={{ asset("./logo_dirppg_preto.png") }} alt="logo" class="img-logo"/>
             <form action="POST">
+                
                 <h3>Candidato</h3>
 
                 <div class="input-container">
