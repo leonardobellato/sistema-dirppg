@@ -686,5 +686,5 @@ INSERT INTO `disciplinas` (`id_curso`, `nome`) VALUES
 (21, 'EQ41N - Produção e Caracterização de Biocombustíveis');
 
 
-INSERT INTO `usuarios` (`nome`, `email`, `senha`, `tipo`) VALUES
-('Admin', 'admin', '$2a$12$BEdfq7Zh.psuN30J3X8fAO1jtOA1v8Wug0X7Ax3wyjNqEaOrDawuy', 'admin');
+INSERT INTO `usuarios` (`nome`, `email`, `senha`, `tipo`) VALUES 
+('Admin', 'admin@dirppg.pg', '$2y$12$eIz8wzg7XpEYeQE/ssL05u/SoUyrk5izpJwrmy5zpF43Yh5qazWWa', 'admin');

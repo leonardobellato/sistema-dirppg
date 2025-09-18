@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Usuario;
 use App\Models\Candidato;
 
@@ -48,5 +50,54 @@ class UsuarioController extends Controller
         }
 
         return view('autenticacao.cadastro.confirmacao');
+    }
+
+    // Mostra o formulário de edição
+    public function edit()
+    {
+        // pega o usuário logado
+        $usuario = Auth::user();
+
+        return view('pessoas.usuarios.alterar', compact('usuario'));
+    }
+
+    // Atualiza os dados
+    public function update(Request $request)
+    {
+        $usuario = Auth::user();
+
+        $data = $request->validate([
+            'nome' => 'required|string|max:100',
+            'telefone' => 'nullable|string|max:20',
+            'email' => 'required|email|max:100|unique:usuarios,email,' . $usuario->id,
+            'senha' => 'nullable|string|min:8',
+        ]);
+
+        // Prepara os dados para atualizar
+        $updateData = [
+            'nome' => $data['nome'],
+            'email' => $data['email'],
+            'telefone' => $data['telefone'] ?? $usuario->telefone,
+        ];
+
+        if (!empty($data['senha'])) {
+            $updateData['senha'] = Hash::make($data['senha']);
+        }
+
+        $usuario->fill($updateData);
+    $usuario->save(); // aqui funciona mesmo com primaryKey customizada
+
+
+        if (!empty($data['telefone'])) {
+            $usuario->telefone = $data['telefone'];
+        }
+
+        if (!empty($data['senha'])) {
+            $usuario->senha = bcrypt($data['senha']);
+        }
+
+        $usuario->save();
+
+        return redirect()->route('pessoas.usuarios.alterar')->with('success', 'Dados atualizados com sucesso!');
     }
 }

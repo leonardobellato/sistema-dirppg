@@ -13,11 +13,11 @@
             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
         </svg>
 
-        <span class="username">Leonardo</span>
+        <span class="username">{{ explode(' ', Auth::user()->nome)[0] }}</span>
 
         <div class="header-dropdown" id="dropdown-menu">
-            <a href="#">Editar Conta</a>
-            <a href="#">Sair</a>
+            <a href="{{ route('pessoas.usuarios.alterar'); }}">Editar Conta</a>
+            <a href="{{ route('autenticacao.logout'); }}">Sair</a>
         </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="0.8" viewBox="0 0 16 16">
