@@ -28,7 +28,7 @@ class UsuarioController extends Controller
         // Campos que realmente precisa validar no backend
         $request->validate([
             'nome' => 'required|string|max:100',
-            'email' => 'required|string|max:100',
+            'email' => 'required|string|max:100|unique:usuarios,email',
             'cpf' => 'required|string|max:14|unique:candidatos,cpf',
             'senha' => 'required|string|min:8',
             'telefone' => 'nullable|string|max:20'
@@ -69,34 +69,27 @@ class UsuarioController extends Controller
         $data = $request->validate([
             'nome' => 'required|string|max:100',
             'telefone' => 'nullable|string|max:20',
-            'email' => 'required|email|max:100|unique:usuarios,email,' . $usuario->id,
+            'email' => 'required|email|max:100|unique:usuarios,email,' . $usuario->id_usuario . ',id_usuario',
             'senha' => 'nullable|string|min:8',
         ]);
 
         // Prepara os dados para atualizar
         $updateData = [
             'nome' => $data['nome'],
-            'email' => $data['email'],
-            'telefone' => $data['telefone'] ?? $usuario->telefone,
+            'email' => $data['email']
         ];
 
         if (!empty($data['senha'])) {
-            $updateData['senha'] = Hash::make($data['senha']);
+            $updateData['senha'] = bcrypt($data['senha']);
         }
 
-        $usuario->fill($updateData);
-    $usuario->save(); // aqui funciona mesmo com primaryKey customizada
-
+        $usuario->update($updateData);
 
         if (!empty($data['telefone'])) {
-            $usuario->telefone = $data['telefone'];
+            $usuario->candidato->update([
+            'telefone' => $data['telefone']
+        ]);
         }
-
-        if (!empty($data['senha'])) {
-            $usuario->senha = bcrypt($data['senha']);
-        }
-
-        $usuario->save();
 
         return redirect()->route('pessoas.usuarios.alterar')->with('success', 'Dados atualizados com sucesso!');
     }

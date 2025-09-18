@@ -7,8 +7,14 @@
 @endpush
 
 @section('content')
+    @if(session('success'))
+        <div class="aviso-sucesso">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
     <h1>Alterar usuário</h1>
-    
 
     <div class="container-form">
 		<form action="{{ route('pessoas.usuarios.atualizar') }}" method="POST">
@@ -37,7 +43,7 @@
 
             <label for="input-telefone">Telefone/Celular<span class="required-content">*</span></label>
             <input type="text" id="input-telefone" name="telefone" class="simple-input" placeholder="(00) 00000-0000" required
-                value="{{ old('telefone', $usuario->telefone) }}" {{-- mantém o valor se der erro --}}
+                value="{{ old('telefone', $usuario->candidato->telefone) }}" {{-- mantém o valor se der erro --}}
             >
 
             {{-- erro específico do campo telefone --}}
@@ -61,8 +67,8 @@
                 <span class="campo-invalido">O email deve ter até 100 caracteres.</span>
             @enderror
 
-            <label for="input-senha">Senha:<span class="required-content">*</span></label>
-            <input type="password" id="input-senha" name="senha" class="simple-input" placeholder="Digite sua senha aqui" required>
+            <label for="input-senha">Senha:</label>
+            <input type="password" id="input-senha" name="senha" class="simple-input" placeholder="Digite sua senha aqui">
 
             {{-- erro específico do campo senha --}}
             @error('senha')

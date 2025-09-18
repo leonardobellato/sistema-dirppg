@@ -26,7 +26,7 @@ Route::post('/cadastro', [UsuarioController::class, 'store'])->name('autenticaca
 
 Route::middleware('auth')->group(function () {
     Route::get('/usuario', [UsuarioController::class, 'edit'])->name('pessoas.usuarios.alterar');
-    Route::post('/usuario', [UsuarioController::class, 'update'])->name('pessoas.usuarios.atualizar');
+    Route::put('/usuario', [UsuarioController::class, 'update'])->name('pessoas.usuarios.atualizar');
 });
 
 //['auth', 'role:admin']
