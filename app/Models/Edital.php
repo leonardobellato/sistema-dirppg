@@ -10,7 +10,7 @@ class Edital extends Model
     protected $primaryKey = 'id_edital';
     public $timestamps = false;
 
-    protected $fillable = ['nome', 'id_curso', 'vigente'];
+    protected $fillable = ['nome', 'link', 'id_curso', 'vigente'];
 
     public function curso(){
         return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');

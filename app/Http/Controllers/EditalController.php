@@ -106,8 +106,14 @@ class EditalController extends Controller
     // Mostrar formulário de edição
     public function edit($id)
     {
-        $edital = Edital::with('curso.programa')->where('id_edital', $id)->firstOrFail();
-        return view('editais.alterar', compact('edital'));
+        $edital = Edital::with(['curso.programa', 'fasesEdital'])->where('id_edital', $id)->firstOrFail();
+
+        // separar por tipo + ordem para facilitar no Blade
+        $fases = $edital->fasesEdital->groupBy(function($fase) {
+            return $fase->tipo.'_'.$fase->ordem;
+        });
+
+        return view('editais.alterar', compact('edital', 'fases'));
     }
 
     // Atualizar objeto

@@ -451,9 +451,6 @@ form h4:nth-of-type(2){
     border-radius: 50%;          
 }
 
-.modal-close:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
 
 .modal-close span{
     text-align: center;

@@ -167,12 +167,36 @@
             }
         });
 
-		document.getElementById('input-dt-1rec-inicio').addEventListener('change', function(){
-			document.getElementById('input-dt-1hom-inicio').value = this.value;
-		});
+		// Esta função define que a data final deve ser >= a data inicial
+		// Além disso, obriga a homologação iniciar junto ao recurso
+		function vincularDatas(idInicio, idFim, idHomologacaoInicio = null) {
+			const inicio = document.getElementById(idInicio);
+			const fim = document.getElementById(idFim);
+			const homInicio = idHomologacaoInicio ? document.getElementById(idHomologacaoInicio) : null;
 
-		document.getElementById('input-dt-2rec-inicio').addEventListener('change', function(){
-			document.getElementById('input-dt-2hom-inicio').value = this.value;
-		});
+			if (inicio && fim) {
+				inicio.addEventListener('change', function () {
+					// regra do fim >= inicio
+					fim.min = this.value;
+					if (fim.value && fim.value < this.value) {
+						fim.value = this.value;
+					}
+
+					// se tiver homologação vinculada, copia a data
+					if (homInicio) {
+						homInicio.value = this.value;
+					}
+				});
+			}
+		}
+
+		vincularDatas('input-dt-insc-inicio', 'input-dt-insc-fim');
+		vincularDatas('input-dt-insc-fim', 'input-dt-1rec-inicio');
+		vincularDatas('input-dt-1rec-inicio', 'input-dt-1rec-fim', 'input-dt-1hom-inicio');
+		vincularDatas('input-dt-1rec-inicio', 'input-dt-1hom-fim');
+		vincularDatas('input-dt-1hom-fim', 'input-dt-2rec-inicio');
+		vincularDatas('input-dt-2rec-inicio', 'input-dt-2rec-fim', 'input-dt-2hom-inicio');
+		vincularDatas('input-dt-2rec-inicio', 'input-dt-2hom-fim');
+
     </script>
 @endpush
