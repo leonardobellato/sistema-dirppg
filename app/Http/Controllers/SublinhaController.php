@@ -15,7 +15,7 @@ class SublinhaController extends Controller
             'linhaPesquisa:id_linha_pesquisa,nome,id_area_concentracao',
             'linhaPesquisa.areaConcentracao:id_area_concentracao,nome,id_curso',
             'linhaPesquisa.areaConcentracao.curso:id_curso,tipo,id_programa',
-            'linhaPesquisa.areaConcentracao.curso.programa:id_programa,nome'
+            'linhaPesquisa.areaConcentracao.curso.programa:id_programa,nome,sigla'
         ])->get();
 
         return view('pos.sublinhas.index', compact('sublinhas'));

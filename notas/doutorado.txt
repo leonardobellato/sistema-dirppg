@@ -1,0 +1,28 @@
+Os arquivos devem conter no máximo <b>5mb
+A dissertação de mestrado (quando necessário) deve conter no máximo <b>15Mb</b>.</spam>
+
+Ficha de inscrição:
+Gere um arquivo pdf da sua ficha de inscrição preenchida e assinada, enviada através do sistema de inscrição on line
+Gere um arquivo pdf contendo um desses documentos (frente e verso)
+Documento de Identificação Oficial com Foto (RG ou CNH)
+cpf
+
+Diploma ou Declaração de Conclusão do Mestrado.
+Currículo Lattes.
+Documentação Comprobatória (Gere um arquivo pdf da documentação comprobatória solicitada, de acordo com o Edital que se refere esta seleção)
+Histórico Escolar do Mestrado
+Dissertação de Mestrado. (exceto para PPGECT)
+Projeto de pesquisa
+Carta de Aceite
+Outro(Cotas,Reservista...)
+
+Comentários:
+
+Modal: 
+ Li e aceito os <a href="" data-toggle="modal" data-target="#termoModal" data-whatever="@getbootstrap">Termos e Condições</a> referentes ao processo de inscrição.
+
+a) Declaro ter lido o edital de seleção na íntegra;<br>
+                                b) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio incorreto de documentos;<br>
+                                c) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio de documentos ilegíveis;<br>
+                                d) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pela falta de documentos;<br>
+                                e) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam por problemas de conexão de internet no momento do envio dos documentos;<br>

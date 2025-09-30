@@ -31,7 +31,7 @@
             @enderror
 
 			<label for="input-link">Link do edital:</label>
-			<input type="text" id="input-link" name="link" placeholder="Digite o link aqui" required
+			<input type="text" id="input-link" name="link" placeholder="Digite o link aqui"
                 value="{{ old('link', $edital->link) }}" {{-- mantém o valor se der erro --}}
             >
 

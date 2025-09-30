@@ -1,0 +1,48 @@
+Os arquivos devem conter no máximo <b>5mb    type="file" accept=".pdf"
+
+Ficha de inscrição:
+Gere um arquivo pdf da sua ficha de inscrição preenchida e assinada, enviada através do sistema de inscrição on line
+Gere um arquivo pdf contendo um desses documentos (frente e verso)
+Documento de Identificação Oficial com Foto (RG ou CNH)
+cpf
+
+Diploma ou Declaração de Conclusão da Graduação
+Currículo Lattes.
+Documentação Comprobatória (Gere um arquivo pdf da documentação comprobatória solicitada, de acordo com o Edital que se refere esta seleção)
+Histórico Escolar da Graduacao
+
+Texto Dissertativo ou Projeto de Pequisa. (exceto PPGBIOTEC)
+
+Outro(Cotas,Reservista...)
+
+
+//PPGCC ?>
+											<label for="doc8">Dados do PosComp.</label><span style="color: red;">*</span></label>
+											<span class="help-block">Gere um arquivo pdf contendo o número de inscrição do PosComp e ano de realização ou justificativa explicando o porque não realizou o PosComp ou para candidatos residentes fora do Brasil, anexar o comprovante de moradia.</span>
+											<input class="form-control" name="doc8" type="file" accept=".pdf" required><br><br>
+
+											<label for="doc9">Resumo de Intenção de Pesquisa.</label><span style="color: red;">*</span>
+											<span class="help-block">Gere um arquivo pdf contendo seu resumo de no máximo 500 palavras</span>
+											<input class="form-control" name="doc9" type="file" accept=".pdf" required><br><br>
+
+											<label for="doc11">Formulário de Indicação de até 3(três) docentes com quem deseja realizar sua pesquisa.</label><span style="color: red;">*</span>
+											<span class="help-block">Gere um arquivo pdf contendo este arquivo de no máximo 1(uma) página.</span>
+
+
+
+//ppgect ?>
+												<label for="doc9">Declaração.</label>
+												<span class="help-block">Gere um arquivo pdf da declaração assinada pelo representante legal do estabelecimento de ensino ao qual o professor está vinculado, quando for o caso, atestando as disciplinas ministradas pelo candidato, o nível de ensino e o respectivo tempo de atuação em cada uma delas. E/ou documento comprobatório de convênio com a UTFPR conforme a resolução nº 079/12-COPPG de 26/07/2012.
+
+
+
+Comentários:
+
+Modal: 
+ Li e aceito os <a href="" data-toggle="modal" data-target="#termoModal" data-whatever="@getbootstrap">Termos e Condições</a> referentes ao processo de inscrição.
+
+a) Declaro ter lido o edital de seleção na íntegra;<br>
+                                b) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio incorreto de documentos;<br>
+                                c) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio de documentos ilegíveis;<br>
+                                d) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pela falta de documentos;<br>
+                                e) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam por problemas de conexão de internet no momento do envio dos documentos;<br>

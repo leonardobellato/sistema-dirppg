@@ -85,7 +85,7 @@
                     { headerName: "Linha", field: "linha_pesquisa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
                     { headerName: "Área", field: "linha_pesquisa.area_concentracao.nome", filter: "agTextColumnFilter", sortable: true, flex: 1},
                     { headerName: "Curso", field: "linha_pesquisa.area_concentracao.curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1},
-                    { headerName: "Programa", field: "linha_pesquisa.area_concentracao.curso.programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 1},
+                    { headerName: "Programa", field: "linha_pesquisa.area_concentracao.curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1},
                     { headerName: "Ativo", field: "inativo", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.inativo ? "Não" : "Sim" },
                 ],
                 rowData: tableData,

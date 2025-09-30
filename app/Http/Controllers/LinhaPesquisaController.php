@@ -14,7 +14,7 @@ class LinhaPesquisaController extends Controller
         $linhas_pesquisa = LinhaPesquisa::with([
             'areaConcentracao:id_area_concentracao,nome,id_curso',
             'areaConcentracao.curso:id_curso,tipo,id_programa',
-            'areaConcentracao.curso.programa:id_programa,nome'
+            'areaConcentracao.curso.programa:id_programa,nome,sigla'
         ])->get();
 
         return view('pos.linhas-pesquisa.index', compact('linhas_pesquisa'));

@@ -1,10 +1,25 @@
-<div id="modalVisualizar" class="modal">
+<div class="modal" id="modal-editais">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Detalhes do edital</h2>
-        <p><strong>Nome: </strong> <span id="modal-nome">Teste</span></p>
-        <hr/>
-        <p><strong>Início das incrições: </strong> <span id="modal-inicio">00/00/0000</span></p>
-        <p><strong>Fim das incrições: </strong> <span id="modal-fim">00/00/0000</span></p>
+        
+        <div class="modal-header">
+            <h2 class="modal-warning">Informações do Edital</h2>
+            <span class="modal-close">&times;</span>
+        </div>
+        
+        <div class="modal-body">
+            <p>Você está prestes a excluir o seguinte item:</p>
+            
+            <span></span>
+
+            <p>
+                AVISO: Ao apagar este item, todos os demais registros do banco de dados que, de alguma forma, 
+                estão associados a este item também serão excluídos em sequência (exclusão em cascata).
+            </p>
+        </div>
+
+        <div class="modal-footer">
+            <button class="modal-cancel">Cancelar</button>
+            <button class="modal-delete">Excluir</button>
+        </div>
     </div>
 </div>

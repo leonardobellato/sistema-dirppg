@@ -122,17 +122,78 @@ class EditalController extends Controller
         $edital = Edital::where('id_edital', $id)->firstOrFail();
 
         $request->validate([
-            'nome' => 'required|string|max:200'
+            'nome' => 'required|string|max:200',
+            'link' => 'nullable|string|max:200'
         ]);
 
+        // Atualizar dados do edital
         $edital->update([
             'nome' => $request->input('nome'),
-            'vigente' => $request->has('ativo') ? 0 : 1
+            'link' => $request->input('link'),
+            'vigente' => $request->has('vigente') ? 1 : 0
         ]);
 
+        // Atualizar/criar fases
+        $fases = [
+            [
+                'tipo' => 'inscricao',
+                'ordem' => 1,
+                'data_inicio' => $request->input('input-dt-insc-inicio'),
+                'data_fim' => $request->input('input-dt-insc-fim'),
+            ],
+            [
+                'tipo' => 'recurso',
+                'ordem' => 1,
+                'data_inicio' => $request->input('input-dt-1rec-inicio'),
+                'data_fim' => $request->input('input-dt-1rec-fim'),
+            ],
+            [
+                'tipo' => 'homologacao',
+                'ordem' => 1,
+                'data_inicio' => $request->input('input-dt-1hom-inicio'),
+                'data_fim' => $request->input('input-dt-1hom-fim'),
+            ],
+        ];
+
+        // 2º recurso (opcional)
+        if ($request->filled('input-dt-2rec-inicio') && $request->filled('input-dt-2rec-fim')) {
+            $fases[] = [
+                'tipo' => 'recurso',
+                'ordem' => 2,
+                'data_inicio' => $request->input('input-dt-2rec-inicio'),
+                'data_fim' => $request->input('input-dt-2rec-fim'),
+            ];
+        }
+
+        // 2ª homologação (opcional)
+        if ($request->filled('input-dt-2hom-inicio') && $request->filled('input-dt-2hom-fim')) {
+            $fases[] = [
+                'tipo' => 'homologacao',
+                'ordem' => 2,
+                'data_inicio' => $request->input('input-dt-2hom-inicio'),
+                'data_fim' => $request->input('input-dt-2hom-fim'),
+            ];
+        }
+
+        // Salvar fases: atualiza se existe, cria se não
+        foreach ($fases as $fase) {
+            FaseEdital::updateOrCreate(
+                [
+                    'id_edital' => $edital->id_edital,
+                    'tipo' => $fase['tipo'],
+                    'ordem' => $fase['ordem'],
+                ],
+                [
+                    'data_inicio' => $fase['data_inicio'],
+                    'data_fim' => $fase['data_fim'],
+                ]
+            );
+        }
+
         return redirect()->route('editais.index')
-                         ->with('success', 'Edital atualizado com sucesso!');
+                        ->with('success', 'Edital atualizado com sucesso!');
     }
+
 
     // Método para remover um objeto
     public function destroy($id)

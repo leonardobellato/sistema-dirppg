@@ -52,7 +52,7 @@
 
                 {{-- erro específico do campo cpf --}}
                 @error('cpf')
-                    <span class="campo-invalido">O cpf deve ser único na base de dados.</span>
+                    <span class="campo-invalido">O cpf deve ser válido e único na base de dados.</span>
                 @enderror
 
                 <label for="input-telefone">Telefone/Celular<span class="required-content">*</span></label>

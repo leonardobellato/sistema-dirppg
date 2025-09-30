@@ -29,7 +29,17 @@ class UsuarioController extends Controller
         $request->validate([
             'nome' => 'required|string|max:100',
             'email' => 'required|string|max:100|unique:usuarios,email',
-            'cpf' => 'required|string|max:14|unique:candidatos,cpf',
+            'cpf' => [
+                'required',
+                'string',
+                'max:14',
+                'unique:candidatos,cpf',
+                function ($attribute, $value, $fail) {
+                    if (!$this->validaCPF($value)) {
+                        $fail('O CPF informado é inválido.');
+                    }
+                },
+            ],
             'senha' => 'required|string|min:8',
             'telefone' => 'nullable|string|max:20'
         ]);
@@ -50,6 +60,28 @@ class UsuarioController extends Controller
         }
 
         return view('autenticacao.cadastro.confirmacao');
+    }
+
+    // Função de validação CPF
+    private function validaCPF($cpf)
+    {
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        if (strlen($cpf) != 11 || preg_match('/^(.)\1{10}$/', $cpf)) {
+            return false;
+        }
+
+        for ($t = 9; $t < 11; $t++) {
+            $d = 0;
+            for ($c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Mostra o formulário de edição

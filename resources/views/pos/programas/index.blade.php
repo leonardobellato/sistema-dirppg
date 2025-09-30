@@ -81,7 +81,8 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: "asc" }
+                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc" },
+                    { headerName: "Sigla", field: "sigla", filter: "agTextColumnFilter", sortable: true, flex: 1 }
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },

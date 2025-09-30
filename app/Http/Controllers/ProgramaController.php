@@ -25,11 +25,13 @@ class ProgramaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:100|unique:programas,nome'
+            'nome' => 'required|string|max:100|unique:programas,nome',
+            'sigla' => 'required|string|max:10|unique:programas,sigla'
         ]);
 
         Programa::create([
-            'nome' => $request->input('nome')
+            'nome' => $request->input('nome'),
+            'sigla' => $request->input('sigla')
         ]);
 
         return redirect()->route('pos.programas.index')->with('success', 'Programa criado com sucesso!');
@@ -48,11 +50,13 @@ class ProgramaController extends Controller
         $programa = Programa::where('id_programa', $id)->firstOrFail();
 
         $request->validate([
-            'nome' => 'required|string|max:100|unique:programas,nome,' . $programa->id_programa . ',id_programa'
+            'nome' => 'required|string|max:100|unique:programas,nome,' . $programa->id_programa . ',id_programa',
+            'sigla' => 'required|string|max:10|unique:programas,sigla,' . $programa->id_programa . ',id_programa'
         ]);
 
         $programa->update([
-            'nome' => $request->input('nome')
+            'nome' => $request->input('nome'),
+            'sigla' => $request->input('sigla')
         ]);
 
         return redirect()->route('pos.programas.index')

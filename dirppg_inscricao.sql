@@ -1,6 +1,7 @@
 CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `nome`        VARCHAR(100) NOT NULL UNIQUE
+  `nome`        VARCHAR(100) NOT NULL UNIQUE,
+  `sigla`       VARCHAR(10) NOT NULL UNIQUE
 );
 
 
@@ -127,6 +128,7 @@ CREATE TABLE `editais` (
   `id_curso`                  INT UNSIGNED NOT NULL,
   `nome`                      VARCHAR(200) NOT NULL,
   `link`                      VARCHAR(200) DEFAULT NULL,
+  `data_publicacao`           DATETIME DEFAULT CURRENT_TIMESTAMP,
   `vigente`                   TINYINT(1) NOT NULL DEFAULT 1
 );
 
@@ -314,14 +316,14 @@ ALTER TABLE `auditorias`
 -- --------------------------------------------------
 -- POPULANDO TABELAS - VALORES PADRÃO
 
-INSERT INTO `programas` (`nome`) VALUES
-('Programa de Pós-Graduação em Ciência da Computação'),
-('Programa de Pós-Graduação em Ensino de Ciência e Tecnologia'),
-('Programa de Pós-Graduação em Engenharia Mecânica'),
-('Programa de Pós-Graduação em Engenharia Elétrica'),
-('Programa de Pós-Graduação em Engenharia de Produção'),
-('Programa de Pós-Graduação em Biotecnologia'),
-('Programa de Pós-Graduação em Engenharia Química');
+INSERT INTO `programas` (`nome`, `sigla`) VALUES
+('Programa de Pós-Graduação em Ciência da Computação', 'PPGCC'),
+('Programa de Pós-Graduação em Ensino de Ciência e Tecnologia', 'PPGECT'),
+('Programa de Pós-Graduação em Engenharia Mecânica', 'PPGEM'),
+('Programa de Pós-Graduação em Engenharia Elétrica', 'PPGEE'),
+('Programa de Pós-Graduação em Engenharia de Produção', 'PPGEP'),
+('Programa de Pós-Graduação em Biotecnologia', 'PPGBIOTEC'),
+('Programa de Pós-Graduação em Engenharia Química', 'PPGEQ');
 
 INSERT INTO `cursos` (`id_programa`, `tipo`) VALUES
 (1, 'Aluno Externo'),
