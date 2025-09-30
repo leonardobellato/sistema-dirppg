@@ -13,14 +13,14 @@ class AreaConcentracaoController extends Controller
     {
         $areas_concentracao = AreaConcentracao::with('curso.programa')->get();
 
-        return view('pos.areas-concentracao.index', compact('areas_concentracao'));
+        return view('admin.pos.areas-concentracao.index', compact('areas_concentracao'));
     }
 
     // Método para mostrar o formulário de criação
     public function create()
     {
         $programas = Programa::all();
-        return view('pos.areas-concentracao.adicionar', compact('programas'));
+        return view('admin.pos.areas-concentracao.adicionar', compact('programas'));
     }
 
     // rota para AJAX
@@ -49,7 +49,7 @@ class AreaConcentracaoController extends Controller
     public function edit($id)
     {
         $area_concentracao = AreaConcentracao::with('curso.programa')->where('id_area_concentracao', $id)->firstOrFail();
-        return view('pos.areas-concentracao.alterar', compact('area_concentracao'));
+        return view('admin.pos.areas-concentracao.alterar', compact('area_concentracao'));
     }
 
     // Atualizar objeto

@@ -18,14 +18,14 @@ class SublinhaController extends Controller
             'linhaPesquisa.areaConcentracao.curso.programa:id_programa,nome,sigla'
         ])->get();
 
-        return view('pos.sublinhas.index', compact('sublinhas'));
+        return view('admin.pos.sublinhas.index', compact('sublinhas'));
     }
 
     // Método para mostrar o formulário de criação
     public function create()
     {
         $programas = Programa::all();
-        return view('pos.sublinhas.adicionar', compact('programas'));
+        return view('admin.pos.sublinhas.adicionar', compact('programas'));
     }
 
     // rota para AJAX
@@ -60,7 +60,7 @@ class SublinhaController extends Controller
             'linhaPesquisa.areaConcentracao.curso.programa:id_programa,nome'
         ])->where('id_sublinha', $id)->firstOrFail();
 
-        return view('pos.sublinhas.alterar', compact('sublinha'));
+        return view('admin.pos.sublinhas.alterar', compact('sublinha'));
     }
 
     // Atualizar objeto

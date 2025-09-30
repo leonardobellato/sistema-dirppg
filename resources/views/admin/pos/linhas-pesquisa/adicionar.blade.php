@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Sublinhas')
+@section('title', 'Linhas de Pesquisa')
 
 @push('head')
     <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
 @endpush
 
 @section('content')
-    <h1>Adicionar sublinha</h1>
+    <h1>Adicionar linha de pesquisa</h1>
 
     <div class="container-form">
-		<form action="{{ route('pos.sublinhas.salvar') }}" method="POST">
+		<form action="{{ route('pos.linhas-pesquisa.salvar') }}" method="POST">
             @csrf
 
             <label for="input-programa">Programa:<span class="required-content">*</span></label>
@@ -33,11 +33,6 @@
 				<option value="">Selecione...</option>		
 			</select>
 
-            <label for="input-linha-pesquisa">Linha de pesquisa:<span class="required-content">*</span></label>
-			<select id="input-linha-pesquisa" name="linha-pesquisa" disabled required>
-				<option value="">Selecione...</option>		
-			</select>
-
 			<label for="input-nome">Nome do linha:<span class="required-content">*</span></label>
 			<input type="text" id="input-nome" name="nome" placeholder="Digite o nome aqui" required
                 value="{{ old('nome') }}" {{-- mantém o valor se der erro --}}
@@ -53,7 +48,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<a href={{ route('pos.sublinhas.index') }}>Cancelar</a>
+				<a href={{ route('pos.linhas-pesquisa.index') }}>Cancelar</a>
 				<button type="submit">Cadastrar</button>
 			</div>
 		</form>
@@ -65,25 +60,21 @@
         const programaSelect = document.getElementById('input-programa');
         const cursoSelect = document.getElementById('input-curso');
         const areaSelect = document.getElementById('input-area-concentracao');
-        const linhaSelect = document.getElementById('input-linha-pesquisa');
 
         // Ao mudar o programa
         programaSelect.addEventListener('change', function() {
             const idPrograma = this.value;
 
-            // Resetar cursos, áreas e linhas
+            // Resetar cursos e áreas
             cursoSelect.innerHTML = '<option value="">Selecione...</option>';
             cursoSelect.disabled = true;
 
             areaSelect.innerHTML = '<option value="">Selecione...</option>';
             areaSelect.disabled = true;
 
-            linhaSelect.innerHTML = '<option value="">Selecione...</option>';
-            linhaSelect.disabled = true;
-
             if (idPrograma) {
                 cursoSelect.innerHTML = '<option>Carregando...</option>';
-                fetch(`/programas/${idPrograma}/cursos`)
+                fetch(`/admin/programas/${idPrograma}/cursos`)
                     .then(response => response.json())
                     .then(data => {
                         cursoSelect.innerHTML = '<option value="">Selecione...</option>';
@@ -102,16 +93,13 @@
         cursoSelect.addEventListener('change', function() {
             const idCurso = this.value;
 
-            // Resetar áreas e linhas
+            // Resetar áreas
             areaSelect.innerHTML = '<option value="">Selecione...</option>';
             areaSelect.disabled = true;
 
-            linhaSelect.innerHTML = '<option value="">Selecione...</option>';
-            linhaSelect.disabled = true;            
-
             if (idCurso) {
                 areaSelect.innerHTML = '<option>Carregando...</option>';
-                fetch(`/cursos/${idCurso}/areas-concentracao`)
+                fetch(`/admin/cursos/${idCurso}/areas-concentracao`)
                     .then(response => response.json())
                     .then(data => {
                         areaSelect.innerHTML = '<option value="">Selecione...</option>';
@@ -122,32 +110,6 @@
                     })
                     .catch(() => {
                         areaSelect.innerHTML = '<option value="">Erro ao carregar áreas</option>';
-                    });
-            }
-        });
-
-        // Ao mudar a area
-        areaSelect.addEventListener('change', function() {
-            const idArea = this.value;
-
-            // Resetar áreas
-            linhaSelect.innerHTML = '<option value="">Selecione...</option>';
-            linhaSelect.disabled = true;
-            
-
-            if (idArea) {
-                linhaSelect.innerHTML = '<option>Carregando...</option>';
-                fetch(`/areas-concentracao/${idArea}/linhas-pesquisa`)
-                    .then(response => response.json())
-                    .then(data => {
-                        linhaSelect.innerHTML = '<option value="">Selecione...</option>';
-                        data.forEach(linha => {
-                            linhaSelect.innerHTML += `<option value="${linha.id_linha_pesquisa}">${linha.nome}</option>`;
-                        });
-                        linhaSelect.disabled = false;
-                    })
-                    .catch(() => {
-                        linhaSelect.innerHTML = '<option value="">Erro ao carregar linhas</option>';
                     });
             }
         });

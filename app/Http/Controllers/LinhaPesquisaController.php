@@ -17,14 +17,14 @@ class LinhaPesquisaController extends Controller
             'areaConcentracao.curso.programa:id_programa,nome,sigla'
         ])->get();
 
-        return view('pos.linhas-pesquisa.index', compact('linhas_pesquisa'));
+        return view('admin.pos.linhas-pesquisa.index', compact('linhas_pesquisa'));
     }
 
     // Método para mostrar o formulário de criação
     public function create()
     {
         $programas = Programa::all();
-        return view('pos.linhas-pesquisa.adicionar', compact('programas'));
+        return view('admin.pos.linhas-pesquisa.adicionar', compact('programas'));
     }
 
     // rota para AJAX
@@ -58,7 +58,7 @@ class LinhaPesquisaController extends Controller
             'areaConcentracao.curso.programa:id_programa,nome'
         ])->where('id_linha_pesquisa', $id)->firstOrFail();
 
-        return view('pos.linhas-pesquisa.alterar', compact('linha_pesquisa'));
+        return view('admin.pos.linhas-pesquisa.alterar', compact('linha_pesquisa'));
     }
 
     // Atualizar objeto

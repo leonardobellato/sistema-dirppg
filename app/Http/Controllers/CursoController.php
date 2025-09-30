@@ -13,14 +13,14 @@ class CursoController extends Controller
     {
         $cursos = Curso::with('programa')->get();
 
-        return view('pos.cursos.index', compact('cursos'));
+        return view('admin.pos.cursos.index', compact('cursos'));
     }
 
     // Método para mostrar o formulário de criação
     public function create()
     {
         $programas = Programa::all();
-        return view('pos.cursos.adicionar', ['programas' => $programas]);
+        return view('admin.pos.cursos.adicionar', ['programas' => $programas]);
     }
 
     // rota para AJAX

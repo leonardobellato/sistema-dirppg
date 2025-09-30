@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Programas')
+@section('title', 'Editais')
 
 @push('head')
     <link rel="stylesheet" href="{{ asset('ag-grid/styles/ag-theme-alpine.css') }}">
@@ -14,17 +14,25 @@
         </div>
     @endif
 
-    <h1>Programas</h1>
+    <h1>Editais</h1>
 
     <div class="container-tabela">
         <div class="btn-grp-tabela">
             <div class="btn-grp-principal">
-                <a href={{ route('pos.programas.adicionar') }} id="btn-adicionar">
+                <a href={{ route('editais.adicionar') }} id="btn-adicionar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                     </svg>
                     Adicionar
                 </a>
+
+                <button href="#" id="btn-visualizar" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg>
+                    Visualizar
+                </button>
 
                 <a href="#" id="btn-alterar" class="disabled-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -54,8 +62,11 @@
         <div id="tabela-vigente" class="ag-theme"></div>
     </div>
 
-    <!-- Modal -->
+    {{ $pagination->links() }}
+
+    <!-- Modais -->
     @include('components.modal-delete')
+    @include('components.modal-editais')
 @endsection
 
 @push('scripts')
@@ -67,12 +78,13 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Busca dados do banco
-            const tableData = @json($programas);
+            const tableData = @json($editais);
+            console.log(tableData);
 
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
-                    resizable: false,
+                    resizable: true,
                     tooltipValueGetter: params => params.value,
                     comparator: (valueA, valueB) => {
                         if (valueA == null) return -1;
@@ -81,29 +93,40 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc" },
-                    { headerName: "Sigla", field: "sigla", filter: "agTextColumnFilter", sortable: true, flex: 1 }
+                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
+                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1 },
+                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1 },
+                    { headerName: "Data de Publicação", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: 'desc',  valueFormatter: params => {
+                        if (!params.value) return '';
+                        const date = new Date(params.value);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                        return `${day}/${month}/${year}`;
+                    }},
+                    { headerName: "Vigente", field: "vigente", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.vigente ? "Sim" : "Não" },
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
-                pagination: true,
-                paginationPageSize: 20,
                 domLayout: "autoHeight",
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");
+                    const btnVisualizar = document.getElementById("btn-visualizar");
 
                     // Ao mudar a seleção, alguns botões são ativados/inativados
                     if(event.selectedNodes.length > 0){
                         btnExcluir.disabled = false;
+                        btnVisualizar.disabled = false;
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/programas/alterar/:ID"; // :ID é placeholder
-                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_programa);
+                        let baseUrl = "/admin/editais/alterar/:ID"; // :ID é placeholder
+                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_edital);
                     } 
                     else{
                         btnExcluir.disabled = true;
+                        btnVisualizar.disabled = true;
                         btnAlterar.classList.add("disabled-link");
                         btnAlterar.removeAttribute("href");
                     }                
@@ -119,12 +142,19 @@
                 gridApi.onFilterChanged();  
             });
 
+            // Visualizar
+            document.getElementById("btn-visualizar").addEventListener("click", function () {
+                const object = gridApi.getSelectedRows()[0];
+
+                openModalEditais(object, null);
+            });
+
             // Excluir
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                openDeleteModal(object.nome, () => {
-                    fetch(`/programas/${object.id_programa}`, {
+                openModalDelete(object.nome, () => {
+                    fetch(`/admin/editais/${object.id_edital}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
@@ -133,7 +163,7 @@
                     .then(response => {
                         if (!response.ok) throw new Error("Erro ao deletar");
                         gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
-                        window.alert("Programa excluído!");
+                        window.alert("Edital excluído!");
                     })
                     .catch(err => alert(err.message));
                 });

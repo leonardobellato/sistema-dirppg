@@ -14,7 +14,7 @@ class EditalController extends Controller
     {
         $editais = Edital::with(['curso.programa', 'fasesEdital'])->paginate(20);
 
-        return view('editais.index', [
+        return view('admin.editais.index', [
             'editais' => $editais->items(), // apenas os registros da página atual
             'pagination' => $editais        // mantém os links de paginação
         ]);
@@ -24,7 +24,7 @@ class EditalController extends Controller
     public function create()
     {
         $programas = Programa::all();
-        return view('editais.adicionar', compact('programas'));
+        return view('admin.editais.adicionar', compact('programas'));
     }
 
     // rota para AJAX
@@ -113,7 +113,7 @@ class EditalController extends Controller
             return $fase->tipo.'_'.$fase->ordem;
         });
 
-        return view('editais.alterar', compact('edital', 'fases'));
+        return view('admin.editais.alterar', compact('edital', 'fases'));
     }
 
     // Atualizar objeto

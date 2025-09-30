@@ -12,13 +12,13 @@ class ProgramaController extends Controller
     {
         $programas = Programa::all();
 
-        return view('pos.programas.index', compact('programas'));
+        return view('admin.pos.programas.index', compact('programas'));
     }
 
     // Método para mostrar o formulário de criação
     public function create()
     {
-        return view('pos.programas.adicionar');
+        return view('admin.pos.programas.adicionar');
     }
 
     // Método para salvar no banco
@@ -41,7 +41,7 @@ class ProgramaController extends Controller
     public function edit($id)
     {
         $programa = Programa::where('id_programa', $id)->firstOrFail();
-        return view('pos.programas.alterar', compact('programa'));
+        return view('admin.pos.programas.alterar', compact('programa'));
     }
 
     // Atualizar objeto

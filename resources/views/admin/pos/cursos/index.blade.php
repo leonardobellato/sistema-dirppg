@@ -108,7 +108,7 @@
                 const object = gridApi.getSelectedRows()[0];
 
                 openDeleteModal(object.tipo + " - " + object.programa.nome, () => {
-                    fetch(`/cursos/${object.id_curso}`, {
+                    fetch(`/admin/cursos/${object.id_curso}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content

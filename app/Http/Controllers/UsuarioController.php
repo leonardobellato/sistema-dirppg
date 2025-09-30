@@ -15,7 +15,7 @@ class UsuarioController extends Controller
     {
         $usuarios = Edital::with(['curso.programa', 'fasesEdital'])->paginate(20);
 
-        return view('editais.index', [
+        return view('admin.editais.index', [
             'editais' => $editais->items(), // apenas os registros da página atual
             'pagination' => $editais        // mantém os links de paginação
         ]);
@@ -59,7 +59,7 @@ class UsuarioController extends Controller
             ]);
         }
 
-        return view('autenticacao.cadastro.confirmacao');
+        return view('admin.autenticacao.cadastro.confirmacao');
     }
 
     // Função de validação CPF
@@ -90,7 +90,7 @@ class UsuarioController extends Controller
         // pega o usuário logado
         $usuario = Auth::user();
 
-        return view('pessoas.usuarios.alterar', compact('usuario'));
+        return view('admin.pessoas.usuarios.alterar', compact('usuario'));
     }
 
     // Atualiza os dados

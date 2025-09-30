@@ -13,14 +13,14 @@ class DisciplinaController extends Controller
     {
         $disciplinas = Disciplina::with('curso.programa')->get();
 
-        return view('pos.disciplinas-aluno-externo.index', compact('disciplinas'));
+        return view('admin.pos.disciplinas-aluno-externo.index', compact('disciplinas'));
     }
 
     // Método para mostrar o formulário de criação
     public function create()
     {
         $programas = Programa::all();
-        return view('pos.disciplinas-aluno-externo.adicionar', ['programas' => $programas]);
+        return view('admin.pos.disciplinas-aluno-externo.adicionar', ['programas' => $programas]);
     }
 
     // rota para AJAX
@@ -49,7 +49,7 @@ class DisciplinaController extends Controller
     public function edit($id)
     {
         $disciplina = Disciplina::with('curso.programa')->where('id_disciplina', $id)->firstOrFail();
-        return view('pos.disciplinas-aluno-externo.alterar', compact('disciplina'));
+        return view('admin.pos.disciplinas-aluno-externo.alterar', compact('disciplina'));
     }
 
     // Atualizar objeto

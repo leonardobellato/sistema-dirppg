@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Linhas de Pesquisa')
+@section('title', 'Disciplinas de Aluno Externos')
 
 @push('head')
     <link rel="stylesheet" href="{{ asset('ag-grid/styles/ag-theme-alpine.css') }}">
@@ -14,12 +14,12 @@
         </div>
     @endif
 
-    <h1>Linhas de Pesquisa</h1>
+    <h1>Disciplinas de Aluno Externo</h1>
 
     <div class="container-tabela">
         <div class="btn-grp-tabela">
             <div class="btn-grp-principal">
-                <a href={{ route('pos.linhas-pesquisa.adicionar') }} id="btn-adicionar">
+                <a href={{ route('pos.disciplinas-aluno-externo.adicionar') }} id="btn-adicionar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                     </svg>
@@ -67,8 +67,8 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Busca dados do banco
-            const tableData = @json($linhas_pesquisa);
-
+            const tableData = @json($disciplinas);
+            
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
                 defaultColDef: {
@@ -81,10 +81,8 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Linha", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc"},
-                    { headerName: "Área", field: "area_concentracao.nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
-                    { headerName: "Curso", field: "area_concentracao.curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1},
-                    { headerName: "Programa", field: "area_concentracao.curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1},
+                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc"},
+                    { headerName: "Programa", field: "curso.programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
                     { headerName: "Ativo", field: "inativo", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.inativo ? "Não" : "Sim" },
                 ],
                 rowData: tableData,
@@ -102,8 +100,8 @@
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/linhas-pesquisa/alterar/:ID"; // :ID é placeholder
-                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_linha_pesquisa);
+                        let baseUrl = "/admin/disciplinas-aluno-externo/alterar/:ID"; // :ID é placeholder
+                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_disciplina);
                     } 
                     else{
                         btnExcluir.disabled = true;
@@ -127,7 +125,7 @@
                 const object = gridApi.getSelectedRows()[0];
 
                 openDeleteModal(object.nome, () => {
-                    fetch(`/linhas-pesquisa/${object.id_linha_pesquisa}`, {
+                    fetch(`/admin/disciplinas-aluno-externo/${object.id_disciplina}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
@@ -136,7 +134,7 @@
                     .then(response => {
                         if (!response.ok) throw new Error("Erro ao deletar");
                         gridApi.applyTransaction({ remove: gridApi.getSelectedRows() });
-                        window.alert("Linha de pesquisa excluída!");
+                        window.alert("Disciplina excluída!");
                     })
                     .catch(err => alert(err.message));
                 });

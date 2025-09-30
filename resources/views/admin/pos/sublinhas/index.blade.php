@@ -103,7 +103,7 @@
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/sublinhas/alterar/:ID"; // :ID é placeholder
+                        let baseUrl = "/admin/sublinhas/alterar/:ID"; // :ID é placeholder
                         btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_sublinha);
                     } 
                     else{
@@ -128,7 +128,7 @@
                 const object = gridApi.getSelectedRows()[0];
 
                 openDeleteModal(object.nome, () => {
-                    fetch(`/sublinhas/${object.id_sublinha}`, {
+                    fetch(`/admin/sublinhas/${object.id_sublinha}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content

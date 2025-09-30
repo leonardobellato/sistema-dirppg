@@ -149,7 +149,7 @@
             cursoSelect.innerHTML = '<option>Carregando...</option>';
 
             if(idPrograma) {
-                fetch(`/programas/${idPrograma}/cursos`)
+                fetch(`/admin/programas/${idPrograma}/cursos`)
                     .then(response => response.json())
                     .then(data => {
                         cursoSelect.innerHTML = '<option value="">Selecione...</option>';

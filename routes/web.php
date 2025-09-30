@@ -31,72 +31,72 @@ Route::middleware('auth')->group(function () {
 
 //['auth', 'role:admin']
 
-Route::get('/analise-inscricoes', function () {
+Route::get('/admin/analise-inscricoes', function () {
     return view('analise-inscricoes.index');
 })->name('analise-inscricoes.index');
 
 
-Route::get('/editais', [EditalController::class, 'index'])->name('editais.index');
-Route::get('/editais/adicionar', [EditalController::class, 'create'])->name('editais.adicionar');
-Route::get('/editais/alterar/{id}', [EditalController::class, 'edit'])->name('editais.alterar');
-Route::post('/editais', [EditalController::class, 'store'])->name('editais.salvar');
-Route::put('/editais/{id}', [EditalController::class, 'update'])->name('editais.atualizar');
-Route::delete('/editais/{id}', [EditalController::class, 'destroy'])->name('editais.excluir');
+Route::get('/admin/editais', [EditalController::class, 'index'])->name('editais.index');
+Route::get('/admin/editais/adicionar', [EditalController::class, 'create'])->name('editais.adicionar');
+Route::get('/admin/editais/alterar/{id}', [EditalController::class, 'edit'])->name('editais.alterar');
+Route::post('/admin/editais', [EditalController::class, 'store'])->name('editais.salvar');
+Route::put('/admin/editais/{id}', [EditalController::class, 'update'])->name('editais.atualizar');
+Route::delete('/admin/editais/{id}', [EditalController::class, 'destroy'])->name('editais.excluir');
 
-Route::get('/programas', [ProgramaController::class, 'index'])->name('pos.programas.index');
-Route::get('/programas/adicionar', [ProgramaController::class, 'create'])->name('pos.programas.adicionar');
-Route::get('/programas/alterar/{id}', [ProgramaController::class, 'edit'])->name('pos.programas.alterar');
-Route::get('/programas/{id}/cursos', [CursoController::class, 'getCursosByPrograma']);
-Route::post('/programas', [ProgramaController::class, 'store'])->name('pos.programas.salvar');
-Route::put('/programas/{id}', [ProgramaController::class, 'update'])->name('pos.programas.atualizar');
-Route::delete('/programas/{id}', [ProgramaController::class, 'destroy'])->name('pos.programas.excluir');
+Route::get('/admin/programas', [ProgramaController::class, 'index'])->name('pos.programas.index');
+Route::get('/admin/programas/adicionar', [ProgramaController::class, 'create'])->name('pos.programas.adicionar');
+Route::get('/admin/programas/alterar/{id}', [ProgramaController::class, 'edit'])->name('pos.programas.alterar');
+Route::get('/admin/programas/{id}/cursos', [CursoController::class, 'getCursosByPrograma']);
+Route::post('/admin/programas', [ProgramaController::class, 'store'])->name('pos.programas.salvar');
+Route::put('/admin/programas/{id}', [ProgramaController::class, 'update'])->name('pos.programas.atualizar');
+Route::delete('/admin/programas/{id}', [ProgramaController::class, 'destroy'])->name('pos.programas.excluir');
 
-Route::get('/cursos', [CursoController::class, 'index'])->name('pos.cursos.index');
-Route::get('/cursos/adicionar', [CursoController::class, 'create'])->name('pos.cursos.adicionar');
-Route::get('/cursos/{id}/areas-concentracao', [AreaConcentracaoController::class, 'getAreasByCurso']);
-Route::get('/cursos/{id}/disciplinas-aluno-externo', [DisciplinaController::class, 'getDisciplinasByCurso']);
-Route::get('/cursos/{id}/editais', [EditalController::class, 'getEditaisByCurso']);
-Route::post('/cursos', [CursoController::class, 'store'])->name('pos.cursos.salvar');
-Route::delete('/cursos/{id}', [CursoController::class, 'destroy'])->name('pos.cursos.excluir');
+Route::get('/admin/cursos', [CursoController::class, 'index'])->name('pos.cursos.index');
+Route::get('/admin/cursos/adicionar', [CursoController::class, 'create'])->name('pos.cursos.adicionar');
+Route::get('/admin/cursos/{id}/areas-concentracao', [AreaConcentracaoController::class, 'getAreasByCurso']);
+Route::get('/admin/cursos/{id}/disciplinas-aluno-externo', [DisciplinaController::class, 'getDisciplinasByCurso']);
+Route::get('/admin/cursos/{id}/editais', [EditalController::class, 'getEditaisByCurso']);
+Route::post('/admin/cursos', [CursoController::class, 'store'])->name('pos.cursos.salvar');
+Route::delete('/admin/cursos/{id}', [CursoController::class, 'destroy'])->name('pos.cursos.excluir');
 
-Route::get('/areas-concentracao', [AreaConcentracaoController::class, 'index'])->name('pos.areas-concentracao.index');
-Route::get('/areas-concentracao/adicionar', [AreaConcentracaoController::class, 'create'])->name('pos.areas-concentracao.adicionar');
-Route::get('/areas-concentracao/alterar/{id}', [AreaConcentracaoController::class, 'edit'])->name('pos.areas-concentracao.alterar');
-Route::get('/areas-concentracao/{id}/linhas-pesquisa', [LinhaPesquisaController::class, 'getLinhasByArea']);
-Route::post('/areas-concentracao', [AreaConcentracaoController::class, 'store'])->name('pos.areas-concentracao.salvar');
-Route::put('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'update'])->name('pos.areas-concentracao.atualizar');
-Route::delete('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'destroy'])->name('pos.areas-concentracao.excluir');
+Route::get('/admin/areas-concentracao', [AreaConcentracaoController::class, 'index'])->name('pos.areas-concentracao.index');
+Route::get('/admin/areas-concentracao/adicionar', [AreaConcentracaoController::class, 'create'])->name('pos.areas-concentracao.adicionar');
+Route::get('/admin/areas-concentracao/alterar/{id}', [AreaConcentracaoController::class, 'edit'])->name('pos.areas-concentracao.alterar');
+Route::get('/admin/areas-concentracao/{id}/linhas-pesquisa', [LinhaPesquisaController::class, 'getLinhasByArea']);
+Route::post('/admin/areas-concentracao', [AreaConcentracaoController::class, 'store'])->name('pos.areas-concentracao.salvar');
+Route::put('/admin/areas-concentracao/{id}', [AreaConcentracaoController::class, 'update'])->name('pos.areas-concentracao.atualizar');
+Route::delete('/admin/areas-concentracao/{id}', [AreaConcentracaoController::class, 'destroy'])->name('pos.areas-concentracao.excluir');
 
-Route::get('/linhas-pesquisa', [LinhaPesquisaController::class, 'index'])->name('pos.linhas-pesquisa.index');
-Route::get('/linhas-pesquisa/adicionar', [LinhaPesquisaController::class, 'create'])->name('pos.linhas-pesquisa.adicionar');
-Route::get('/linhas-pesquisa/alterar/{id}', [LinhaPesquisaController::class, 'edit'])->name('pos.linhas-pesquisa.alterar');
-Route::get('/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'getSublinhasByLinha']);
-Route::post('/linhas-pesquisa', [LinhaPesquisaController::class, 'store'])->name('pos.linhas-pesquisa.salvar');
-Route::put('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'update'])->name('pos.linhas-pesquisa.atualizar');
-Route::delete('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'destroy'])->name('pos.linhas-pesquisa.excluir');
+Route::get('/admin/linhas-pesquisa', [LinhaPesquisaController::class, 'index'])->name('pos.linhas-pesquisa.index');
+Route::get('/admin/linhas-pesquisa/adicionar', [LinhaPesquisaController::class, 'create'])->name('pos.linhas-pesquisa.adicionar');
+Route::get('/admin/linhas-pesquisa/alterar/{id}', [LinhaPesquisaController::class, 'edit'])->name('pos.linhas-pesquisa.alterar');
+Route::get('/admin/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'getSublinhasByLinha']);
+Route::post('/admin/linhas-pesquisa', [LinhaPesquisaController::class, 'store'])->name('pos.linhas-pesquisa.salvar');
+Route::put('/admin/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'update'])->name('pos.linhas-pesquisa.atualizar');
+Route::delete('/admin/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'destroy'])->name('pos.linhas-pesquisa.excluir');
 
-Route::get('/sublinhas', [SublinhaController::class, 'index'])->name('pos.sublinhas.index');
-Route::get('/sublinhas/adicionar', [SublinhaController::class, 'create'])->name('pos.sublinhas.adicionar');
-Route::get('/sublinhas/alterar/{id}', [SublinhaController::class, 'edit'])->name('pos.sublinhas.alterar');
-Route::post('/sublinhas', [SublinhaController::class, 'store'])->name('pos.sublinhas.salvar');
-Route::put('/sublinhas/{id}', [SublinhaController::class, 'update'])->name('pos.sublinhas.atualizar');
-Route::delete('/sublinhas/{id}', [SublinhaController::class, 'destroy'])->name('pos.sublinhas.excluir');
+Route::get('/admin/sublinhas', [SublinhaController::class, 'index'])->name('pos.sublinhas.index');
+Route::get('/admin/sublinhas/adicionar', [SublinhaController::class, 'create'])->name('pos.sublinhas.adicionar');
+Route::get('/admin/sublinhas/alterar/{id}', [SublinhaController::class, 'edit'])->name('pos.sublinhas.alterar');
+Route::post('/admin/sublinhas', [SublinhaController::class, 'store'])->name('pos.sublinhas.salvar');
+Route::put('/admin/sublinhas/{id}', [SublinhaController::class, 'update'])->name('pos.sublinhas.atualizar');
+Route::delete('/admin/sublinhas/{id}', [SublinhaController::class, 'destroy'])->name('pos.sublinhas.excluir');
 
-Route::get('/disciplinas-aluno-externo', [DisciplinaController::class, 'index'])->name('pos.disciplinas-aluno-externo.index');
-Route::get('/disciplinas-aluno-externo/adicionar', [DisciplinaController::class, 'create'])->name('pos.disciplinas-aluno-externo.adicionar');
-Route::get('/disciplinas-aluno-externo/alterar/{id}', [DisciplinaController::class, 'edit'])->name('pos.disciplinas-aluno-externo.alterar');
-Route::post('/disciplinas-aluno-externo', [DisciplinaController::class, 'store'])->name('pos.disciplinas-aluno-externo.salvar');
-Route::put('/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'update'])->name('pos.disciplinas-aluno-externo.atualizar');
-Route::delete('/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'destroy'])->name('pos.disciplinas-aluno-externo.excluir');
+Route::get('/admin/disciplinas-aluno-externo', [DisciplinaController::class, 'index'])->name('pos.disciplinas-aluno-externo.index');
+Route::get('/admin/disciplinas-aluno-externo/adicionar', [DisciplinaController::class, 'create'])->name('pos.disciplinas-aluno-externo.adicionar');
+Route::get('/admin/disciplinas-aluno-externo/alterar/{id}', [DisciplinaController::class, 'edit'])->name('pos.disciplinas-aluno-externo.alterar');
+Route::post('/admin/disciplinas-aluno-externo', [DisciplinaController::class, 'store'])->name('pos.disciplinas-aluno-externo.salvar');
+Route::put('/admin/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'update'])->name('pos.disciplinas-aluno-externo.atualizar');
+Route::delete('/admin/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'destroy'])->name('pos.disciplinas-aluno-externo.excluir');
 
-Route::get('/professores', function () {
+Route::get('/admin/professores', function () {
     return view('pessoas.professores');
 })->name('pessoas.professores');
 
-Route::get('/secretarios', function () {
+Route::get('/admin/secretarios', function () {
     return view('pessoas.secretarios');
 })->name('pessoas.secretarios');
 
-Route::get('/entrevistas', function () {
+Route::get('/admin/entrevistas', function () {
     return view('entrevistas.index');
 })->name('entrevistas.index');
