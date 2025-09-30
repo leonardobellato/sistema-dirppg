@@ -11,7 +11,7 @@
             
             <span></span>
 
-            <p>
+            <p class="warning">
                 AVISO: Ao apagar este item, todos os demais registros do banco de dados que, de alguma forma, 
                 estão associados a este item também serão excluídos em sequência (exclusão em cascata).
             </p>
@@ -19,7 +19,7 @@
 
         <div class="modal-footer">
             <button class="modal-cancel">Cancelar</button>
-            <button class="modal-delete">Excluir</button>
+            <button class="modal-confirm">Excluir</button>
         </div>
     </div>
 </div>
