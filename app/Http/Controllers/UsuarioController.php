@@ -59,7 +59,7 @@ class UsuarioController extends Controller
             ]);
         }
 
-        return view('admin.autenticacao.cadastro.confirmacao');
+        return view('autenticacao.cadastro.confirmacao');
     }
 
     // Função de validação CPF
@@ -90,7 +90,7 @@ class UsuarioController extends Controller
         // pega o usuário logado
         $usuario = Auth::user();
 
-        return view('admin.pessoas.usuarios.alterar', compact('usuario'));
+        return view('usuarios.alterar', compact('usuario'));
     }
 
     // Atualiza os dados
@@ -123,6 +123,6 @@ class UsuarioController extends Controller
         ]);
         }
 
-        return redirect()->route('pessoas.usuarios.alterar')->with('success', 'Dados atualizados com sucesso!');
+        return redirect()->route('usuarios.alterar')->with('success', 'Dados atualizados com sucesso!');
     }
 }

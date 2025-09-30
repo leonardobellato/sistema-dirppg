@@ -17,7 +17,7 @@
     <h1>Alterar usuário</h1>
 
     <div class="container-form">
-		<form action="{{ route('pessoas.usuarios.atualizar') }}" method="POST">
+		<form action="{{ route('usuarios.atualizar') }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -81,7 +81,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<a href={{ route('inicio') }}>Cancelar</a>
+				<a href={{ url()->previous() }}>Cancelar</a>
 				<button type="submit">Atualizar</button>
 			</div>
 		</form>

@@ -10,7 +10,7 @@
     <h1>Alterar edital</h1>
 
     <div class="container-form">
-		<form action="{{ route('editais.atualizar', ['id' => $edital->id_edital])}}" method="POST">
+		<form action="{{ route('admin.editais.atualizar', ['id' => $edital->id_edital])}}" method="POST">
             @csrf
 			@method('PUT')
 
@@ -150,7 +150,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<a href={{ route('editais.index') }}>Cancelar</a>
+				<a href={{ route('admin.editais.index') }}>Cancelar</a>
 				<button type="submit">Atualizar</button>
 			</div>
 		</form>

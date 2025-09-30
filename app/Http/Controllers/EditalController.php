@@ -99,7 +99,7 @@ class EditalController extends Controller
             ]);
         }
 
-        return redirect()->route('editais.index')
+        return redirect()->route('admin.editais.index')
             ->with('success', 'Edital cadastrado com sucesso!');
     }
 
@@ -190,7 +190,7 @@ class EditalController extends Controller
             );
         }
 
-        return redirect()->route('editais.index')
+        return redirect()->route('admin.editais.index')
                         ->with('success', 'Edital atualizado com sucesso!');
     }
 

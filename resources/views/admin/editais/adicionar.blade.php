@@ -10,7 +10,7 @@
     <h1>Adicionar edital</h1>
 
     <div class="container-form">
-		<form action="{{ route('editais.salvar') }}" method="POST">
+		<form action="{{ route('admin.editais.salvar') }}" method="POST">
             @csrf
 
 			<label for="input-programa">Programa:<span class="required-content">*</span></label>
@@ -131,7 +131,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<a href={{ route('editais.index') }}>Cancelar</a>
+				<a href={{ route('admin.editais.index') }}>Cancelar</a>
 				<button type="submit">Cadastrar</button>
 			</div>
 		</form>

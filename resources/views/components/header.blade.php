@@ -16,7 +16,7 @@
         <span class="username">{{ explode(' ', Auth::user()->nome)[0] }}</span>
 
         <div class="header-dropdown" id="dropdown-menu">
-            <a href="{{ route('pessoas.usuarios.alterar'); }}">Editar Conta</a>
+            <a href="{{ route('usuarios.alterar'); }}">Editar Conta</a>
             <a href="{{ route('autenticacao.logout'); }}">Sair</a>
         </div>
 
