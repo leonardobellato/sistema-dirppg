@@ -103,8 +103,9 @@
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/admin/sublinhas/alterar/:ID"; // :ID é placeholder
-                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_sublinha);
+                        
+                        const baseUrl = "{{ url('admin/sublinhas/alterar') }}";
+                        btnAlterar.href = `${baseUrl}/${gridApi.getSelectedRows()[0].id_sublinha}`;
                     } 
                     else{
                         btnExcluir.disabled = true;
@@ -127,7 +128,7 @@
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                openDeleteModal(object.nome, () => {
+                openModalDelete(object.nome, () => {
                     fetch(`/admin/sublinhas/${object.id_sublinha}`, {
                         method: "DELETE",
                         headers: {

@@ -62,8 +62,6 @@
         <div id="tabela-vigente" class="ag-theme"></div>
     </div>
 
-    {{ $pagination->links() }}
-
     <!-- Modais -->
     @include('components.modal-delete')
     @include('components.modal-editais')
@@ -79,7 +77,6 @@
         document.addEventListener("DOMContentLoaded", function () {
             // Busca dados do banco
             const tableData = @json($editais);
-            console.log(tableData);
 
             const gridOptions = {
                 localeText: AG_GRID_LOCALE_BR,
@@ -121,8 +118,9 @@
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/admin/editais/alterar/:ID"; // :ID é placeholder
-                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_edital);
+
+                        const baseUrl = "{{ url('admin/editais/alterar') }}";
+                        btnAlterar.href = `${baseUrl}/${gridApi.getSelectedRows()[0].id_edital}`;
                     } 
                     else{
                         btnExcluir.disabled = true;

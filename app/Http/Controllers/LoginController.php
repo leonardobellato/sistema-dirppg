@@ -22,9 +22,16 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            if (Auth::user()->tipo === 'admin') {
+                return redirect()->route('inicio'); // nome da rota /admin/
+            } elseif (Auth::user()->tipo === 'candidato') {
+                return redirect()->route('candidato.editais.index');
+            } else {
+                Auth::logout();
+                return back()->with('failure', 'Usuário sem permissão válida.');
+            }
         }
-
+        
         return back()->with('failure', 'E-mail ou senha incorretos.');
     }
 

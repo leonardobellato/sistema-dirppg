@@ -52,7 +52,7 @@
 			<hr>
 
 			<fieldset>
-				<legend>Período de submissão de documentos<span class="required-content">*</span></legend>
+				<legend>Período de inscrição no edital<span class="required-content">*</span><span class="tag-context candidato">candidato</span></legend>
 
 				<div class="field-linha">
         			<div class="campo-data">
@@ -67,7 +67,20 @@
 			</fieldset>
 
 			<fieldset>
-				<legend>Período de interposição do 1º recurso<span class="required-content">*</span></legend>
+				<legend>Divulgação do deferimento das inscrições<span class="required-content">*</span></legend>
+
+				<div class="field-linha">
+        			<div class="campo-data">
+						<label for="input-dt-div-insc">Data: <span class="required-content">*</span></label>
+						<input type="date" id="input-dt-div-insc" name="input-dt-div-insc" required>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="space"></div>
+
+			<fieldset>
+				<legend>Período de interposição do 1º recurso<span class="required-content">*</span><span class="tag-context candidato">candidato</span></legend>
 
 				<div class="field-linha">
 					<div class="campo-data">
@@ -82,49 +95,50 @@
 			</fieldset>
 
 			<fieldset>
-				<legend>Homologação do 1º recurso<span class="required-content">*</span></legend>
+				<legend>Divulgação do resultado do 1º recurso<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
-					<div class="campo-data">			
-						<label for="input-dt-1hom-inicio">Data de início:<span class="required-content">*</span></label>
-						<input type="date" id="input-dt-1hom-inicio" name="input-dt-1hom-inicio" readonly required>
-					</div>
-					<div class="campo-data">
-						<label for="input-dt-1hom-fim">Data de fim:<span class="required-content">*</span></label>
-						<input type="date" id="input-dt-1hom-fim" name="input-dt-1hom-fim" required>
+        			<div class="campo-data">
+						<label for="input-dt-div-1rev">Data: <span class="required-content">*</span></label>
+						<input type="date" id="input-dt-div-1rev" name="input-dt-div-1rev" required>
 					</div>
 				</div>
 			</fieldset>
 
-			<fieldset>
-				<legend>Período de interposição do 2º recurso</legend>
+			<div class="space"></div>
+
+			<label for="input-enable-2rec">(Opcional) Habilitar segundo recurso:</label>
+            <label class="toggle">
+                <input type="checkbox" id="input-enable-2rec" name="vigente" value="1">
+                <span class="slider"></span>
+            </label>
+
+			<fieldset class="fieldset-2rec disabled-fieldset">
+				<legend>Período de interposição do 2º recurso<span class="required-content">*</span><span class="tag-context candidato">candidato</span></legend>
 
 				<div class="field-linha">
 					<div class="campo-data">
-						<label for="input-dt-2rec-inicio">Data de início:</label>
-						<input type="date" id="input-dt-2rec-inicio" name="input-dt-2rec-inicio">
+						<label for="input-dt-2rec-inicio">Data de início:<span class="required-content">*</span></label>
+						<input type="date" id="input-dt-2rec-inicio" name="input-dt-2rec-inicio" disabled>
 					</div>
 					<div class="campo-data">
-						<label for="input-dt-2rec-fim">Data de fim:</label>
-						<input type="date" id="input-dt-2rec-fim" name="input-dt-2rec-fim">
+						<label for="input-dt-2rec-fim">Data de fim:<span class="required-content">*</span></label>
+						<input type="date" id="input-dt-2rec-fim" name="input-dt-2rec-fim" disabled>
 					</div>
 				</div>
 			</fieldset>
 
-			<fieldset>
-				<legend>Homologação do 2º recurso</legend>
+			<fieldset class="fieldset-2rec disabled-fieldset">
+				<legend>Divulgação do resultado do 2º recurso<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
-					<div class="campo-data">
-						<label for="input-dt-2hom-inicio">Data de início:</label>
-						<input type="date" id="input-dt-2hom-inicio" name="input-dt-2hom-inicio" readonly>
-					</div>
-					<div class="campo-data">
-						<label for="input-dt-2hom-fim">Data de fim:</label>
-						<input type="date" id="input-dt-2hom-fim" name="input-dt-2hom-fim">
+        			<div class="campo-data">
+						<label for="input-dt-div-2rec">Data:<span class="required-content">*</span></label>
+						<input type="date" id="input-dt-div-2rec" name="input-dt-div-2rec" disabled>
 					</div>
 				</div>
 			</fieldset>
+
 
 			<div class="pos-form">
 				<p><span class="required-content">*</span> Campos OBRIGATÓRIOS</p>
@@ -167,36 +181,73 @@
             }
         });
 
-		// Esta função define que a data final deve ser >= a data inicial
-		// Além disso, obriga a homologação iniciar junto ao recurso
-		function vincularDatas(idInicio, idFim, idHomologacaoInicio = null) {
+		// Esta função define que a data final deve ser pelo menos 1 dia após a data inicial
+		function vincularDatas(idInicio, idFim) {
 			const inicio = document.getElementById(idInicio);
 			const fim = document.getElementById(idFim);
-			const homInicio = idHomologacaoInicio ? document.getElementById(idHomologacaoInicio) : null;
 
 			if (inicio && fim) {
 				inicio.addEventListener('change', function () {
-					// regra do fim >= inicio
-					fim.min = this.value;
-					if (fim.value && fim.value < this.value) {
-						fim.value = this.value;
-					}
+					const dataInicio = new Date(this.value);
+					if (isNaN(dataInicio)) return;
 
-					// se tiver homologação vinculada, copia a data
-					if (homInicio) {
-						homInicio.value = this.value;
+					// Adiciona 1 dia
+					dataInicio.setDate(dataInicio.getDate() + 1);
+
+					// Formata para yyyy-mm-dd
+					const minDate = dataInicio.toISOString().split('T')[0];
+
+					// Define o mínimo da data final
+					fim.min = minDate;
+
+					// Se a data final atual for inválida ou anterior, limpa ou ajusta
+					if (!fim.value || fim.value < minDate) {
+						fim.value = '';
 					}
 				});
 			}
 		}
 
 		vincularDatas('input-dt-insc-inicio', 'input-dt-insc-fim');
-		vincularDatas('input-dt-insc-fim', 'input-dt-1rec-inicio');
-		vincularDatas('input-dt-1rec-inicio', 'input-dt-1rec-fim', 'input-dt-1hom-inicio');
-		vincularDatas('input-dt-1rec-inicio', 'input-dt-1hom-fim');
-		vincularDatas('input-dt-1hom-fim', 'input-dt-2rec-inicio');
-		vincularDatas('input-dt-2rec-inicio', 'input-dt-2rec-fim', 'input-dt-2hom-inicio');
-		vincularDatas('input-dt-2rec-inicio', 'input-dt-2hom-fim');
+		vincularDatas('input-dt-insc-fim', 'input-dt-div-insc');
+		vincularDatas('input-dt-div-insc', 'input-dt-1rec-inicio');
+		vincularDatas('input-dt-1rec-inicio', 'input-dt-1rec-fim');
+		vincularDatas('input-dt-1rec-fim', 'input-dt-div-1rev');
+		vincularDatas('input-dt-div-1rev', 'input-dt-2rec-inicio');
+		vincularDatas('input-dt-2rec-inicio', 'input-dt-2rec-fim');
+		vincularDatas('input-dt-2rec-fim', 'input-dt-div-2rec');
 
+		// --------------------------------------------------------
+		// 2 recurso
+		const toggle = document.getElementById('input-enable-2rec');
+		const fieldsets = document.querySelectorAll('.fieldset-2rec');
+		
+		// IDs dos inputs que fazem parte do grupo
+		const inputIds = [
+			'input-dt-2rec-inicio',
+			'input-dt-2rec-fim',
+			'input-dt-div-2rec'
+		];
+
+		toggle.addEventListener('change', function () {
+			const ativar = this.checked;
+
+			// Habilita ou desabilita os inputs
+			inputIds.forEach(id => {
+				const input = document.getElementById(id);
+				if (!input) return;
+
+				input.disabled = !ativar;
+				input.required = ativar;
+				if (!ativar) {
+					input.value = '';
+				}
+			});
+
+			// Alterna classe nos fieldsets
+			fieldsets.forEach(fs => {
+				fs.classList.toggle('disabled-fieldset', !ativar);
+			});
+		});
     </script>
 @endpush

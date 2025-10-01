@@ -13,6 +13,9 @@ use App\Http\Controllers\LoginController;
 
 
 /* AUTENTICAÇÃO */
+Route::get('/', function () {
+    return redirect('/login');
+});
 Route::get('/login', function () { return view('autenticacao.login.index');})->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('autenticacao.login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('autenticacao.logout');
@@ -29,11 +32,11 @@ Route::middleware('auth')->group(function () {
 
 
 /* ACESSO RESTRITO - Admin */
-Route::get('/', function () {
-    return view('admin.inicio.index');
-})->name('inicio')->middleware(['auth', 'permissao:admin']);
-
 Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function () {
+
+    Route::get('/', function () {
+        return view('admin.inicio.index');
+    })->name('inicio');
 
     Route::get('/analise-inscricoes', function () {
         return view('admin.analise-inscricoes.index');
@@ -110,9 +113,11 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
 /* ACESSO RESTRITO - Candidato */
 Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(function () {
     
-    Route::get('/editais', function () {
-        return view('candidato.editais.index');
-    })->name('candidato.editais.index');
+    Route::get('/', function () {
+        return redirect()->route('candidato.editais.index');
+    });
+
+    Route::get('/editais', [EditalController::class, 'listVigentes'])->name('candidato.editais.index');
 
     Route::get('/inscricoes', function () {
         return view('candidato.inscricoes.index');

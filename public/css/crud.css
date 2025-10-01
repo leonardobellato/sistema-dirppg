@@ -179,6 +179,10 @@ form hr {
     border-radius: 5px;
 }
 
+form div.space{
+    height: 30px;
+}
+
 form fieldset {
     border: 2px solid rgba(15, 14, 14, 0.1);
     border-radius: 10px;
@@ -221,6 +225,10 @@ form h4:nth-of-type(2){
 
 .field-linha input[type="date"] {
     max-width: 350px; 
+}
+
+.disabled-fieldset{
+    background-color: rgb(236, 235, 235);
 }
 
 .required-content {
@@ -404,6 +412,10 @@ form h4:nth-of-type(2){
     cursor: not-allowed !important;
 }
 
+.m-3{
+    margin-top: 30px;
+}
+
 /* Janelas modais */
 .modal {
     position: fixed;
@@ -583,4 +595,21 @@ form h4:nth-of-type(2){
     font-weight: bold;
     margin-bottom: 20px;
     border-radius: 30px;
+}
+
+/* Outros */
+.tag-context {
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  padding: 0 6px;
+  margin-left: 8px;
+  border-radius: 4px;
+  font-size: 0.87em;
+  font-family: Arial, sans-serif;
+  vertical-align: center;
+}
+
+.tag-context.candidato{
+    background-color: rgb(0, 0, 0, 0.4);
 }

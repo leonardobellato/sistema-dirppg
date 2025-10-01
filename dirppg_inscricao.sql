@@ -145,7 +145,7 @@ ALTER TABLE `editais`
 CREATE TABLE `fases_edital` (
   `id_fase` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_edital` INT UNSIGNED NOT NULL,
-  `tipo` ENUM('inscricao','recurso','homologacao') NOT NULL,
+  `tipo` ENUM('inscricao', 'interposicao', 'resultado') NOT NULL,
   `ordem` TINYINT NOT NULL,
   `data_inicio` DATE NOT NULL,
   `data_fim` DATE NOT NULL

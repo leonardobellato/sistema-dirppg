@@ -12,12 +12,17 @@ class EditalController extends Controller
     // Método para listar objetos
     public function index()
     {
-        $editais = Edital::with(['curso.programa', 'fasesEdital'])->paginate(20);
+        $editais = Edital::with(['curso.programa', 'fasesEdital'])->get();
 
-        return view('admin.editais.index', [
-            'editais' => $editais->items(), // apenas os registros da página atual
-            'pagination' => $editais        // mantém os links de paginação
-        ]);
+        return view('admin.editais.index', ['editais' => $editais]);
+    }
+
+    // Método que retorna apenas os vigentes para o candidato
+    public function listVigentes()
+    {
+        $editais = Edital::with(['curso.programa'])->where('vigente', true)->get();
+
+        return view('candidato.editais.index', ['editais' => $editais]);
     }
 
     // Método para mostrar o formulário de criação

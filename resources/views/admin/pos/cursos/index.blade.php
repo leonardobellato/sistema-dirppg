@@ -107,7 +107,7 @@
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                openDeleteModal(object.tipo + " - " + object.programa.nome, () => {
+                openModalDelete(object.tipo + " - " + object.programa.nome, () => {
                     fetch(`/admin/cursos/${object.id_curso}`, {
                         method: "DELETE",
                         headers: {

@@ -101,8 +101,9 @@
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
-                        let baseUrl = "/admin/areas-concentracao/alterar/:ID"; // :ID é placeholder
-                        btnAlterar.href = baseUrl.replace(':ID', gridApi.getSelectedRows()[0].id_area_concentracao);
+
+                        const baseUrl = "{{ url('admin/areas-concentracao/alterar') }}";
+                        btnAlterar.href = `${baseUrl}/${gridApi.getSelectedRows()[0].id_area_concentracao}`;
                     } 
                     else{
                         btnExcluir.disabled = true;
@@ -125,7 +126,7 @@
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                openDeleteModal(object.nome, () => {
+                openModalDelete(object.nome, () => {
                     fetch(`/admin/areas-concentracao/${object.id_area_concentracao}`, {
                         method: "DELETE",
                         headers: {
