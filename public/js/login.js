@@ -1,5 +1,5 @@
+// Função de máscara de CPF no frontend (xxx.xxx.xxx-xx)
 function mascara(i){
-    // Função de máscara de CPF
     var v = i.value;
     
     if(isNaN(v[v.length-1])){
@@ -11,17 +11,3 @@ function mascara(i){
     if (v.length == 3 || v.length == 7) i.value += ".";
     if (v.length == 11) i.value += "-";
 }
-
-// Alternância abas
-const toggleOptions = document.querySelectorAll(".toggle-option");
-const contents = document.querySelectorAll(".content");
-
-toggleOptions.forEach((option, index) => {
-    option.addEventListener("click", () => {
-        toggleOptions.forEach(opt => opt.classList.remove("selected"));
-        option.classList.add("selected");
-
-        contents.forEach(cnt => cnt.classList.remove("active"));
-        contents[index].classList.add("active");
-    });
-});

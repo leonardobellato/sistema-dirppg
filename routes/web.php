@@ -10,7 +10,6 @@ use App\Http\Controllers\SublinhaController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
-use App\Http\Middleware\PermissaoMiddleware;
 
 
 /* AUTENTICAÇÃO */
@@ -29,11 +28,11 @@ Route::middleware('auth')->group(function () {
 });
 
 
+/* ACESSO RESTRITO - Admin */
 Route::get('/', function () {
     return view('admin.inicio.index');
 })->name('inicio')->middleware(['auth', 'permissao:admin']);
 
-/* ACESSO RESTRITO - Admin */
 Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function () {
 
     Route::get('/analise-inscricoes', function () {

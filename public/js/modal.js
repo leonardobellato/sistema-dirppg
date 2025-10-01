@@ -1,4 +1,4 @@
-// Modal
+// Comportamentos das janelas modais
 const modalDelete = document.getElementById("modal-delete");
 const modalEditais = document.getElementById("modal-editais");
 const modalClose = document.querySelectorAll(".modal-close");

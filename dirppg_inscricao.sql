@@ -1,3 +1,5 @@
+/* Script com tabelas do banco de dados, além de alguns registros pré-criados necessários para funcionamento do sistema */
+
 CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `nome`        VARCHAR(100) NOT NULL UNIQUE,
