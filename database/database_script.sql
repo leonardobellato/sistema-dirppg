@@ -1,4 +1,9 @@
-/* Script com tabelas do banco de dados, além de alguns registros pré-criados necessários para funcionamento do sistema */
+/* Script para criar o banco de dados e as respectivas tabelas,
+   bem como já inserir dados cruciais da aplicação. */
+
+CREATE DATABASE IF NOT EXISTS `dirppg_inscricao_v2` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE `dirppg_inscricao_v2`;
 
 CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
