@@ -26,12 +26,16 @@ window.openModalEditais = function(edital) {
     body.innerHTML = '';
 
     body.innerHTML += `<p><b>Edital:</b> ${edital.nome}</p>`;
-    body.innerHTML += `<p><b>Link:</b> ${edital.link}</p>`;
+    if(edital.link) {
+        body.innerHTML += `<p><b>Link:</b> <a href="${edital.link}" target="_blank">Clique aqui</a></p>`;
+    } else{
+        body.innerHTML += `<p><b>Link:</b> Não cadastrado.</p>`;
+    }
 
     // Container para as fases
     const container = document.createElement('div');
     container.classList.add('fase-container');
-    const tituloFase = {"inscricao": "Inscrição", "resultadoInsc": "Resultado da Inscrição", "recurso": "Interposição de Recurso", "resultadoRec": "Resultado do Recurso"};
+    const tituloFase = {"inscricao": "Inscrição", "resultadoInsc": "Resultado da inscrição", "recurso": "Interposição de recurso", "resultadoRec": "Resultado do recurso"};
 
     edital.fases_edital.forEach(fase => {
         const faseDiv = document.createElement('div');

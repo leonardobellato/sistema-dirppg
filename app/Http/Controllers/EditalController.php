@@ -82,7 +82,7 @@ class EditalController extends Controller
         ];
 
         // 2º recurso (opcional)
-        if ($request->has('input-enable-2rec')) {
+        if ($request->has('vigente')) {
             $fases[] = [
                 'tipo' => 'recurso',
                 'ordem' => 2,

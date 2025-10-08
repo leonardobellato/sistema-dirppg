@@ -127,8 +127,9 @@
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
+                const baseUrl = "{{ url('admin/linhas-pesquisa') }}";
                 openModalDelete(object.nome, () => {
-                    fetch(`/admin/linhas-pesquisa/${object.id_linha_pesquisa}`, {
+                    fetch(`${baseUrl}/${object.id_linha_pesquisa}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
