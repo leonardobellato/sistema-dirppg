@@ -92,7 +92,7 @@
                 rowSelection: { mode: "singleRow" },
                 pagination: true,
                 paginationPageSize: 20,
-                domLayout: "autoHeight",
+                paginationPageSizeSelector: [10, 20, 50, 100],
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");

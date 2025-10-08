@@ -99,8 +99,8 @@
 
 				<div class="field-linha">
         			<div class="campo-data">
-						<label for="input-dt-div-1rev">Data: <span class="required-content">*</span></label>
-						<input type="date" id="input-dt-div-1rev" name="input-dt-div-1rev" required>
+						<label for="input-dt-div-1rec">Data: <span class="required-content">*</span></label>
+						<input type="date" id="input-dt-div-1rec" name="input-dt-div-1rec" required>
 					</div>
 				</div>
 			</fieldset>
@@ -163,7 +163,8 @@
             cursoSelect.innerHTML = '<option>Carregando...</option>';
 
             if(idPrograma) {
-                fetch(`/admin/programas/${idPrograma}/cursos`)
+				const baseUrl = "{{ url('/') }}";
+                fetch(`${baseUrl}/admin/programas/${idPrograma}/cursos`)
                     .then(response => response.json())
                     .then(data => {
                         cursoSelect.innerHTML = '<option value="">Selecione...</option>';
@@ -212,8 +213,8 @@
 		vincularDatas('input-dt-insc-fim', 'input-dt-div-insc');
 		vincularDatas('input-dt-div-insc', 'input-dt-1rec-inicio');
 		vincularDatas('input-dt-1rec-inicio', 'input-dt-1rec-fim');
-		vincularDatas('input-dt-1rec-fim', 'input-dt-div-1rev');
-		vincularDatas('input-dt-div-1rev', 'input-dt-2rec-inicio');
+		vincularDatas('input-dt-1rec-fim', 'input-dt-div-1rec');
+		vincularDatas('input-dt-div-1rec', 'input-dt-2rec-inicio');
 		vincularDatas('input-dt-2rec-inicio', 'input-dt-2rec-fim');
 		vincularDatas('input-dt-2rec-fim', 'input-dt-div-2rec');
 

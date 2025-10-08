@@ -105,7 +105,9 @@
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
-                domLayout: "autoHeight",
+                pagination: true,
+                paginationPageSize: 20,
+                paginationPageSizeSelector: [10, 20, 50, 100],
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");

@@ -26,17 +26,19 @@ window.openModalEditais = function(edital) {
     body.innerHTML = '';
 
     body.innerHTML += `<p><b>Edital:</b> ${edital.nome}</p>`;
+    body.innerHTML += `<p><b>Link:</b> ${edital.link}</p>`;
 
     // Container para as fases
     const container = document.createElement('div');
     container.classList.add('fase-container');
+    const tituloFase = {"inscricao": "Inscrição", "resultadoInsc": "Resultado da Inscrição", "recurso": "Interposição de Recurso", "resultadoRec": "Resultado do Recurso"};
 
     edital.fases_edital.forEach(fase => {
         const faseDiv = document.createElement('div');
         faseDiv.classList.add('fase');
 
         faseDiv.innerHTML = `
-            <div class="fase-titulo">${fase.tipo} (${fase.ordem}º)</div>
+            <div class="fase-titulo">${tituloFase[fase.tipo]} (${fase.ordem}º)</div>
             <div class="fase-datas">${formatDate(fase.data_inicio)} até ${formatDate(fase.data_fim)}</div>
         `;
         container.appendChild(faseDiv);
@@ -62,13 +64,9 @@ window.addEventListener("click", e => {
     if(e.target === modalEditais) modalEditais.style.display = 'none'; 
 });
 
-
-// Função para formatar datas dd/mm/yyyy
 function formatDate(dateStr) {
     if (!dateStr) return '';
-    const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
+    // Espera formato yyyy-mm-dd
+    const [year, month, day] = dateStr.split('-');
     return `${day}/${month}/${year}`;
 }

@@ -135,11 +135,11 @@
 
                 <div class="sidebar-dropdown-subitems">
                     <a href="{{ route('pos.programas.index') }}" class="{{ request()->routeIs('pos.programas.*') ? 'active' : '' }}">Programas</a>
-                    <a href="{{ route('pos.cursos.index') }}" class="{{ request()->routeIs('pos.cursos.index') ? 'active' : '' }}">Cursos</a>
-                    <a href="{{ route('pos.areas-concentracao.index') }}" class="{{ request()->routeIs('pos.areas-concentracao.index') ? 'active' : '' }}">Áreas de Concentração</a>
-                    <a href="{{ route('pos.linhas-pesquisa.index') }}" class="{{ request()->routeIs('pos.linhas-pesquisa.index') ? 'active' : '' }}">Linhas de Pesquisa</a>
-                    <a href="{{ route('pos.sublinhas.index') }}" class="{{ request()->routeIs('pos.sublinhas.index') ? 'active' : '' }}">Sublinhas</a>
-                    <a href="{{ route('pos.disciplinas-aluno-externo.index') }}" class="{{ request()->routeIs('pos.disciplinas-aluno-externo.index') ? 'active' : '' }}">Disciplinas de aluno externo</a>
+                    <a href="{{ route('pos.cursos.index') }}" class="{{ request()->routeIs('pos.cursos.*') ? 'active' : '' }}">Cursos</a>
+                    <a href="{{ route('pos.areas-concentracao.index') }}" class="{{ request()->routeIs('pos.areas-concentracao.*') ? 'active' : '' }}">Áreas de Concentração</a>
+                    <a href="{{ route('pos.linhas-pesquisa.index') }}" class="{{ request()->routeIs('pos.linhas-pesquisa.*') ? 'active' : '' }}">Linhas de Pesquisa</a>
+                    <a href="{{ route('pos.sublinhas.index') }}" class="{{ request()->routeIs('pos.sublinhas.*') ? 'active' : '' }}">Sublinhas</a>
+                    <a href="{{ route('pos.disciplinas-aluno-externo.index') }}" class="{{ request()->routeIs('pos.disciplinas-aluno-externo.*') ? 'active' : '' }}">Disciplinas de aluno externo</a>
                 </div>
             </li>
             
@@ -159,8 +159,8 @@
                 </div>
 
                 <div class="sidebar-dropdown-subitems">
-                    <a href="{{ route('pessoas.professores') }}" class="{{ request()->routeIs('pessoas.professores') ? 'active' : '' }}">Professores</a>
-                    <a href="{{ route('pessoas.secretarios') }}" class="{{ request()->routeIs('pessoas.secretarios') ? 'active' : '' }}">Secretários</a>
+                    <a href="{{ route('pessoas.professores') }}" class="{{ request()->routeIs('pessoas.professores.*') ? 'active' : '' }}">Professores</a>
+                    <a href="{{ route('pessoas.secretarios') }}" class="{{ request()->routeIs('pessoas.secretarios.*') ? 'active' : '' }}">Secretários</a>
                 </div>
             </li>
 
