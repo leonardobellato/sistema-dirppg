@@ -25,11 +25,11 @@ window.openModalEditais = function(edital) {
     const body = modalEditais.querySelector(".modal-body");
     body.innerHTML = '';
 
-    body.innerHTML += `<p><b>Edital:</b> ${edital.nome}</p>`;
+    body.innerHTML += `<p><b>Edital:</b> &nbsp;${edital.nome}</p>`;
     if(edital.link) {
-        body.innerHTML += `<p><b>Link:</b> <a href="${edital.link}" target="_blank">Clique aqui</a></p>`;
+        body.innerHTML += `<p><b>Link:</b> &nbsp;<a href="${edital.link}" target="_blank">Clique aqui</a></p>`;
     } else{
-        body.innerHTML += `<p><b>Link:</b> Não cadastrado.</p>`;
+        body.innerHTML += `<p><b>Link:</b> &nbsp;Não cadastrado.</p>`;
     }
 
     // Container para as fases
@@ -43,8 +43,14 @@ window.openModalEditais = function(edital) {
 
         faseDiv.innerHTML = `
             <div class="fase-titulo">${tituloFase[fase.tipo]} (${fase.ordem}º)</div>
-            <div class="fase-datas">${formatDate(fase.data_inicio)} até ${formatDate(fase.data_fim)}</div>
         `;
+
+        if(fase.data_inicio == fase.data_fim) {
+            faseDiv.innerHTML += `<div class="fase-data">${formatDate(fase.data_inicio)}</div>`;
+        } else {
+            faseDiv.innerHTML += `<div class="fase-data">De ${formatDate(fase.data_inicio)} até ${formatDate(fase.data_fim)}</div>`;
+        }
+
         container.appendChild(faseDiv);
     });
 

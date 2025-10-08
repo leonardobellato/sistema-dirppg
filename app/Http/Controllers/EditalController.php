@@ -82,7 +82,7 @@ class EditalController extends Controller
         ];
 
         // 2º recurso (opcional)
-        if ($request->has('vigente')) {
+        if ($request->has('input-enable-2rec')) {
             $fases[] = [
                 'tipo' => 'recurso',
                 'ordem' => 2,
@@ -150,36 +150,38 @@ class EditalController extends Controller
                 'data_fim' => $request->input('input-dt-insc-fim'),
             ],
             [
+                'tipo' => 'resultadoInsc',
+                'ordem' => 1,
+                'data_inicio' => $request->input('input-dt-div-insc'),
+                'data_fim' => $request->input('input-dt-div-insc'),
+            ],
+            [
                 'tipo' => 'recurso',
                 'ordem' => 1,
                 'data_inicio' => $request->input('input-dt-1rec-inicio'),
                 'data_fim' => $request->input('input-dt-1rec-fim'),
             ],
             [
-                'tipo' => 'homologacao',
+                'tipo' => 'resultadoRec',
                 'ordem' => 1,
-                'data_inicio' => $request->input('input-dt-1hom-inicio'),
-                'data_fim' => $request->input('input-dt-1hom-fim'),
+                'data_inicio' => $request->input('input-dt-div-1rec'),
+                'data_fim' => $request->input('input-dt-div-1rec'),
             ],
         ];
 
         // 2º recurso (opcional)
-        if ($request->filled('input-dt-2rec-inicio') && $request->filled('input-dt-2rec-fim')) {
+        if ($request->has('input-enable-2rec')) {
             $fases[] = [
                 'tipo' => 'recurso',
                 'ordem' => 2,
                 'data_inicio' => $request->input('input-dt-2rec-inicio'),
                 'data_fim' => $request->input('input-dt-2rec-fim'),
             ];
-        }
-
-        // 2ª homologação (opcional)
-        if ($request->filled('input-dt-2hom-inicio') && $request->filled('input-dt-2hom-fim')) {
             $fases[] = [
-                'tipo' => 'homologacao',
+                'tipo' => 'resultadoRec',
                 'ordem' => 2,
-                'data_inicio' => $request->input('input-dt-2hom-inicio'),
-                'data_fim' => $request->input('input-dt-2hom-fim'),
+                'data_inicio' => $request->input('input-dt-div-2rec'),
+                'data_fim' => $request->input('input-dt-div-2rec'),
             ];
         }
 
@@ -197,6 +199,15 @@ class EditalController extends Controller
                 ]
             );
         }
+
+        // Excluir 2 fases se foram desmarcadas
+        $tiposOrdensAtuais = collect($fases)->map(function($fase) {
+            return $fase['tipo'].'_'.$fase['ordem'];
+        })->toArray();
+        FaseEdital::where('id_edital', $edital->id_edital)
+            ->whereNotIn(\DB::raw("CONCAT(tipo, '_', ordem)"), $tiposOrdensAtuais)
+            ->delete();
+
 
         return redirect()->route('admin.editais.index')
                         ->with('success', 'Edital atualizado com sucesso!');

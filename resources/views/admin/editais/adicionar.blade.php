@@ -109,7 +109,7 @@
 
 			<label for="input-enable-2rec">(Opcional) Habilitar segundo recurso:</label>
             <label class="toggle">
-                <input type="checkbox" id="input-enable-2rec" name="vigente" value="1">
+                <input type="checkbox" id="input-enable-2rec" name="input-enable-2rec" value="1">
                 <span class="slider"></span>
             </label>
 
