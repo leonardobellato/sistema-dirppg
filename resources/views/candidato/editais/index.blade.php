@@ -16,6 +16,8 @@
 
     <h1>Editais abertos</h1>
 
+    <p>Clique em um edital para avançar:</p>
+
     <div class="container-tabela m-3">
         <div id="tabela-vigente" class="ag-theme"></div>
     </div>
@@ -55,7 +57,6 @@
                     }},
                 ],
                 rowData: tableData,
-                domLayout: "autoHeight",
                 onRowClicked: function(event) {
                     const editalId = event.data.id_edital;
                     const baseUrl = "{{ url('candidato/editais') }}";
