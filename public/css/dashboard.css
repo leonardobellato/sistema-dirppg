@@ -1,0 +1,76 @@
+.canva-container{
+    width: 900px;
+    height: 400px;
+    max-width: 100%;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.title-welcome{
+    width: 900px;
+    max-width: 100%;
+    text-align: left;
+}
+
+.title-welcome span{
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.title-welcome p{
+    color: rgb(0, 82, 78);
+    font-weight: 500;
+}
+
+.card-group {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;       
+    justify-content: center;  
+    gap: 1rem;
+    margin: 20px 0 40px 0;
+}
+
+.dashcard {
+    width: 290px;   
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashcard span.number{
+    display: block;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.dashcard span.text{
+    display: inline-block;
+    font-weight: 500;
+}
+
+#card-editais{
+    background-color: #c1e7c4;
+    color: #2a692e;
+}
+
+#card-analises{
+    background-color: #f8d4b9;
+    color: #94741c;
+}
+
+#card-entrevistas{
+    background-color: #cadfee;
+    color: #2e6bc6;
+}
+
+@media screen and (max-width: 768px) {
+    .dashcard{
+        width: 90%;
+    }
+}
