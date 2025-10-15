@@ -288,25 +288,29 @@ main h1{
 
 
 @media screen and (max-width: 768px) {
-   .sidebar {
-    width: 265px; /* largura cheia no mobile */
-  }
+	.sidebar {
+		width: 265px; /* largura cheia no mobile */
+	}
 
-  .sidebar.close {
-    left: -100%; /* esconde totalmente */
-    width: 265px; /* mantém largura interna fixa */
-  }
+	.sidebar.close {
+    	left: -100%; /* esconde totalmente */
+    	width: 265px; /* mantém largura interna fixa */
+  	}
 
-  main {
-    width: 100% !important;
-    margin-left: 0 !important;
-  }
+  	main {
+    	width: 100% !important;
+    	margin-left: 0 !important;
+  	}
 
-  /* garante que não aplique o comportamento de desktop */
-  .sidebar.close ~ main {
-    width: 100% !important;
-    margin-left: 0 !important;
-  }
+  	/* garante que não aplique o comportamento de desktop */
+  	.sidebar.close ~ main {
+    	width: 100% !important;
+    	margin-left: 0 !important;
+  	}
+
+	.header-brand {
+		font-size: 16px;
+	}
 }
 
 

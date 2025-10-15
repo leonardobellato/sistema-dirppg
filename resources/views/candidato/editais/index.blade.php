@@ -16,8 +16,6 @@
 
     <h1>Editais abertos</h1>
 
-    <p>Clique em um edital para avançar:</p>
-
     <div class="container-tabela m-3">
         <div id="tabela-vigente" class="ag-theme"></div>
     </div>
@@ -44,10 +42,10 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
-                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1 },
-                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1 },
-                    { headerName: "Data de Publicação", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: 'desc',  valueFormatter: params => {
+                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, minWidth: 160},
+                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
+                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
+                    { headerName: "Data de Publicação", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 140, sort: 'desc',  valueFormatter: params => {
                         if (!params.value) return '';
                         const date = new Date(params.value);
                         const day = String(date.getDate()).padStart(2, '0');

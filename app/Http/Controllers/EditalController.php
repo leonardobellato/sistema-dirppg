@@ -18,11 +18,29 @@ class EditalController extends Controller
     }
 
     // Método que retorna apenas os vigentes para o candidato
-    public function listVigentes()
+    public function listVigentes(Request $request)
     {
         $editais = Edital::with(['curso.programa'])->where('vigente', true)->get();
 
-        return view('candidato.editais.index', ['editais' => $editais]);
+        // Verifica quem está acessando
+        if ($request->user()->eCandidato()) {
+            return view('candidato.editais.index', compact('editais'));
+        } else {
+            return view('secretario.editais.index', compact('editais'));
+        }
+    }
+
+    // Detalhar objeto específico
+    public function lookup($id)
+    {
+        $edital = Edital::with(['curso.programa', 'fasesEdital'])->where('id_edital', $id)->firstOrFail();
+
+        // separar por tipo + ordem para facilitar no Blade
+        $fases = $edital->fasesEdital->groupBy(function($fase) {
+            return $fase->tipo.'_'.$fase->ordem;
+        });
+
+        return view('candidato.editais.details', compact('edital', 'fases'));
     }
 
     // Método para mostrar o formulário de criação

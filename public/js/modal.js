@@ -25,38 +25,74 @@ window.openModalEditais = function(edital) {
     const body = modalEditais.querySelector(".modal-body");
     body.innerHTML = '';
 
-    body.innerHTML += `<p><b>Edital:</b> &nbsp;${edital.nome}</p>`;
-    if(edital.link) {
-        body.innerHTML += `<p><b>Link:</b> &nbsp;<a href="${edital.link}" target="_blank">Clique aqui</a></p>`;
-    } else{
-        body.innerHTML += `<p><b>Link:</b> &nbsp;Não cadastrado.</p>`;
-    }
+    // Monta a tabela de detalhes
+    const tableWrapper = document.createElement('div');
+    tableWrapper.classList.add('table-wrapper');
+
+    const table = document.createElement('table');
+    table.classList.add('details-table');
+
+    const tbody = document.createElement('tbody');
+
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    const td = document.createElement('td');
+    th.textContent = "Link";
+    td.innerHTML = edital.link
+            ? `<a href="${edital.link}" target="_blank">Clique aqui</a>`
+            : '<span class="muted">Não cadastrado</span>';
+    tr.appendChild(th);
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+
+    table.appendChild(tbody);
+    tableWrapper.appendChild(table);
+    body.appendChild(tableWrapper);
+
+    // Adiciona o título "Cronograma"
+    const h2 = document.createElement('h2');
+    h2.textContent = 'Cronograma';
+    body.appendChild(h2);
 
     // Container para as fases
     const container = document.createElement('div');
     container.classList.add('fase-container');
-    const tituloFase = {"inscricao": "Inscrição", "resultadoInsc": "Resultado da inscrição", "recurso": "Interposição de recurso", "resultadoRec": "Resultado do recurso"};
 
+    const tituloFase = {
+        inscricao: 'Inscrição',
+        resultadoInsc: 'Resultado da inscrição',
+        recurso: 'Interposição de recurso',
+        resultadoRec: 'Resultado do recurso',
+    };
+
+    // Monta as fases
     edital.fases_edital.forEach(fase => {
         const faseDiv = document.createElement('div');
         faseDiv.classList.add('fase');
 
-        faseDiv.innerHTML = `
-            <div class="fase-titulo">${tituloFase[fase.tipo]} (${fase.ordem}º)</div>
-        `;
+        const titulo = tituloFase[fase.tipo] || fase.tipo;
+        const ordem = fase.ordem ? ` (${fase.ordem}º)` : '';
+        const tituloDiv = document.createElement('div');
+        tituloDiv.classList.add('fase-titulo');
+        tituloDiv.textContent = `${titulo}${ordem}`;
 
-        if(fase.data_inicio == fase.data_fim) {
-            faseDiv.innerHTML += `<div class="fase-data">${formatDate(fase.data_inicio)}</div>`;
+        const dataDiv = document.createElement('div');
+        dataDiv.classList.add('fase-data');
+        if (fase.data_inicio === fase.data_fim) {
+            dataDiv.textContent = formatDate(fase.data_inicio);
         } else {
-            faseDiv.innerHTML += `<div class="fase-data">De ${formatDate(fase.data_inicio)} até ${formatDate(fase.data_fim)}</div>`;
+            dataDiv.textContent = `De ${formatDate(fase.data_inicio)} até ${formatDate(fase.data_fim)}`;
         }
 
+        faseDiv.appendChild(tituloDiv);
+        faseDiv.appendChild(dataDiv);
         container.appendChild(faseDiv);
     });
 
     body.appendChild(container);
     modalEditais.style.display = 'flex';
 };
+
 
 
 // Fechar modais com X

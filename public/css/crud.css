@@ -344,55 +344,107 @@ form h4:nth-of-type(2){
     width: 40;
 }
 
+/* Faz o grid se ajustar e não cortar o texto */
+.ag-theme-alpine {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+/* Permite quebra de texto no cabeçalho e nas células */
+.ag-header-cell-label,
+.ag-cell {
+  white-space: normal !important;
+  text-overflow: clip !important;
+  line-height: 1.3;
+}
+
+/* Centraliza o texto das colunas mais curtas */
+.ag-cell {
+  display: flex;
+  align-items: center;
+}
+
+/* Reduz o tamanho do texto em telas menores */
+@media (max-width: 768px) {
+  .ag-theme-alpine {
+    font-size: 13px;
+  }
+  .ag-header-cell-text {
+    white-space: normal !important;
+    font-size: 12px;
+  }
+}
+
+/* === Grupo de botões principal === */
 .btn-grp-tabela {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-top: 20px;
     margin-bottom: 15px;
 }
 
-.btn-grp-principal, .btn-grp-secundario {
+/* Subgrupos */
+.btn-grp-principal,
+.btn-grp-secundario {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
-.btn-grp-tabela button {
-    padding: 6px 12px;
-    border-radius: 5px;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 5px; 
-    font-weight: 500;
-    font-size: 14px;
-    cursor: pointer;
-}
-
+/* Botões */
+.btn-grp-tabela button,
 .btn-grp-tabela a {
     text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 5px;
+    padding: 8px 14px;
+    border-radius: 6px;
     border: none;
     display: flex;
     align-items: center;
-    gap: 5px; 
+    justify-content: center;
+    gap: 6px;
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
-.btn-grp-tabela button a{ 
-    all: unset; 
-    vertical-align: center; 
-    display: flex; 
-    flex-direction: row; 
-    align-items: center; 
-    width: 100%;
-} 
+/* Ícones dentro de botões */
+.btn-grp-tabela svg {
+    margin-right: 5px;
+    flex-shrink: 0;
+}
 
-.btn-grp-tabela button svg, a svg{ 
-    margin-right: 5px; 
-    vertical-align: center; 
+/* Hover suave */
+.btn-grp-tabela button:hover,
+.btn-grp-tabela a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 700px) {
+    .btn-grp-tabela {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-grp-principal,
+    .btn-grp-secundario {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-grp-tabela button,
+    .btn-grp-tabela a {
+        width: 100%;
+        justify-content: center;
+        font-size: 15px;
+    }
 }
 
 #btn-adicionar { background-color: #21b169; color: white; }
@@ -486,13 +538,17 @@ form h4:nth-of-type(2){
 
 
 .modal-body {
-    max-height: 600px;
+    max-height: 700px;
     overflow-y: auto;
     margin-bottom: 25px;
     font-size: 1rem;
     line-height: 1.5;
     color: #333;
     padding-right: 5px; /* para scroll */
+}
+
+#modal-editais.modal-content{
+    width: 800px;
 }
 
 .modal-body span {
@@ -593,6 +649,10 @@ form h4:nth-of-type(2){
     opacity: 0.9;
 }
 
+.fase-data{
+    text-align: right;
+}
+
 /* Avisos */
 .aviso-sucesso{
     background-color: #24dd80;
@@ -618,4 +678,118 @@ form h4:nth-of-type(2){
 
 .tag-context.candidato{
     background-color: rgb(0, 0, 0, 0.4);
+}
+
+.container-details{
+    width: 800px;
+    max-width: 90%;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+.container-details h2 {
+    margin: 20px 0 10px;
+    color: #222;
+    font-size: 1.3rem;
+    border-left: 4px solid #3b82f6;
+    padding-left: 10px;
+}
+
+.btn-grp-details{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.btn-grp-details a{
+    background-color: #dddddd;
+    color: #272727;
+    margin-top: 12px;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-grp-details a:hover{
+    background-color: #bdbdbd;
+}
+
+.container-details a.confirm{
+    margin-top: 12px;
+    width: 100%;
+    background-color: #0076df;
+    color: #ffffff;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+}
+
+.container-details a.confirm:hover{
+    background-color: #0167c0;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+
+.details-table th {
+    text-align: left;
+    padding: 10px 14px 7px 14px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    font-size: 0.9rem;
+    display: block;
+    width: 100%;
+}
+
+.details-table td {
+    display: block;
+    width: 100%;
+    padding: 4px 14px 10px 14px;
+    border: none;
+    color: #555;
+}
+
+.details-table tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.details-table a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.details-table a:hover {
+    text-decoration: underline;
+}
+
+span.muted {
+    color: #888;
+    font-style: italic;
+    margin-top: 0;
 }
