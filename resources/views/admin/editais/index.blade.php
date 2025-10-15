@@ -90,10 +90,10 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
-                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1 },
-                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1 },
-                    { headerName: "Data de Publicação", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: 'desc',  valueFormatter: params => {
+                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, minWidth: 160},
+                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
+                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
+                    { headerName: "Data de Publicação", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 140, sort: 'desc',  valueFormatter: params => {
                         if (!params.value) return '';
                         const date = new Date(params.value);
                         const day = String(date.getDate()).padStart(2, '0');
@@ -101,13 +101,14 @@
                         const year = date.getFullYear();
                         return `${day}/${month}/${year}`;
                     }},
-                    { headerName: "Vigente", field: "vigente", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.vigente ? "Sim" : "Não" },
+                    { headerName: "Vigente", field: "vigente", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120, valueGetter: params => params.data.vigente ? "Sim" : "Não" },
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
                 pagination: true,
-                paginationPageSize: 20,
                 paginationPageSizeSelector: [10, 20, 50, 100],
+                paginationPageSize: 10,
+                domLayout: 'autoHeight',
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");

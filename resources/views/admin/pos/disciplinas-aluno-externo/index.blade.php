@@ -81,15 +81,16 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc"},
-                    { headerName: "Programa", field: "curso.programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2},
-                    { headerName: "Ativo", field: "inativo", filter: "agTextColumnFilter", sortable: true, flex: 1, valueGetter: params => params.data.inativo ? "Não" : "Sim" },
+                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, minWidth: 160, sort: "asc"},
+                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120},
+                    { headerName: "Ativo", field: "inativo", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 100, valueGetter: params => params.data.inativo ? "Não" : "Sim" },
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
                 pagination: true,
-                paginationPageSize: 20,
                 paginationPageSizeSelector: [10, 20, 50, 100],
+                paginationPageSize: 10,
+                domLayout: "autoHeight",
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");

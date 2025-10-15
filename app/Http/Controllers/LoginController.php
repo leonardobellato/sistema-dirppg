@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
+
 
 class LoginController extends Controller
 {
@@ -13,6 +15,13 @@ class LoginController extends Controller
             'email' => 'required|email',
             'senha' => 'required'
         ]);
+
+        // Verifica se o e-mail existe na base de dados
+        $usuario = Usuario::where('email', $dados['email'])->first();
+
+        if (!$usuario) {
+            return back()->with('failure', 'E-mail não encontrado.');
+        }
 
         // o Laravel espera que a chave seja "password"
         $credentials = [

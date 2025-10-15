@@ -3,8 +3,46 @@
 @section('title', 'Editais')
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('ag-grid/styles/ag-theme-alpine.css') }}">
     <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
+    <style>
+        .card-edital {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .card-edital:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-edital h2 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-edital p {
+            font-size: 0.95rem;
+            color: #555;
+            margin: 4px 0;
+        }
+
+        .card-edital .data {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .card-edital {
+                padding: 15px;
+            }
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -16,54 +54,19 @@
 
     <h1>Editais abertos</h1>
 
-    <div class="container-tabela m-3">
-        <div id="tabela-vigente" class="ag-theme"></div>
+    <div class="container-details">
+        @forelse($editais as $edital)
+            <div class="card-edital" onclick="window.location.href='{{ url('candidato/editais/'.$edital->id_edital) }}'">
+                <h2>{{ $edital->nome }}</h2>
+                <p><strong>Programa:</strong> {{ $edital->curso->programa->sigla ?? '-' }}</p>
+                <p><strong>Curso:</strong> {{ $edital->curso->tipo ?? '-' }}</p>
+                <p class="data">
+                    <strong>Publicado em:</strong> 
+                    {{ \Carbon\Carbon::parse($edital->data_publicacao)->format('d/m/Y') }}
+                </p>
+            </div>
+        @empty
+            <p>Nenhum edital disponível no momento.</p>
+        @endforelse
     </div>
 @endsection
-
-@push('scripts')
-    <!-- AG Grid -->
-    <script src="{{ asset('ag-grid/ag-grid-community.min.js')}}"></script>
-    <script src="{{ asset('ag-grid/pt-BR.js') }}"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Busca dados do banco
-            const tableData = @json($editais);
-
-            const gridOptions = {
-                localeText: AG_GRID_LOCALE_BR,
-                defaultColDef: {
-                    resizable: true,
-                    tooltipValueGetter: params => params.value,
-                    comparator: (valueA, valueB) => {
-                        if (valueA == null) return -1;
-                        if (valueB == null) return 1;
-                        return valueA.toString().localeCompare(valueB.toString(), 'pt-BR', { sensitivity: 'base' });
-                    }
-                },
-                columnDefs: [
-                    { headerName: "Edital", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, minWidth: 160},
-                    { headerName: "Programa", field: "curso.programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
-                    { headerName: "Curso", field: "curso.tipo", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
-                    { headerName: "Data de Publicação", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 140, sort: 'desc',  valueFormatter: params => {
-                        if (!params.value) return '';
-                        const date = new Date(params.value);
-                        const day = String(date.getDate()).padStart(2, '0');
-                        const month = String(date.getMonth() + 1).padStart(2, '0');
-                        const year = date.getFullYear();
-                        return `${day}/${month}/${year}`;
-                    }},
-                ],
-                rowData: tableData,
-                onRowClicked: function(event) {
-                    const editalId = event.data.id_edital;
-                    const baseUrl = "{{ url('candidato/editais') }}";
-                    window.location.href = `${baseUrl}/${editalId}`;
-                }
-            };
-
-            const eGridDiv = document.querySelector("#tabela-vigente");
-            gridApi = agGrid.createGrid(eGridDiv, gridOptions);
-        });
-    </script>
-@endpush

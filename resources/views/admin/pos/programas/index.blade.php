@@ -81,14 +81,15 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc" },
-                    { headerName: "Sigla", field: "sigla", filter: "agTextColumnFilter", sortable: true, flex: 1 }
+                    { headerName: "Nome", field: "nome", filter: "agTextColumnFilter", sortable: true, flex: 2, minWidth: 160, sort: "asc" },
+                    { headerName: "Sigla", field: "sigla", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 }
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
                 pagination: true,
-                paginationPageSize: 20,
                 paginationPageSizeSelector: [10, 20, 50, 100],
+                paginationPageSize: 10,
+                domLayout: 'autoHeight',
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");

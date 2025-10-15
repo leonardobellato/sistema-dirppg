@@ -74,14 +74,15 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Programa", field: "programa.nome", filter: "agTextColumnFilter", sortable: true, flex: 2, sort: "asc" },
-                    { headerName: "Tipo", field: "tipo", filter: "agTextColumnFilter", sortable: true, flex: 1}
+                    { headerName: "Programa", field: "programa.sigla", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 130, sort: "asc" },
+                    { headerName: "Tipo", field: "tipo", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 120 },
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
                 pagination: true,
-                paginationPageSize: 20,
                 paginationPageSizeSelector: [10, 20, 50, 100],
+                paginationPageSize: 10,
+                domLayout: 'autoHeight',
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
 

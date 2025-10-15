@@ -328,16 +328,17 @@ form h4:nth-of-type(2){
 
 
 /* Tabelas */
-.container-tabela{
+.container-tabela {
     width: 1310px;
     max-width: 90%;
     border-radius: 10px;
     padding: 10px;
+    overflow-y: auto;      /* scroll no container */
 }
 
 #tabela-vigente {
-    width: 100%; 
-    height: 600px;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #ag-Grid-SelectionColumn{
@@ -352,19 +353,13 @@ form h4:nth-of-type(2){
   border-radius: 10px;
 }
 
-/* Permite quebra de texto no cabeçalho e nas células */
-.ag-header-cell-label,
-.ag-cell {
+/* Permite quebra de texto no cabeçalho */
+.ag-header-cell-label{
   white-space: normal !important;
   text-overflow: clip !important;
   line-height: 1.3;
 }
 
-/* Centraliza o texto das colunas mais curtas */
-.ag-cell {
-  display: flex;
-  align-items: center;
-}
 
 /* Reduz o tamanho do texto em telas menores */
 @media (max-width: 768px) {
@@ -680,6 +675,7 @@ form h4:nth-of-type(2){
     background-color: rgb(0, 0, 0, 0.4);
 }
 
+/* Exibições simples */
 .container-details{
     width: 800px;
     max-width: 90%;
