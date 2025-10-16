@@ -26,8 +26,7 @@ class CursoController extends Controller
     // rota para AJAX
     public function getCursosByPrograma($idPrograma)
     {
-        $cursos = Curso::where('id_programa', $idPrograma)->get();
-        return response()->json($cursos);
+        return response()->json(Programa::findOrFail($idPrograma)->cursos);
     }
 
     // Método para salvar no banco
@@ -44,7 +43,7 @@ class CursoController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $curso = Curso::where('id_curso', $id)->firstOrFail();
+        $curso = Curso::findOrFail($id);
 
         try {
             $curso->delete();

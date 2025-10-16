@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Programa;
 use App\Models\Disciplina;
+use App\Models\Curso;
 
 class DisciplinaController extends Controller
 {
@@ -26,8 +27,7 @@ class DisciplinaController extends Controller
     // rota para AJAX
     public function getDisciplinasByCurso($idCurso)
     {
-        $disciplinas = Disciplina::where('id_curso', $idCurso)->get();
-        return response()->json($disciplinas);
+        return response()->json(Curso::findOrFail($idCurso)->disciplinas);
     }
 
     // Método para salvar no banco
@@ -48,14 +48,14 @@ class DisciplinaController extends Controller
     // Mostrar formulário de edição
     public function edit($id)
     {
-        $disciplina = Disciplina::with('curso.programa')->where('id_disciplina', $id)->firstOrFail();
+        $disciplina = Disciplina::with('curso.programa')->findOrFail($id);
         return view('admin.pos.disciplinas-aluno-externo.alterar', compact('disciplina'));
     }
 
     // Atualizar objeto
     public function update(Request $request, $id)
     {
-        $disciplina = Disciplina::where('id_disciplina', $id)->firstOrFail();
+        $disciplina = Disciplina::findOrFail($id);
 
         $request->validate([
             'nome' => 'required|string|max:200'
@@ -73,7 +73,7 @@ class DisciplinaController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $disciplina = Disciplina::where('id_disciplina', $id)->firstOrFail();
+        $disciplina = Disciplina::findOrFail($id);
 
         try {
             $disciplina->delete();

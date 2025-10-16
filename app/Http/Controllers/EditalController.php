@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Programa;
 use App\Models\Edital;
 use App\Models\FaseEdital;
+use App\Models\Curso;
 
 class EditalController extends Controller
 {
@@ -33,7 +34,7 @@ class EditalController extends Controller
     // Detalhar objeto específico
     public function lookup($id)
     {
-        $edital = Edital::with(['curso.programa', 'fasesEdital'])->where('id_edital', $id)->firstOrFail();
+        $edital = Edital::with(['curso.programa', 'fasesEdital'])->findOrFail($id);
 
         // separar por tipo + ordem para facilitar no Blade
         $fases = $edital->fasesEdital->groupBy(function($fase) {
@@ -53,8 +54,7 @@ class EditalController extends Controller
     // rota para AJAX
     public function getEditaisByCurso($idCurso)
     {
-        $editais = Edital::where('id_curso', $idCurso)->get();
-        return response()->json($editais);
+        return response()->json(Curso::findOrFail($idCurso)->editais);
     }
 
     // Método para salvar no banco
@@ -132,7 +132,7 @@ class EditalController extends Controller
     // Mostrar formulário de edição
     public function edit($id)
     {
-        $edital = Edital::with(['curso.programa', 'fasesEdital'])->where('id_edital', $id)->firstOrFail();
+        $edital = Edital::with(['curso.programa', 'fasesEdital'])->findOrFail($id);
 
         // separar por tipo + ordem para facilitar no Blade
         $fases = $edital->fasesEdital->groupBy(function($fase) {
@@ -145,7 +145,7 @@ class EditalController extends Controller
     // Atualizar objeto
     public function update(Request $request, $id)
     {
-        $edital = Edital::where('id_edital', $id)->firstOrFail();
+        $edital = Edital::findOrFail($id);
 
         $request->validate([
             'nome' => 'required|string|max:200',
@@ -235,7 +235,7 @@ class EditalController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $edital = Edital::where('id_edital', $id)->firstOrFail();
+        $edital = Edital::findOrFail($id);
 
         try {
             $edital->delete();

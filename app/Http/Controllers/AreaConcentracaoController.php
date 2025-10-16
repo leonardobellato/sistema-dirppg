@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Programa;
 use App\Models\AreaConcentracao;
+use App\Models\Curso;
 
 class AreaConcentracaoController extends Controller
 {
@@ -26,8 +27,7 @@ class AreaConcentracaoController extends Controller
     // rota para AJAX
     public function getAreasByCurso($idCurso)
     {
-        $areas_concentracao = AreaConcentracao::where('id_curso', $idCurso)->get();
-        return response()->json($areas_concentracao);
+        return response()->json(Curso::findOrFail($idCurso)->areasConcentracao);
     }
 
     // Método para salvar no banco
@@ -48,14 +48,14 @@ class AreaConcentracaoController extends Controller
     // Mostrar formulário de edição
     public function edit($id)
     {
-        $area_concentracao = AreaConcentracao::with('curso.programa')->where('id_area_concentracao', $id)->firstOrFail();
+        $area_concentracao = AreaConcentracao::with('curso.programa')->findOrFail($id);
         return view('admin.pos.areas-concentracao.alterar', compact('area_concentracao'));
     }
 
     // Atualizar objeto
     public function update(Request $request, $id)
     {
-        $area_concentracao = AreaConcentracao::where('id_area_concentracao', $id)->firstOrFail();
+        $area_concentracao = AreaConcentracao::findOrFail($id);
 
         $request->validate([
             'nome' => 'required|string|max:150'
@@ -73,7 +73,7 @@ class AreaConcentracaoController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $area_concentracao = AreaConcentracao::where('id_area_concentracao', $id)->firstOrFail();
+        $area_concentracao = AreaConcentracao::findOrFail($id);
 
         try {
             $area_concentracao->delete();

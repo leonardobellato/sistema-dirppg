@@ -40,14 +40,14 @@ class ProgramaController extends Controller
     // Mostrar formulário de edição
     public function edit($id)
     {
-        $programa = Programa::where('id_programa', $id)->firstOrFail();
+        $programa = Programa::findOrFail($id);
         return view('admin.pos.programas.alterar', compact('programa'));
     }
 
     // Atualizar objeto
     public function update(Request $request, $id)
     {
-        $programa = Programa::where('id_programa', $id)->firstOrFail();
+        $programa = Programa::findOrFail($id);
 
         $request->validate([
             'nome' => 'required|string|max:100|unique:programas,nome,' . $programa->id_programa . ',id_programa',
@@ -66,7 +66,7 @@ class ProgramaController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $programa = Programa::where('id_programa', $id)->firstOrFail();
+        $programa = Programa::findOrFail($id);
 
         try {
             $programa->delete();

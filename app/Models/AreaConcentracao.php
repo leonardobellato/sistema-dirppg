@@ -17,6 +17,6 @@ class AreaConcentracao extends Model
     }
 
     public function linhasPesquisa(){
-        return $this->hasMany(LinhaPesquisa::class);
+        return $this->hasMany(LinhaPesquisa::class, 'id_area_concentracao', 'id_area_concentracao');
     }
 }

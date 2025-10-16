@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AreaConcentracao;
 use Illuminate\Http\Request;
 use App\Models\Programa;
 use App\Models\LinhaPesquisa;
@@ -30,8 +31,7 @@ class LinhaPesquisaController extends Controller
     // rota para AJAX
     public function getLinhasByArea($idArea)
     {
-        $linhas_pesquisa = LinhaPesquisa::where('id_area_concentracao', $idArea)->get();
-        return response()->json($linhas_pesquisa);
+        return response()->json(AreaConcentracao::findOrFail($idArea)->linhasPesquisa);
     }
 
     // Método para salvar no banco
@@ -56,7 +56,7 @@ class LinhaPesquisaController extends Controller
             'areaConcentracao:id_area_concentracao,nome,id_curso',
             'areaConcentracao.curso:id_curso,tipo,id_programa',
             'areaConcentracao.curso.programa:id_programa,nome'
-        ])->where('id_linha_pesquisa', $id)->firstOrFail();
+        ])->findOrFail($id);
 
         return view('admin.pos.linhas-pesquisa.alterar', compact('linha_pesquisa'));
     }
@@ -64,7 +64,7 @@ class LinhaPesquisaController extends Controller
     // Atualizar objeto
     public function update(Request $request, $id)
     {
-        $linha_pesquisa = LinhaPesquisa::where('id_linha_pesquisa', $id)->firstOrFail();
+        $linha_pesquisa = LinhaPesquisa::findOrFail($id);
 
         $request->validate([
             'nome' => 'required|string|max:150'
@@ -82,7 +82,7 @@ class LinhaPesquisaController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $linha_pesquisa = LinhaPesquisa::where('id_linha_pesquisa', $id)->firstOrFail();
+        $linha_pesquisa = LinhaPesquisa::findOrFail($id);
 
         try {
             $linha_pesquisa->delete();

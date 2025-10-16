@@ -17,14 +17,14 @@ class Curso extends Model
     }
 
     public function areasConcentracao(){
-        return $this->hasMany(AreaConcentracao::class);
+        return $this->hasMany(AreaConcentracao::class, 'id_curso', 'id_curso');
     }
 
     public function disciplinas(){
-        return $this->hasMany(Disciplina::class);
+        return $this->hasMany(Disciplina::class, 'id_curso', 'id_curso');
     }
 
     public function editais(){
-        return $this->hasMany(Edital::class);
+        return $this->hasMany(Edital::class, 'id_curso', 'id_curso');
     }
 }

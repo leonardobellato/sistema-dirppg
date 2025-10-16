@@ -13,6 +13,6 @@ class Programa extends Model
     protected $fillable = ['nome'];
 
     public function cursos(){
-        return $this->hasMany(Curso::class);
+        return $this->hasMany(Curso::class, 'id_programa', 'id_programa');
     }
 }

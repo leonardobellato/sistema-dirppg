@@ -17,6 +17,6 @@ class LinhaPesquisa extends Model
     }
 
     public function sublinhas(){
-        return $this->hasMany(Sublinha::class);
+        return $this->hasMany(Sublinha::class, 'id_linha_pesquisa', 'id_linha_pesquisa');
     }
 }

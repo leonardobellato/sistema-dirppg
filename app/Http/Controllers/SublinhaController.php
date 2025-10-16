@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LinhaPesquisa;
 use Illuminate\Http\Request;
 use App\Models\Programa;
 use App\Models\Sublinha;
@@ -31,8 +32,7 @@ class SublinhaController extends Controller
     // rota para AJAX
     public function getSublinhasByLinha($idLinha)
     {
-        $sublinhas = Sublinha::where('id_linha_pesquisa', $idLinha)->get();
-        return response()->json($sublinhas);
+        return response()->json(LinhaPesquisa::findOrFail($idLinha)->sublinhas);
     }
 
     // Método para salvar no banco
@@ -58,7 +58,7 @@ class SublinhaController extends Controller
             'linhaPesquisa.areaConcentracao:id_area_concentracao,nome,id_curso',
             'linhaPesquisa.areaConcentracao.curso:id_curso,tipo,id_programa',
             'linhaPesquisa.areaConcentracao.curso.programa:id_programa,nome'
-        ])->where('id_sublinha', $id)->firstOrFail();
+        ])->findOrFail($id);
 
         return view('admin.pos.sublinhas.alterar', compact('sublinha'));
     }
@@ -66,7 +66,7 @@ class SublinhaController extends Controller
     // Atualizar objeto
     public function update(Request $request, $id)
     {
-        $sublinha = Sublinha::where('id_sublinha', $id)->firstOrFail();
+        $sublinha = Sublinha::findOrFail($id);
 
         $request->validate([
             'nome' => 'required|string|max:150'
@@ -84,7 +84,7 @@ class SublinhaController extends Controller
     // Método para remover um objeto
     public function destroy($id)
     {
-        $sublinha = Sublinha::where('id_sublinha', $id)->firstOrFail();
+        $sublinha = Sublinha::findOrFail($id);
 
         try {
             $sublinha->delete();
