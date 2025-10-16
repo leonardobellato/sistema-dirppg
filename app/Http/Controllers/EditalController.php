@@ -20,7 +20,7 @@ class EditalController extends Controller
     // Método que retorna apenas os vigentes para o candidato
     public function listVigentes(Request $request)
     {
-        $editais = Edital::with(['curso.programa'])->where('vigente', true)->get();
+        $editais = Edital::with(['curso.programa'])->where('vigente', true)->orderBy('data_publicacao', 'desc')->get();
 
         // Verifica quem está acessando
         if ($request->user()->eCandidato()) {

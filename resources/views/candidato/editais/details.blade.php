@@ -4,7 +4,6 @@
 
 @push('head')
     <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
-    <script>console.log(@json($fases));</script>;
 @endpush
 
 @section('content')
@@ -82,9 +81,25 @@
             @endforeach
         </div>
 
+
+
+        @php
+            use Carbon\Carbon;
+            $podeInscrever = Carbon::parse($fases['inscricao_1'][0]->data_fim)->isFuture();
+        @endphp
+
+        @if(!$podeInscrever)
+            <p class="warning"> As inscrições estão encerradas.</p>
+        @endif
+
         <div class="btn-grp-details">
             <a href={{ route('candidato.editais.index') }}>Voltar</a>
-            <a href={{ route('candidato.editais.index') }} class="confirm">Inscrever-se</a>
+            
+            <a 
+                href={{ route('candidato.editais.index') }} class="confirm {{ $podeInscrever ? '' : 'disabled-link' }}"
+            >   
+                Inscrever-se
+            </a>
         </div>
     </div>
     
