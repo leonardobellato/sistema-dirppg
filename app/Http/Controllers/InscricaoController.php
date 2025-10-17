@@ -25,9 +25,7 @@ class InscricaoController extends Controller
     // Método para mostrar o formulário de criação
     public function create($idEdital)
     {
-        // aquiii - tipo edital??
-
         $edital = Edital::with('curso.programa')->findOrFail($idEdital);
-        return view('admin.pos.areas-concentracao.adicionar', compact('edital'));
+        return view('candidato.inscricoes.inscrever', compact('edital'));
     }
 }

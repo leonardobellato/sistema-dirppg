@@ -10,7 +10,7 @@ use App\Http\Controllers\SublinhaController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
-
+use App\Http\Controllers\InscricaoController;
 
 /* AUTENTICAÇÃO */
 Route::get('/', function () {
@@ -123,6 +123,7 @@ Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(f
     Route::get('/inscricoes', function () {
         return view('candidato.inscricoes.index');
     })->name('candidato.inscricoes.index');
+    Route::get('/inscricoes/inscrever/{id}', [InscricaoController::class, 'create'])->name('candidato.inscricoes.inscrever');
 
     Route::get('/entrevistas', function () {
         return view('candidato.entrevistas.index');
