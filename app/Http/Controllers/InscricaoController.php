@@ -28,4 +28,9 @@ class InscricaoController extends Controller
         $edital = Edital::with('curso.programa')->findOrFail($idEdital);
         return view('candidato.inscricoes.inscrever', compact('edital'));
     }
+
+    // Método para salvar no banco
+    public function store(Request $request){
+        
+    }
 }

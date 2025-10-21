@@ -96,7 +96,7 @@
             <a href={{ route('candidato.editais.index') }}>Voltar</a>
             
             <a 
-                href={{ url('candidato/inscricoes/inscrever/'.$edital->id_edital) }} class="confirm {{ $podeInscrever ? '' : 'disabled-link' }}"
+                href={{ url('candidato/editais/'.$edital->id_edital.'/inscrever') }} class="confirm {{ $podeInscrever ? '' : 'disabled-link' }}"
             >   
                 Inscrever-se
             </a>
