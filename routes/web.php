@@ -119,7 +119,7 @@ Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(f
 
     Route::get('/editais', [EditalController::class, 'listVigentes'])->name('candidato.editais.index');
     Route::get('/editais/{id}', [EditalController::class, 'lookup'])->name('candidato.editais.details');
-    Route::get('/editais/{id}/inscrever', [InscricaoController::class, 'create'])->name('candidato.inscricoes.inscrever');
+    Route::get('/editais/{id}/inscrever', [InscricaoController::class, 'create'])->name('candidato.editais.inscrever');
 
     Route::get('/inscricoes', function () {
         return view('candidato.inscricoes.index');
