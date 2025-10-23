@@ -1,4 +1,4 @@
-<form action="{{route('inscricao.store')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
+<form action="{{route('inscricao.salvar')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
     @csrf
 
     <label>Ficha de inscrição 
@@ -101,7 +101,13 @@
         <input type="file" name="formulario_indicacao" accept="application/pdf" required>
     @endif
 
-    <label>Outro (Cotas, Reservista etc.)</label>
+    <label>Outros
+        <div class="tooltip">?
+            <span class="tooltip-text">
+                Gere um arquivo pdf contendo outro(s) documentos requisitados. (Cotas,Reservista...)
+            </span>
+        </div>
+    </label>
     <input type="file" name="outro" accept="application/pdf">
 
     <label for="input-comentarios" class="comentarios-label">Comentários (opcional)</label>
@@ -110,17 +116,21 @@
     <div class="termos">
         <label>
             <input type="checkbox" name="aceito_termos" required>
-            Li e aceito os <a href="#" target="_blank" style="color:#0076df; text-decoration:none; font-weight:600;"> Termos e Condições </a> referentes ao processo de inscrição.
+            <span class="termos-label">
+                Li e aceito os 
+                <a href="#" target="_blank">Termos e Condições</a>
+                referentes ao processo de inscrição.
+            </span>
         </label>
 
         <div class="termos-text">
-            a) Declaro ter lido o edital de seleção na íntegra;<br>
-            b) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio incorreto de documentos;<br>
-            c) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio de documentos ilegíveis;<br>
-            d) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pela falta de documentos;<br>
-            e) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam por problemas de conexão de internet no momento do envio dos documentos;<br>
+            <p>a) Declaro ter lido o edital de seleção na íntegra;</p>
+            <p>b) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio incorreto de documentos;</p>
+            <p>c) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pelo envio de documentos ilegíveis;</p>
+            <p>d) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam pela falta de documentos;</p>
+            <p>e) Os Programas de Pós-Graduação da UTFPR-PG não se responsabilizam por problemas de conexão de internet no momento do envio dos documentos;</p>
         </div>
-    </div> 
+    </div>
 
     <div class="pos-form">
         <p><span class="required-content">*</span> Campos obrigatórios</p>

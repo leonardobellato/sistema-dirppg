@@ -15,4 +15,9 @@ class Programa extends Model
     public function cursos(){
         return $this->hasMany(Curso::class, 'id_programa', 'id_programa');
     }
+
+    public function professores()
+    {
+        return $this->belongsToMany(Usuario::class, 'professor_programa', 'id_programa', 'id_usuario');
+    }
 }

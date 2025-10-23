@@ -8,12 +8,15 @@
 @endpush
 
 @section('content')
-    <h1>Inscrição no {{ $edital->curso->programa->nome }}</br>({{ $edital->curso->tipo }})</h1>
+    <h2>Inscrição no {{ $edital->curso->programa->nome }}</br>({{ $edital->curso->tipo }})</h2>
 
     
     <div class="atencao-box">
         <b>Atenção:</b> &nbsp;Serão aceitos apenas arquivos <b>PDF</b>, de no máximo <b>5 MB</b>. <br>
+        
+        @if($edital->curso->tipo == "Doutorado")
         A dissertação de mestrado (quando necessário) deve conter no máximo <b>15 MB</b>.
+        @endif
     </div>
     
     <div class="container-form">

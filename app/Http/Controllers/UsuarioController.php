@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Usuario;
 use App\Models\Candidato;
+use App\Models\Programa;
 
 class UsuarioController extends Controller
 {
@@ -19,7 +20,8 @@ class UsuarioController extends Controller
 
     public function listarProfessores()
     {
-        $usuarios = Usuario::where('tipo', 'professor')->get();
+        $usuarios = Usuario::with('programas')->where('tipo', 'professor')->get();
+
         return view('admin.pessoas.professores.index', compact('usuarios'));
     }
 
@@ -186,6 +188,23 @@ class UsuarioController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['success' => false, 'message' => 'Erro ao excluir: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function obterProgramasVinculados($idUsuario)
+    {
+        $professor = Usuario::with('programas')->findOrFail($idUsuario);
+        $programas = Programa::all();
+
+        return view('admin.pessoas.professores.vincular', compact('professor', 'programas'));
+    }
+
+    public function vincularPrograma(Request $request){
+        $professor = Usuario::findOrFail($request['id_usuario']);
+
+        // Atualiza os vínculos com base nos checkboxes marcados
+        $professor->programas()->sync($request['id_programas'] ?? []);
+
+        return redirect()->route('pessoas.professores.index')->with('success', 'Programa vinculado com sucesso!');
     }
 }
 

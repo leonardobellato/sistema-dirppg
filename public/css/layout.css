@@ -36,7 +36,7 @@ main{
 	flex-direction: column;
 }
 
-main h1{
+main h1, h2{
 	color: #272727;
 	text-align: center;
 }
