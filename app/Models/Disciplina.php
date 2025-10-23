@@ -10,7 +10,7 @@ class Disciplina extends Model
     protected $primaryKey = 'id_disciplina';
     public $timestamps = false;
 
-    protected $fillable = ['nome', 'id_curso', 'inativo'];
+    protected $fillable = ['nome', 'id_curso', 'visivel'];
 
     public function curso(){
         return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');

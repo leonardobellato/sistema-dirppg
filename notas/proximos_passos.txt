@@ -1,5 +1,3 @@
-- visibilidade de disciplinas
-- perguntar sobre PAPOS (escolhe disciplinas?)
 - criar controlador inscricoes
 - dividir crud.css
 - análise de inscricoes (recursos)

@@ -83,4 +83,18 @@ class DisciplinaController extends Controller
             return response()->json(['success' => false, 'message' => 'Erro ao excluir: ' . $e->getMessage()], 500);
         }
     }
+
+    public function alterarVisibilidade($id){
+        $disciplina = Disciplina::findOrFail($id);
+        
+        $disciplina->update([
+            'visivel' => (1 - $disciplina->visivel) 
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'visivel' => (bool) $disciplina->visivel,
+            'message' => 'Disciplina atualizada com sucesso!'
+        ]);
+    }
 }

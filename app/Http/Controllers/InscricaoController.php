@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Disciplina;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
 use App\Models\Edital;
@@ -25,7 +26,12 @@ class InscricaoController extends Controller
     // Método para mostrar o formulário de criação
     public function criar($idEdital)
     {
-        $edital = Edital::with(['curso.programa', 'curso.disciplinas'])->findOrFail($idEdital);
+        $edital = Edital::with([
+            'curso.programa',
+            'curso.disciplinas' => function ($query) {
+                $query->where('visivel', true);
+            }
+        ])->findOrFail($idEdital);
         
         return view('candidato.editais.inscrever', compact('edital'));
     }

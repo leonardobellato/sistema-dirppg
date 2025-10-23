@@ -91,6 +91,7 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::get('/disciplinas-aluno-externo', [DisciplinaController::class, 'listar'])->name('pos.disciplinas-aluno-externo.index');
     Route::get('/disciplinas-aluno-externo/adicionar', [DisciplinaController::class, 'criar'])->name('pos.disciplinas-aluno-externo.adicionar');
     Route::get('/disciplinas-aluno-externo/alterar/{id}', [DisciplinaController::class, 'alterar'])->name('pos.disciplinas-aluno-externo.alterar');
+    Route::patch('/disciplinas-aluno-externo/visibilidade/{id}', [DisciplinaController::class, 'alterarVisibilidade'])->name('pos.disciplinas-aluno-externo.visibilidade');
     Route::post('/disciplinas-aluno-externo', [DisciplinaController::class, 'salvar'])->name('pos.disciplinas-aluno-externo.salvar');
     Route::put('/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'atualizar'])->name('pos.disciplinas-aluno-externo.atualizar');
     Route::delete('/disciplinas-aluno-externo/{id}', [DisciplinaController::class, 'excluir'])->name('pos.disciplinas-aluno-externo.excluir');

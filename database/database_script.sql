@@ -75,7 +75,7 @@ CREATE TABLE `disciplinas` (
   `id_disciplina` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_curso`      INT UNSIGNED NOT NULL,
   `nome`          VARCHAR(200) NOT NULL,
-  `inativo`       TINYINT(1) NOT NULL DEFAULT 0
+  `visivel`       TINYINT(1) NOT NULL DEFAULT 0
 );
 
 ALTER TABLE `disciplinas`

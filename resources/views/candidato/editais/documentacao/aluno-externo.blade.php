@@ -58,7 +58,7 @@
     <label for="input-comentarios" class="comentarios-label">Comentários (opcional)</label>
     <textarea id="input-comentarios" name="comentarios" class="comentarios-textarea" placeholder="Se quiser, escreva algo que considere relevante para o processo seletivo (opcional)" maxlength="1000">{{ old('comentarios') }}</textarea>
 
-    <p>Selecione a(s) disciplina(s) que você deseja cursar obedecendo o limite estipulado na resolução do programa.</p>
+    <p><br/>Selecione a(s) disciplina(s) que você deseja cursar obedecendo o limite estipulado na resolução do programa.</p>
 
     <div class="disciplinas-container">
         @foreach ($edital->curso->disciplinas as $disciplina)
