@@ -8,8 +8,8 @@ use App\Models\Programa;
 
 class CursoController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $cursos = Curso::with('programa')->get();
 
@@ -17,20 +17,22 @@ class CursoController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
+        // Buscar todos os programas para popular o select
         $programas = Programa::all();
+
         return view('admin.pos.cursos.adicionar', ['programas' => $programas]);
     }
 
-    // rota para AJAX
-    public function getCursosByPrograma($idPrograma)
+    // Rota para AJAX
+    public function filtrarCursosPorPrograma($idPrograma)
     {
         return response()->json(Programa::findOrFail($idPrograma)->cursos);
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         Curso::create([
             'tipo' => $request->input('tipo'),
@@ -40,8 +42,7 @@ class CursoController extends Controller
         return redirect()->route('pos.cursos.index')->with('success', 'Curso criado com sucesso!');
     }
 
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $curso = Curso::findOrFail($id);
 

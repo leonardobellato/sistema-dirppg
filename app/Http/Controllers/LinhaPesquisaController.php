@@ -9,8 +9,8 @@ use App\Models\LinhaPesquisa;
 
 class LinhaPesquisaController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $linhas_pesquisa = LinhaPesquisa::with([
             'areaConcentracao:id_area_concentracao,nome,id_curso',
@@ -22,20 +22,22 @@ class LinhaPesquisaController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
+        // Buscar os programas para popular o select
         $programas = Programa::all();
+
         return view('admin.pos.linhas-pesquisa.adicionar', compact('programas'));
     }
 
-    // rota para AJAX
-    public function getLinhasByArea($idArea)
+    // Rota para AJAX
+    public function filtrarLinhasPorArea($idArea)
     {
         return response()->json(AreaConcentracao::findOrFail($idArea)->linhasPesquisa);
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:150'
@@ -50,7 +52,7 @@ class LinhaPesquisaController extends Controller
     }
 
     // Mostrar formulário de edição
-    public function edit($id)
+    public function alterar($id)
     {
         $linha_pesquisa = LinhaPesquisa::with([
             'areaConcentracao:id_area_concentracao,nome,id_curso',
@@ -61,8 +63,7 @@ class LinhaPesquisaController extends Controller
         return view('admin.pos.linhas-pesquisa.alterar', compact('linha_pesquisa'));
     }
 
-    // Atualizar objeto
-    public function update(Request $request, $id)
+    public function atualizar(Request $request, $id)
     {
         $linha_pesquisa = LinhaPesquisa::findOrFail($id);
 
@@ -79,8 +80,7 @@ class LinhaPesquisaController extends Controller
                          ->with('success', 'Linha de pesquisa atualizada com sucesso!');
     }
 
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $linha_pesquisa = LinhaPesquisa::findOrFail($id);
 

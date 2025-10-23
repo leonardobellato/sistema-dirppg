@@ -9,28 +9,29 @@ use App\Models\Edital;
 class InscricaoController extends Controller
 {
 
-    // Método para listar objetos
-    public function index($idCandidato)
+    // Método para listar todos os objetos
+    public function listar($idCandidato)
     {
         $inscricoes = Inscricao::with('edital.curso.programa')->where('id_candidato', $idCandidato)->firstOrFail();
 
         return view('candidato.inscricoes.index', ['inscricoes' => $inscricoes]);
     }
 
-    public function getInscricoesByEdital($idEdital)
+    public function filtrarInscricoesPorEdital($idEdital)
     {
         return response()->json(Edital::findOrFail($idEdital)->inscricoes);
     }
 
     // Método para mostrar o formulário de criação
-    public function create($idEdital)
+    public function criar($idEdital)
     {
         $edital = Edital::with(['curso.programa', 'curso.disciplinas'])->findOrFail($idEdital);
+        
         return view('candidato.editais.inscrever', compact('edital'));
     }
 
     // Método para salvar no banco
-    public function store(Request $request){
+    public function salvar(Request $request){
         
     }
 }

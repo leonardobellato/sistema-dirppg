@@ -7,8 +7,8 @@ use App\Models\Programa;
 
 class ProgramaController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $programas = Programa::all();
 
@@ -16,13 +16,13 @@ class ProgramaController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
         return view('admin.pos.programas.adicionar');
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:100|unique:programas,nome',
@@ -38,14 +38,14 @@ class ProgramaController extends Controller
     }
 
     // Mostrar formulário de edição
-    public function edit($id)
+    public function alterar($id)
     {
         $programa = Programa::findOrFail($id);
+        
         return view('admin.pos.programas.alterar', compact('programa'));
     }
 
-    // Atualizar objeto
-    public function update(Request $request, $id)
+    public function atualizar(Request $request, $id)
     {
         $programa = Programa::findOrFail($id);
 
@@ -63,8 +63,7 @@ class ProgramaController extends Controller
                          ->with('success', 'Programa atualizado com sucesso!');
     }
 
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $programa = Programa::findOrFail($id);
 

@@ -10,20 +10,68 @@ use App\Models\Candidato;
 
 class UsuarioController extends Controller
 {
-    // Método para listar objetos
-    /*public function index()
+    // Método para listar todos os objetos
+    public function listarAdministradores()
     {
-        $usuarios = Edital::with(['curso.programa', 'fasesEdital'])->paginate(20);
+        $usuarios = Usuario::where('tipo', 'admin')->get();
+        return view('admin.pessoas.administradores.index', compact('usuarios'));
+    }
 
-        return view('admin.editais.index', [
-            'editais' => $editais->items(), // apenas os registros da página atual
-            'pagination' => $editais        // mantém os links de paginação
-        ]);
-    }*/
+    public function listarProfessores()
+    {
+        $usuarios = Usuario::where('tipo', 'professor')->get();
+        return view('admin.pessoas.professores.index', compact('usuarios'));
+    }
 
+    // Método para mostrar o formulário de cadastro
+    public function criarAdministrador()
+    {
+        return view('admin.pessoas.administradores.adicionar');
+    }
+
+    public function criarProfessor()
+    {
+        return view('admin.pessoas.professores.adicionar');
+    }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvarAdministrador(Request $request)
+    {
+        $request->validate([
+            'nome' => 'required|string|max:100',
+            'email' => 'required|string|max:100|unique:usuarios,email',
+            'senha' => 'required|string|min:8',
+        ]);
+
+        $usuario = Usuario::create([
+            'nome' => $request->input('nome'),
+            'email' => $request->input('email'),
+            'senha' => bcrypt($request->input('senha')),
+            'tipo' => 'admin'
+        ]);
+
+        return redirect()->route('pessoas.administradores.index')->with('success', 'Administrador criado com sucesso!');
+    }
+
+    public function salvarProfessor(Request $request)
+    {
+        $request->validate([
+            'nome' => 'required|string|max:100',
+            'email' => 'required|string|max:100|unique:usuarios,email',
+            'senha' => 'required|string|min:8',
+        ]);
+
+        $usuario = Usuario::create([
+            'nome' => $request->input('nome'),
+            'email' => $request->input('email'),
+            'senha' => bcrypt($request->input('senha')),
+            'tipo' => 'professor'
+        ]);
+
+        return redirect()->route('pessoas.professores.index')->with('success', 'Professor criado com sucesso!');
+    }
+
+    public function salvarCandidato(Request $request)
     {
         // Campos que realmente precisa validar no backend
         $request->validate([
@@ -50,14 +98,13 @@ class UsuarioController extends Controller
             'senha' => bcrypt($request->input('senha'))
         ]);
 
-        if($request->filled('cpf')) {
-            Candidato::create([
-                'id_usuario' => $usuario->id_usuario,
-                'cpf' => $request->input('cpf'),
-                'telefone' => $request->input('telefone'),
-                'brasileiro' => $request->input('nacionalidade') === 'brasileiro' ? 1 : 0
-            ]);
-        }
+        
+        Candidato::create([
+            'id_usuario' => $usuario->id_usuario,
+            'cpf' => $request->input('cpf'),
+            'telefone' => $request->input('telefone'),
+            'brasileiro' => $request->input('nacionalidade') === 'brasileiro' ? 1 : 0
+        ]);
 
         return view('autenticacao.cadastro.confirmacao');
     }
@@ -85,7 +132,7 @@ class UsuarioController extends Controller
     }
 
     // Mostra o formulário de edição
-    public function edit()
+    public function alterar()
     {
         // pega o usuário logado
         $usuario = Auth::user();
@@ -93,8 +140,7 @@ class UsuarioController extends Controller
         return view('usuarios.alterar', compact('usuario'));
     }
 
-    // Atualiza os dados
-    public function update(Request $request)
+    public function atualizar(Request $request)
     {
         $usuario = Auth::user();
 
@@ -125,4 +171,21 @@ class UsuarioController extends Controller
 
         return redirect()->route('usuarios.alterar')->with('success', 'Dados atualizados com sucesso!');
     }
+
+    public function excluir($id)
+    {
+        $usuario = Usuario::findOrFail($id);
+
+        if ($usuario->nome === 'Admin') {
+            return response()->json(['success' => false, 'message' => 'O usuário Admin não pode ser removido.'], 403);
+        }
+
+        try {
+            $usuario->delete();
+            return response()->json(['success' => true, 'message' => 'Usuário removido com sucesso!']);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['success' => false, 'message' => 'Erro ao excluir: ' . $e->getMessage()], 500);
+        }
+    }
 }
+

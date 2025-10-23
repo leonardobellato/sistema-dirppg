@@ -9,8 +9,8 @@ use App\Models\Curso;
 
 class DisciplinaController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $disciplinas = Disciplina::with('curso.programa')->get();
 
@@ -18,20 +18,22 @@ class DisciplinaController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
+        // Buscar todos os programas para popular o select
         $programas = Programa::all();
+
         return view('admin.pos.disciplinas-aluno-externo.adicionar', ['programas' => $programas]);
     }
 
-    // rota para AJAX
-    public function getDisciplinasByCurso($idCurso)
+    // Rota para AJAX
+    public function filtrarDisciplinasPorCurso($idCurso)
     {
         return response()->json(Curso::findOrFail($idCurso)->disciplinas);
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:200'
@@ -46,14 +48,14 @@ class DisciplinaController extends Controller
     }
 
     // Mostrar formulário de edição
-    public function edit($id)
+    public function alterar($id)
     {
         $disciplina = Disciplina::with('curso.programa')->findOrFail($id);
+
         return view('admin.pos.disciplinas-aluno-externo.alterar', compact('disciplina'));
     }
 
-    // Atualizar objeto
-    public function update(Request $request, $id)
+    public function atualizar(Request $request, $id)
     {
         $disciplina = Disciplina::findOrFail($id);
 
@@ -70,8 +72,7 @@ class DisciplinaController extends Controller
                          ->with('success', 'Disciplina atualizada com sucesso!');
     }
 
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $disciplina = Disciplina::findOrFail($id);
 

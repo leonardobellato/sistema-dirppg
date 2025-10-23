@@ -278,6 +278,10 @@ form h4:nth-of-type(2){
     margin-top: 10px;
 }
 
+.confirmacao{
+    display: none;
+}
+
 .toggle {
     position: relative;
     display: inline-block;
@@ -551,12 +555,6 @@ form h4:nth-of-type(2){
     font-style: italic;
     margin-top: 10px;
     color: #555;
-}
-
-.modal-body p {
-    word-wrap: break-word;  
-    overflow-wrap: break-word; 
-    word-break: break-all;
 }
 
 .modal-body p.warning {

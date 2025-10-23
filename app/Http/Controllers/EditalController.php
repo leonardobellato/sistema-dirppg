@@ -10,8 +10,8 @@ use App\Models\Curso;
 
 class EditalController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $editais = Edital::with(['curso.programa', 'fasesEdital'])->get();
 
@@ -19,7 +19,7 @@ class EditalController extends Controller
     }
 
     // Método que retorna apenas os vigentes para o candidato
-    public function listVigentes(Request $request)
+    public function listarVigentes(Request $request)
     {
         $editais = Edital::with(['curso.programa'])->where('vigente', true)->orderBy('data_publicacao', 'desc')->get();
 
@@ -31,12 +31,11 @@ class EditalController extends Controller
         }
     }
 
-    // Detalhar objeto específico
-    public function lookup($id)
+    public function detalhar($id)
     {
         $edital = Edital::with(['curso.programa', 'fasesEdital'])->findOrFail($id);
 
-        // separar por tipo + ordem para facilitar no Blade
+        // Separar por tipo + ordem para facilitar no Blade
         $fases = $edital->fasesEdital->groupBy(function($fase) {
             return $fase->tipo.'_'.$fase->ordem;
         });
@@ -45,20 +44,22 @@ class EditalController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
+        // Buscar todos os programas para popular o select
         $programas = Programa::all();
+
         return view('admin.editais.adicionar', compact('programas'));
     }
 
-    // rota para AJAX
-    public function getEditaisByCurso($idCurso)
+    // Rota para AJAX
+    public function filtrarEditaisPorCurso($idCurso)
     {
         return response()->json(Curso::findOrFail($idCurso)->editais);
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:200',
@@ -71,7 +72,7 @@ class EditalController extends Controller
             'link' => $request->input('link')
         ]);
 
-        // criando fases
+        // Criando fases
         $fases = [
             [
                 'tipo' => 'inscricao',
@@ -130,11 +131,11 @@ class EditalController extends Controller
     }
 
     // Mostrar formulário de edição
-    public function edit($id)
+    public function alterar($id)
     {
         $edital = Edital::with(['curso.programa', 'fasesEdital'])->findOrFail($id);
 
-        // separar por tipo + ordem para facilitar no Blade
+        // Separar por tipo + ordem para facilitar no Blade
         $fases = $edital->fasesEdital->groupBy(function($fase) {
             return $fase->tipo.'_'.$fase->ordem;
         });
@@ -142,8 +143,7 @@ class EditalController extends Controller
         return view('admin.editais.alterar', compact('edital', 'fases'));
     }
 
-    // Atualizar objeto
-    public function update(Request $request, $id)
+    public function atualizar(Request $request, $id)
     {
         $edital = Edital::findOrFail($id);
 
@@ -218,7 +218,7 @@ class EditalController extends Controller
             );
         }
 
-        // Excluir 2 fases se foram desmarcadas
+        // Excluir as fases opcionais se foram desmarcadas
         $tiposOrdensAtuais = collect($fases)->map(function($fase) {
             return $fase['tipo'].'_'.$fase['ordem'];
         })->toArray();
@@ -231,9 +231,7 @@ class EditalController extends Controller
                         ->with('success', 'Edital atualizado com sucesso!');
     }
 
-
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $edital = Edital::findOrFail($id);
 

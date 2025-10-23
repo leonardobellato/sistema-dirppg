@@ -9,8 +9,8 @@ use App\Models\Curso;
 
 class AreaConcentracaoController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $areas_concentracao = AreaConcentracao::with('curso.programa')->get();
 
@@ -18,20 +18,22 @@ class AreaConcentracaoController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
+        // Buscar todos os programas para popular o select
         $programas = Programa::all();
+
         return view('admin.pos.areas-concentracao.adicionar', compact('programas'));
     }
 
-    // rota para AJAX
-    public function getAreasByCurso($idCurso)
+    // Rota para AJAX
+    public function filtrarAreasPorCurso($idCurso)
     {
-        return response()->json(Curso::findOrFail($idCurso)->areasConcentracao);
+        return response()->json( Curso::findOrFail($idCurso)->areasConcentracao );
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:150'
@@ -46,14 +48,14 @@ class AreaConcentracaoController extends Controller
     }
 
     // Mostrar formulário de edição
-    public function edit($id)
+    public function alterar($id)
     {
         $area_concentracao = AreaConcentracao::with('curso.programa')->findOrFail($id);
+
         return view('admin.pos.areas-concentracao.alterar', compact('area_concentracao'));
     }
 
-    // Atualizar objeto
-    public function update(Request $request, $id)
+    public function atualizar(Request $request, $id)
     {
         $area_concentracao = AreaConcentracao::findOrFail($id);
 
@@ -70,8 +72,7 @@ class AreaConcentracaoController extends Controller
                          ->with('success', 'Área de concentração atualizada com sucesso!');
     }
 
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $area_concentracao = AreaConcentracao::findOrFail($id);
 

@@ -23,7 +23,7 @@ class LoginController extends Controller
             return back()->with('failure', 'E-mail não encontrado.');
         }
 
-        // o Laravel espera que a chave seja "password"
+        // O Laravel espera que a chave seja "password"
         $credentials = [
             'email' => $dados['email'],
             'password' => $dados['senha']

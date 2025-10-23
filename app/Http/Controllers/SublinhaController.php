@@ -9,8 +9,8 @@ use App\Models\Sublinha;
 
 class SublinhaController extends Controller
 {
-    // Método para listar objetos
-    public function index()
+    // Método para listar todos os objetos
+    public function listar()
     {
         $sublinhas = Sublinha::with([
             'linhaPesquisa:id_linha_pesquisa,nome,id_area_concentracao',
@@ -23,20 +23,22 @@ class SublinhaController extends Controller
     }
 
     // Método para mostrar o formulário de criação
-    public function create()
+    public function criar()
     {
+        // Buscar todos os programas para popular o select
         $programas = Programa::all();
+
         return view('admin.pos.sublinhas.adicionar', compact('programas'));
     }
 
-    // rota para AJAX
-    public function getSublinhasByLinha($idLinha)
+    // Rota para AJAX
+    public function filtrarSublinhasPorLinha($idLinha)
     {
         return response()->json(LinhaPesquisa::findOrFail($idLinha)->sublinhas);
     }
 
     // Método para salvar no banco
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:150'
@@ -51,7 +53,7 @@ class SublinhaController extends Controller
     }
 
     // Mostrar formulário de edição
-    public function edit($id)
+    public function alterar($id)
     {
         $sublinha = Sublinha::with([
             'linhaPesquisa:id_linha_pesquisa,nome,id_area_concentracao',
@@ -63,8 +65,7 @@ class SublinhaController extends Controller
         return view('admin.pos.sublinhas.alterar', compact('sublinha'));
     }
 
-    // Atualizar objeto
-    public function update(Request $request, $id)
+    public function atualizar(Request $request, $id)
     {
         $sublinha = Sublinha::findOrFail($id);
 
@@ -81,8 +82,7 @@ class SublinhaController extends Controller
                          ->with('success', 'Sublinha atualizada com sucesso!');
     }
 
-    // Método para remover um objeto
-    public function destroy($id)
+    public function excluir($id)
     {
         $sublinha = Sublinha::findOrFail($id);
 

@@ -159,8 +159,8 @@
                 </div>
 
                 <div class="sidebar-dropdown-subitems">
-                    <a href="{{ route('pessoas.professores') }}" class="{{ request()->routeIs('pessoas.professores.*') ? 'active' : '' }}">Professores</a>
-                    <a href="{{ route('pessoas.secretarios') }}" class="{{ request()->routeIs('pessoas.secretarios.*') ? 'active' : '' }}">Secretários</a>
+                    <a href="{{ route('pessoas.professores.index') }}" class="{{ request()->routeIs('pessoas.professores.*') ? 'active' : '' }}">Professores</a>
+                    <a href="{{ route('pessoas.administradores.index') }}" class="{{ request()->routeIs('pessoas.administradores.*') ? 'active' : '' }}">Administradores</a>
                 </div>
             </li>
 
