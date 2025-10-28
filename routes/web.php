@@ -130,10 +130,10 @@ Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(f
 
     Route::get('/inscricoes', [InscricaoController::class, 'listar'])->name('candidato.inscricoes.index');
 
-    Route::post('/inscricoes/doutorado', [InscricaoController::class, 'salvarDoutorado'])->name('inscricao.salvarDoutorado');
-    Route::post('/inscricoes/mestrado', [InscricaoController::class, 'salvarMestrado'])->name('inscricao.salvarMestrado');
-    Route::post('/inscricoes/papos', [InscricaoController::class, 'salvarPapos'])->name('inscricao.salvarPapos');
-    Route::post('/inscricoes/aluno-externo', [InscricaoController::class, 'salvarAlunoExterno'])->name('inscricao.salvarAlunoExterno');
+    Route::post('/inscricoes/doutorado', [InscricaoController::class, 'salvarDoutorado'])->name('candidato.inscricao.salvarDoutorado');
+    Route::post('/inscricoes/mestrado', [InscricaoController::class, 'salvarMestrado'])->name('candidato.inscricao.salvarMestrado');
+    Route::post('/inscricoes/papos', [InscricaoController::class, 'salvarPapos'])->name('candidato.inscricao.salvarPapos');
+    Route::post('/inscricoes/aluno-externo', [InscricaoController::class, 'salvarAlunoExterno'])->name('candidato.inscricao.salvarAlunoExterno');
 
 
     Route::get('/entrevistas', function () {

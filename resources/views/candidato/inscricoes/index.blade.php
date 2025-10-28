@@ -7,6 +7,12 @@
 @endpush
 
 @section('content')
+    @if(session('success'))
+        <div class="aviso-sucesso">
+            {{ session('success') }}
+        </div>
+    @endif
+    
     <h1>Minhas inscrições</h1>
 
     <div class="container-vigentes">

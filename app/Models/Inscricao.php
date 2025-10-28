@@ -45,4 +45,14 @@ class Inscricao extends Model
     public function documentos(){
         return $this->hasMany(Documento::class, 'id_inscricao', 'id_inscricao');
     }
+
+    public function disciplinas()
+    {
+        return $this->belongsToMany(
+            Disciplina::class,
+            'inscricao_disciplina', // tabela pivô
+            'id_inscricao',         // chave estrangeira desta tabela
+            'id_disciplina'         // chave estrangeira da tabela relacionada
+        )->withPivot('deferido', 'motivo_indeferimento'); // campos extras da pivô
+    }
 }

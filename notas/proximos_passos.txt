@@ -1,4 +1,3 @@
-- criar controlador inscricoes
 - dividir crud.css
 - análise de inscricoes (recursos)
 - entrevistas

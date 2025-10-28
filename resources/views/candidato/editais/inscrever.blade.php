@@ -8,6 +8,12 @@
 @endpush
 
 @section('content')
+    @if(session('failure'))
+        <div class="aviso-falha">
+            {{ session('failure') }}
+        </div>
+    @endif
+
     <h2>Inscrição no {{ $edital->curso->programa->nome }}</br>({{ $edital->curso->tipo }})</h2>
 
     

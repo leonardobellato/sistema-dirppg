@@ -1,4 +1,4 @@
-<form action="{{route('inscricao.salvarMestrado')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
+<form action="{{route('candidato.inscricao.salvarMestrado')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
     @csrf
 
     <input type="hidden" name="id_edital" value="{{ $edital->id_edital }}"> <!-- Não apagar! -->

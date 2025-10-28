@@ -1,5 +1,7 @@
-<form action="{{route('inscricao.salvar')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
+<form action="{{route('candidato.inscricao.salvarPapos')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
     @csrf
+
+    <input type="hidden" name="id_edital" value="{{ $edital->id_edital }}"> <!-- Não apagar! -->
 
     <label>Documento de Identificação Oficial (RG ou CNH) 
         <span class="required-content">*</span>
