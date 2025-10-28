@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Programa;
 use App\Models\Edital;
 use App\Models\FaseEdital;
 use App\Models\Curso;
+use App\Models\Inscricao;
 
 class EditalController extends Controller
 {
@@ -40,7 +42,18 @@ class EditalController extends Controller
             return $fase->tipo.'_'.$fase->ordem;
         });
 
-        return view('candidato.editais.details', compact('edital', 'fases'));
+        // Verificar se candidato já está inscrito
+        $jaInscrito = Inscricao::where('id_candidato', Auth::id())->where('id_edital', $edital->id_edital)->exists();
+
+        // Verificar se ainda está no período de inscrição
+        $podeInscrever = \Carbon\Carbon::parse($fases['inscricao_1'][0]->data_fim)->isFuture();
+
+        return view('candidato.editais.details', compact(
+            'edital',
+            'fases',
+            'jaInscrito',
+            'podeInscrever',
+        ));
     }
 
     // Método para mostrar o formulário de criação

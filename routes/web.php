@@ -28,6 +28,14 @@ Route::post('/cadastro', [UsuarioController::class, 'salvarCandidato'])->name('a
 Route::middleware('auth')->group(function () {
     Route::get('/usuario', [UsuarioController::class, 'alterar'])->name('usuarios.alterar');
     Route::put('/usuario', [UsuarioController::class, 'atualizar'])->name('usuarios.atualizar');
+
+    // Rotas AJAX
+    Route::get('/programas/{id}/cursos', [CursoController::class, 'filtrarCursosPorPrograma']);
+    Route::get('/cursos/{id}/areas-concentracao', [AreaConcentracaoController::class, 'filtrarAreasPorCurso']);
+    Route::get('/cursos/{id}/disciplinas-aluno-externo', [DisciplinaController::class, 'filtrarDisciplinasPorCurso']);
+    Route::get('/cursos/{id}/editais', [EditalController::class, 'filtrarEditaisPorCurso']);
+    Route::get('/areas-concentracao/{id}/linhas-pesquisa', [LinhaPesquisaController::class, 'filtrarLinhasPorArea']);
+    Route::get('/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'filtrarSublinhasPorLinha']);
 });
 
 
@@ -52,23 +60,18 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::get('/programas', [ProgramaController::class, 'listar'])->name('pos.programas.index');
     Route::get('/programas/adicionar', [ProgramaController::class, 'criar'])->name('pos.programas.adicionar');
     Route::get('/programas/alterar/{id}', [ProgramaController::class, 'alterar'])->name('pos.programas.alterar');
-    Route::get('/programas/{id}/cursos', [CursoController::class, 'filtrarCursosPorPrograma']);
     Route::post('/programas', [ProgramaController::class, 'salvar'])->name('pos.programas.salvar');
     Route::put('/programas/{id}', [ProgramaController::class, 'atualizar'])->name('pos.programas.atualizar');
     Route::delete('/programas/{id}', [ProgramaController::class, 'excluir'])->name('pos.programas.excluir');
 
     Route::get('/cursos', [CursoController::class, 'listar'])->name('pos.cursos.index');
     Route::get('/cursos/adicionar', [CursoController::class, 'criar'])->name('pos.cursos.adicionar');
-    Route::get('/cursos/{id}/areas-concentracao', [AreaConcentracaoController::class, 'filtrarAreasPorCurso']);
-    Route::get('/cursos/{id}/disciplinas-aluno-externo', [DisciplinaController::class, 'filtrarDisciplinasPorCurso']);
-    Route::get('/cursos/{id}/editais', [EditalController::class, 'filtrarEditaisPorCurso']);
     Route::post('/cursos', [CursoController::class, 'salvar'])->name('pos.cursos.salvar');
     Route::delete('/cursos/{id}', [CursoController::class, 'excluir'])->name('pos.cursos.excluir');
 
     Route::get('/areas-concentracao', [AreaConcentracaoController::class, 'listar'])->name('pos.areas-concentracao.index');
     Route::get('/areas-concentracao/adicionar', [AreaConcentracaoController::class, 'criar'])->name('pos.areas-concentracao.adicionar');
     Route::get('/areas-concentracao/alterar/{id}', [AreaConcentracaoController::class, 'alterar'])->name('pos.areas-concentracao.alterar');
-    Route::get('/areas-concentracao/{id}/linhas-pesquisa', [LinhaPesquisaController::class, 'filtrarLinhasPorArea']);
     Route::post('/areas-concentracao', [AreaConcentracaoController::class, 'salvar'])->name('pos.areas-concentracao.salvar');
     Route::put('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'atualizar'])->name('pos.areas-concentracao.atualizar');
     Route::delete('/areas-concentracao/{id}', [AreaConcentracaoController::class, 'excluir'])->name('pos.areas-concentracao.excluir');
@@ -76,7 +79,6 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::get('/linhas-pesquisa', [LinhaPesquisaController::class, 'listar'])->name('pos.linhas-pesquisa.index');
     Route::get('/linhas-pesquisa/adicionar', [LinhaPesquisaController::class, 'criar'])->name('pos.linhas-pesquisa.adicionar');
     Route::get('/linhas-pesquisa/alterar/{id}', [LinhaPesquisaController::class, 'alterar'])->name('pos.linhas-pesquisa.alterar');
-    Route::get('/linhas-pesquisa/{id}/sublinhas', [SublinhaController::class, 'filtrarSublinhasPorLinha']);
     Route::post('/linhas-pesquisa', [LinhaPesquisaController::class, 'salvar'])->name('pos.linhas-pesquisa.salvar');
     Route::put('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'atualizar'])->name('pos.linhas-pesquisa.atualizar');
     Route::delete('/linhas-pesquisa/{id}', [LinhaPesquisaController::class, 'excluir'])->name('pos.linhas-pesquisa.excluir');
@@ -126,10 +128,13 @@ Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(f
     Route::get('/editais/{id}', [EditalController::class, 'detalhar'])->name('candidato.editais.details');
     Route::get('/editais/{id}/inscrever', [InscricaoController::class, 'criar'])->name('candidato.editais.inscrever');
 
-    Route::get('/inscricoes', function () {
-        return view('candidato.inscricoes.index');
-    })->name('candidato.inscricoes.index');
-    Route::post('/inscricoes', [InscricaoController::class, 'salvar'])->name('inscricao.salvar');
+    Route::get('/inscricoes', [InscricaoController::class, 'listar'])->name('candidato.inscricoes.index');
+
+    Route::post('/inscricoes/doutorado', [InscricaoController::class, 'salvarDoutorado'])->name('inscricao.salvarDoutorado');
+    Route::post('/inscricoes/mestrado', [InscricaoController::class, 'salvarMestrado'])->name('inscricao.salvarMestrado');
+    Route::post('/inscricoes/papos', [InscricaoController::class, 'salvarPapos'])->name('inscricao.salvarPapos');
+    Route::post('/inscricoes/aluno-externo', [InscricaoController::class, 'salvarAlunoExterno'])->name('inscricao.salvarAlunoExterno');
+
 
     Route::get('/entrevistas', function () {
         return view('candidato.entrevistas.index');

@@ -84,7 +84,7 @@
             if (idPrograma) {
                 cursoSelect.innerHTML = '<option>Carregando...</option>';
                 const baseUrl = "{{ url('/') }}";
-                fetch(`${baseUrl}/admin/programas/${idPrograma}/cursos`)
+                fetch(`${baseUrl}/programas/${idPrograma}/cursos`)
                     .then(response => response.json())
                     .then(data => {
                         cursoSelect.innerHTML = '<option value="">Selecione...</option>';
@@ -113,7 +113,7 @@
             if (idCurso) {
                 areaSelect.innerHTML = '<option>Carregando...</option>';
                 const baseUrl = "{{ url('/') }}";
-                fetch(`${baseUrl}/admin/cursos/${idCurso}/areas-concentracao`)
+                fetch(`${baseUrl}/cursos/${idCurso}/areas-concentracao`)
                     .then(response => response.json())
                     .then(data => {
                         areaSelect.innerHTML = '<option value="">Selecione...</option>';
@@ -140,7 +140,7 @@
             if (idArea) {
                 linhaSelect.innerHTML = '<option>Carregando...</option>';
                 const baseUrl = "{{ url('/') }}";
-                fetch(`${baseUrl}/admin/areas-concentracao/${idArea}/linhas-pesquisa`)
+                fetch(`${baseUrl}/areas-concentracao/${idArea}/linhas-pesquisa`)
                     .then(response => response.json())
                     .then(data => {
                         linhaSelect.innerHTML = '<option value="">Selecione...</option>';

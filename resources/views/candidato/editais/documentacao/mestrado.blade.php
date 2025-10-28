@@ -1,5 +1,27 @@
-<form action="{{route('inscricao.salvar')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
+<form action="{{route('inscricao.salvarMestrado')}}" method="POST" enctype="multipart/form-data" id="inscricaoForm">
     @csrf
+
+    <input type="hidden" name="id_edital" value="{{ $edital->id_edital }}"> <!-- Não apagar! -->
+
+    <label for="input-area-concentracao">Área de concentração:<span class="required-content">*</span></label>
+    <select id="input-area-concentracao" name="area-concentracao" required>
+        <option value="">Selecione...</option>
+        
+        @foreach($edital->curso->areasConcentracao as $area)
+            <option value="{{ $area->id_area_concentracao }}">{{ $area->nome }}</option>
+        @endforeach
+    
+    </select>
+
+    <label for="input-linha-pesquisa">Linha de pesquisa:<span class="required-content">*</span></label>
+    <select id="input-linha-pesquisa" name="linha-pesquisa" disabled required>
+        <option value="">Selecione...</option>		
+    </select>
+
+    <label for="input-sublinha">Sublinha:<span class="required-content">*</span></label>
+    <select id="input-sublinha" name="sublinha" disabled required>
+        <option value="">Selecione...</option>		
+    </select>
 
     <label>Ficha de inscrição 
         <span class="required-content">*</span>
@@ -141,3 +163,75 @@
         <button type="submit">Enviar Inscrição</button>
     </div>
 </form>
+
+@push('scripts')
+    <script>
+        const areaSelect = document.getElementById('input-area-concentracao');
+        const linhaSelect = document.getElementById('input-linha-pesquisa');
+        const sublinhaSelect = document.getElementById('input-sublinha');
+
+        // Ao mudar o programa
+        areaSelect.addEventListener('change', function() {
+            const idArea = this.value;
+
+            // Resetar linhas e sublinhas
+            linhaSelect.innerHTML = '<option value="">Selecione...</option>';
+            linhaSelect.disabled = true;
+
+            sublinhaSelect.innerHTML = '<option value="">Selecione...</option>';
+            sublinhaSelect.disabled = true;
+
+            console.log(idArea);
+
+            if (idArea) {
+                linhaSelect.innerHTML = '<option>Carregando...</option>';
+                const baseUrl = "{{ url('/') }}";
+                fetch(`${baseUrl}/areas-concentracao/${idArea}/linhas-pesquisa`)
+                    .then(response => response.json())
+                    .then(data => {
+                        linhaSelect.innerHTML = '<option value="">Selecione...</option>';
+                        data.forEach(linha => {
+                            linhaSelect.innerHTML += `<option value="${linha.id_linha_pesquisa}">${linha.nome}</option>`;
+                        });
+                        linhaSelect.disabled = false;
+                    })
+                    .catch(() => {
+                        linhaSelect.innerHTML = '<option value="">Erro ao carregar linhas</option>';
+                    });
+            }
+        });
+
+        // Ao mudar a linha
+        linhaSelect.addEventListener('change', function() {
+            const idLinha = this.value;
+
+            // Resetar sublinhas
+            sublinhaSelect.innerHTML = '<option value="">Selecione...</option>';
+            sublinhaSelect.disabled = true;
+            sublinhaSelect.required = false;
+
+            if (idLinha) {
+                sublinhaSelect.innerHTML = '<option>Carregando...</option>';
+                const baseUrl = "{{ url('/') }}";
+                fetch(`${baseUrl}/linhas-pesquisa/${idLinha}/sublinhas`)
+                    .then(response => response.json())
+                    .then(data => {
+                        sublinhaSelect.innerHTML = '<option value="">Selecione...</option>';
+                        
+                        if (data.length > 0) {
+                            data.forEach(sublinha => {
+                                sublinhaSelect.innerHTML += `<option value="${sublinha.id_sublinha}">${sublinha.nome}</option>`;
+                            });
+                            sublinhaSelect.disabled = false;
+                            sublinhaSelect.required = true; 
+                        } else {
+                            sublinhaSelect.innerHTML = '<option value="">Não há sublinhas</option>';
+                        }
+                    })
+                    .catch(() => {
+                        sublinhaSelect.innerHTML = '<option value="">Erro ao carregar sublinhas</option>';
+                    });
+            }
+        });
+    </script>
+@endpush

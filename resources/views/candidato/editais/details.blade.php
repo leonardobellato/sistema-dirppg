@@ -81,14 +81,9 @@
             @endforeach
         </div>
 
-
-
-        @php
-            use Carbon\Carbon;
-            $podeInscrever = Carbon::parse($fases['inscricao_1'][0]->data_fim)->isFuture();
-        @endphp
-
-        @if(!$podeInscrever)
+        @if($jaInscrito)
+            <p class="warning"> Candidato já inscrito.</p>
+        @elseif(!$podeInscrever)
             <p class="warning"> As inscrições estão encerradas.</p>
         @endif
 
@@ -96,7 +91,7 @@
             <a href={{ route('candidato.editais.index') }}>Voltar</a>
             
             <a 
-                href={{ url('candidato/editais/'.$edital->id_edital.'/inscrever') }} class="confirm {{ $podeInscrever ? '' : 'disabled-link' }}"
+                href={{ url('candidato/editais/'.$edital->id_edital.'/inscrever') }} class="confirm {{ $podeInscrever && !$jaInscrito ? '' : 'disabled-link' }}"
             >   
                 Inscrever-se
             </a>

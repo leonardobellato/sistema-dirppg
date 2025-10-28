@@ -705,12 +705,8 @@ form h4:nth-of-type(2){
     font-size: 1.2rem;
     color: #333;
     margin-bottom: 0.5rem;
-}
-
-.card-edital p {
-    font-size: 0.95rem;
-    color: #555;
-    margin: 4px 0;
+    text-align: left;
+    text-overflow: ellipsis;
 }
 
 .card-edital .data {
@@ -741,6 +737,7 @@ form h4:nth-of-type(2){
     font-size: 1.3rem;
     border-left: 4px solid #3b82f6;
     padding-left: 10px;
+    text-align: left;
 }
 
 .container-details p.warning{

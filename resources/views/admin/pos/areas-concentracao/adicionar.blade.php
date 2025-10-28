@@ -62,7 +62,7 @@
 
             if(idPrograma) {
                 const baseUrl = "{{ url('/') }}";
-                fetch(`${baseUrl}/admin/programas/${idPrograma}/cursos`)
+                fetch(`${baseUrl}/programas/${idPrograma}/cursos`)
                     .then(response => response.json())
                     .then(data => {
                         cursoSelect.innerHTML = '<option value="">Selecione...</option>';

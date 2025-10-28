@@ -174,7 +174,7 @@ CREATE TABLE `inscricoes` (
   `deferido`             TINYINT(1) DEFAULT NULL,
   `motivo_indeferimento` VARCHAR(600) DEFAULT NULL,
   `nome_orientador`      VARCHAR(100) DEFAULT NULL,
-  `observacao`           VARCHAR(600) DEFAULT NULL,
+  `comentarios`          VARCHAR(600) DEFAULT NULL,
   `criado_em`            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

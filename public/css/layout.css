@@ -307,7 +307,15 @@ main h1, h2{
   	}
 
 	.header-brand {
-		font-size: 14px;
+		font-size: 16px;
+	}
+
+	.header-content svg{
+		margin-left: 0;
+	}
+
+	.username, #username-dropdown{
+		display: none;
 	}
 }
 

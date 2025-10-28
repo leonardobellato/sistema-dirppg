@@ -19,7 +19,7 @@ class Inscricao extends Model
         'deferido',
         'motivo_indeferimento',
         'nome_orientador',
-        'observacao'
+        'comentarios'
     ];
 
     public function edital(){

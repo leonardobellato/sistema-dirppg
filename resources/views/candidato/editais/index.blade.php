@@ -19,8 +19,6 @@
         @forelse($editais as $edital)
             <div class="card-edital" onclick="window.location.href='{{ url('candidato/editais/'.$edital->id_edital) }}'">
                 <h2>{{ $edital->nome }}</h2>
-                <p><strong>Programa:</strong> {{ $edital->curso->programa->sigla ?? '-' }}</p>
-                <p><strong>Curso:</strong> {{ $edital->curso->tipo ?? '-' }}</p>
                 <p class="data">
                     <strong>Publicado em:</strong> 
                     {{ \Carbon\Carbon::parse($edital->data_publicacao)->format('d/m/Y') }}
