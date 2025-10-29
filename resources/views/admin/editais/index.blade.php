@@ -3,8 +3,8 @@
 @section('title', 'Editais')
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('ag-grid/styles/ag-theme-alpine.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tabelas.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/modals.css') }}">
 @endpush
 
 @section('content')

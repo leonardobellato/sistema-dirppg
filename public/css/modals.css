@@ -1,0 +1,145 @@
+/* Janelas modais */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 25px 30px;
+    width: 600px;
+    max-width: 90%;
+    border-radius: 15px;
+    position: relative;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    transform: translateY(-20px);
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #222;
+}
+
+.modal-close {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    font-size: 26px;
+    color: #333;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+
+.modal-body {
+    max-height: 700px;
+    overflow-y: auto;
+    margin-bottom: 25px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    padding-right: 5px; /* para scroll */
+}
+
+#modal-editais.modal-content{
+    width: 800px;
+}
+
+.modal-body span {
+    display: block;
+    font-style: italic;
+    margin-top: 10px;
+    color: #555;
+}
+
+.modal-body p.warning {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.modal-cancel {
+    background-color: #f1f1f1;
+    color: #333;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.modal-cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-confirm {
+    background: linear-gradient(135deg, #000000, #222222);
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.modal-confirm:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+/* Scroll personalizado no modal */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: transparent;
+}

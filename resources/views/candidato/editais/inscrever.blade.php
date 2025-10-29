@@ -3,7 +3,7 @@
 @section('title', 'Inscrição')
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
     <link rel="stylesheet" href="{{ asset('css/inscricao.css') }}">
 @endpush
 

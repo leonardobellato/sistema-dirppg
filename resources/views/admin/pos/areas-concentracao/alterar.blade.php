@@ -3,7 +3,7 @@
 @section('title', 'Áreas de Concentração')
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
 @endpush
 
 @section('content')
