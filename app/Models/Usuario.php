@@ -46,4 +46,9 @@ class Usuario extends Authenticatable
     {
         return $this->belongsToMany(Programa::class, 'professor_programa', 'id_usuario', 'id_programa');
     }
+
+    public function entrevistasAgendadas()
+    {
+        return $this->hasMany(Entrevista::class, 'id_agendador', 'id_usuario');
+    }
 }

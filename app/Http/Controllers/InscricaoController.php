@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
 use App\Models\Edital;
@@ -13,11 +14,37 @@ class InscricaoController extends Controller
 {
 
     // Método para listar todos os objetos
-    public function listar()
+    public function listarPorEdital($idEdital)
+    {
+        $inscricoes = Inscricao::with([
+            'edital:id_edital',
+            'candidato:id_usuario,nome',
+            'candidato.candidato:id_usuario,cpf',
+            'linhaPesquisa:id_linha_pesquisa,nome', 
+            'sublinha:id_sublinha,nome',
+            'disciplinas:id_disciplina,nome'
+        ])->where('id_edital', $idEdital)->get();
+
+        $tipoCurso = Edital::findOrFail($idEdital)->curso->tipo;
+
+        return view('admin.analise-inscricoes.listar', compact('inscricoes', 'tipoCurso'));
+    }
+
+    public function listarPeloCandidato()
     {
         $inscricoes = Inscricao::with('edital.curso.programa')->where('id_candidato', Auth::id())->get();
 
         return view('candidato.inscricoes.index', compact('inscricoes'));
+    }
+
+    public function analisar($id){
+        $inscricao = Inscricao::with([
+            'documentos',
+            'candidato:id_usuario,nome,email',
+            'candidato.candidato'
+            ])->findOrFail($id);
+
+        return view('admin.analise-inscricoes.analisar', compact('inscricao'));
     }
 
     public function filtrarInscricoesPorEdital($idEdital)
@@ -66,7 +93,7 @@ class InscricaoController extends Controller
             'sublinha' => 'nullable'
         ]);
 
-        \DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             // Criar a inscrição
@@ -120,13 +147,13 @@ class InscricaoController extends Controller
                 'navegador' => $request->header('User-Agent'),
             ]);
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()
                 ->route('candidato.inscricoes.index')
                 ->with('success', 'Inscrição enviada com sucesso!');
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             Auditoria::create([
                 'id_usuario' => Auth::id(),
@@ -162,7 +189,7 @@ class InscricaoController extends Controller
             'sublinha' => 'nullable'
         ]);
 
-        \DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             // Criar a inscrição
@@ -217,13 +244,13 @@ class InscricaoController extends Controller
                 'navegador' => $request->header('User-Agent'),
             ]);
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()
                 ->route('candidato.inscricoes.index')
                 ->with('success', 'Inscrição enviada com sucesso!');
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             Auditoria::create([
                 'id_usuario' => Auth::id(),
@@ -251,7 +278,7 @@ class InscricaoController extends Controller
             'aceito_termos' => 'accepted',
         ]);
 
-        \DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             // Criar a inscrição
@@ -298,13 +325,13 @@ class InscricaoController extends Controller
                 'navegador' => $request->header('User-Agent'),
             ]);
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()
                 ->route('candidato.inscricoes.index')
                 ->with('success', 'Inscrição enviada com sucesso!');
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             Auditoria::create([
                 'id_usuario' => Auth::id(),
@@ -332,7 +359,7 @@ class InscricaoController extends Controller
             'disciplinas' => 'required|array|min:1',
         ]);
 
-        \DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
             // Criar a inscrição
@@ -385,13 +412,13 @@ class InscricaoController extends Controller
                 'navegador' => $request->header('User-Agent'),
             ]);
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()
                 ->route('candidato.inscricoes.index')
                 ->with('success', 'Inscrição enviada com sucesso!');
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             Auditoria::create([
                 'id_usuario' => Auth::id(),

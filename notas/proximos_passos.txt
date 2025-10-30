@@ -1,5 +1,7 @@
-- dividir crud.css
-- análise de inscricoes (recursos)
+- análise de inscricoes
+    salvar analise
+    recursos
+    disciplinas - dividir
 - entrevistas
 - professores
 - atualizar imagem BD

@@ -11,6 +11,7 @@ use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\DashboardController;
 
 /* AUTENTICAÇÃO */
 Route::get('/', function () {
@@ -42,14 +43,12 @@ Route::middleware('auth')->group(function () {
 /* ACESSO RESTRITO - Admin */
 Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function () {
 
-    Route::get('/', function () {
-        return view('admin.inicio.index');
-    })->name('inicio');
+    Route::get('/', [DashboardController::class, 'index'])->name('inicio');
 
-    Route::get('/analise-inscricoes', function () {
-        return view('admin.analise-inscricoes.index');
-    })->name('analise-inscricoes.index');
-    
+    Route::get('/analise-inscricoes', [EditalController::class, 'listarVigentes'])->name('analise-inscricoes.index');
+    Route::get('/analise-inscricoes/{id}', [InscricaoController::class, 'listarPorEdital'])->name('analise-inscricoes.listar');
+    Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('analise-inscricoes.analisar');
+
     Route::get('/editais', [EditalController::class, 'listar'])->name('admin.editais.index');
     Route::get('/editais/adicionar', [EditalController::class, 'criar'])->name('admin.editais.adicionar');
     Route::get('/editais/alterar/{id}', [EditalController::class, 'alterar'])->name('admin.editais.alterar');
@@ -128,7 +127,7 @@ Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(f
     Route::get('/editais/{id}', [EditalController::class, 'detalhar'])->name('candidato.editais.details');
     Route::get('/editais/{id}/inscrever', [InscricaoController::class, 'criar'])->name('candidato.editais.inscrever');
 
-    Route::get('/inscricoes', [InscricaoController::class, 'listar'])->name('candidato.inscricoes.index');
+    Route::get('/inscricoes', [InscricaoController::class, 'listarPeloCandidato'])->name('candidato.inscricoes.index');
 
     Route::post('/inscricoes/doutorado', [InscricaoController::class, 'salvarDoutorado'])->name('candidato.inscricao.salvarDoutorado');
     Route::post('/inscricoes/mestrado', [InscricaoController::class, 'salvarMestrado'])->name('candidato.inscricao.salvarMestrado');

@@ -277,7 +277,7 @@ ALTER TABLE `recursos`
 CREATE TABLE `entrevistas` (
   `id_entrevista` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_inscricao`  INT UNSIGNED NOT NULL,
-  `id_agendador`  INT UNSIGNED NULL, -- secretário/professor que agendou
+  `id_agendador`  INT UNSIGNED NULL, -- admin/professor que agendou
   `data_hora`     DATETIME NOT NULL,
   `local`         VARCHAR(200) NOT NULL,
   `status`        ENUM('agendada','realizada','ausente','cancelada') NOT NULL DEFAULT 'agendada',

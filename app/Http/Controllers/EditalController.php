@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Programa;
 use App\Models\Edital;
 use App\Models\FaseEdital;
@@ -20,7 +21,6 @@ class EditalController extends Controller
         return view('admin.editais.index', ['editais' => $editais]);
     }
 
-    // Método que retorna apenas os vigentes para o candidato
     public function listarVigentes(Request $request)
     {
         $editais = Edital::with(['curso.programa'])->where('vigente', true)->orderBy('data_publicacao', 'desc')->get();
@@ -29,7 +29,7 @@ class EditalController extends Controller
         if ($request->user()->eCandidato()) {
             return view('candidato.editais.index', compact('editais'));
         } else {
-            return view('secretario.editais.index', compact('editais'));
+            return view('admin.analise-inscricoes.index', compact('editais'));
         }
     }
 
@@ -236,7 +236,7 @@ class EditalController extends Controller
             return $fase['tipo'].'_'.$fase['ordem'];
         })->toArray();
         FaseEdital::where('id_edital', $edital->id_edital)
-            ->whereNotIn(\DB::raw("CONCAT(tipo, '_', ordem)"), $tiposOrdensAtuais)
+            ->whereNotIn(DB::raw("CONCAT(tipo, '_', ordem)"), $tiposOrdensAtuais)
             ->delete();
 
 
