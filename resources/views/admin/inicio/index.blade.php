@@ -55,13 +55,9 @@
     <script>
         const ctx = document.getElementById('histograma');
 
-        const inscricoesPorDia = [12, 0, 15, 10, 5, 18, 9];
-        const hoje = new Date();
-        const dias = Array.from({ length: 7 }, (_, i) => {
-            const d = new Date(hoje);
-            d.setDate(hoje.getDate() - (6 - i));
-            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        });
+        // Dados enviados pelo controller
+        const inscricoesPorDia = @json($inscricoesPorDia);
+        const dias = @json($dias);
 
         new Chart(ctx, {
             type: 'bar',

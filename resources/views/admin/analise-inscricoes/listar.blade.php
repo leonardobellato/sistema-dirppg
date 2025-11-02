@@ -60,18 +60,18 @@
                         },
                     @endif
                     
-                    { headerName: "Status", field: "data_publicacao", filter: "agTextColumnFilter", sortable: true, flex: 1,  minWidth: 100, 
+                    { headerName: "Status", field: "deferido", filter: "agTextColumnFilter", sortable: true, flex: 1,  minWidth: 100, 
                         valueFormatter: params => {
-                            if (!params.value) return 'Pendente';
-                            if(params.value === true) return 'Deferido';
+                            if (params.value === null) return 'Pendente';
+                            if(params.value === 1) return 'Deferido';
                             else return 'Indeferido';
                         },
                         cellStyle: params => {
-                            if (!params.value) {
+                            if (params.value === null) {
                                 return { color: 'orange', fontWeight: 'bold' }; // pendente
                             }
-                            if (params.value === true) {
-                                return { color: 'green', fontWeight: 'bold' }; // deferido
+                            if (params.value === 1) {
+                                return { color: 'lightgreen', fontWeight: 'bold' }; // deferido
                             }
                             return { color: 'red', fontWeight: 'bold' }; // indeferido
                         }}

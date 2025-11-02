@@ -54,15 +54,19 @@
         .comentarios-textarea {
     width: 100%;
     min-height: 120px;
+    border: 1px solid rgba(206, 206, 206, 1);
     padding: 10px;
-    border: 1px solid rgba(255, 219, 219, 1);
-    background-color: #ffe6e6ff;
     font-size: 14px;
     color: #272727;
     margin-top: 12px;
     border-radius: 6px;
     resize: vertical;
     line-height: 1.4;
+}
+
+.doc-item .comentarios-textarea {
+    border: 1px solid rgba(255, 219, 219, 1);
+    background-color: #ffe6e6ff;
 }
 
 .comentarios-textarea:focus {
@@ -95,6 +99,11 @@
 
     <h1>Análise de Inscrição</h1>
 
+    @if($inscricao->id_avaliador)
+        <br>
+        <p><strong>Última análise feita por:</strong> {{ $inscricao->avaliador->nome ?? 'Usuário removido' }}</p>
+    @endif
+
     <div class="container-details">
         <div class="table-wrapper">
             <table class="details-table">
@@ -126,34 +135,17 @@
     <h3>Documentos</h3>
 
     <div class="container-form">
-        <form action="" method="POST">
+        <form action="{{ route('analise-inscricoes.salvar', $inscricao->id_inscricao) }}" method="POST">
             @csrf
 
-            @php
-                // Apenas um detalhe para deixar o nome do arquivo mais apresentável
-                $tipos = [
-                    'ficha_inscricao' => 'Ficha de Inscrição',
-                    'documento_identificacao' => 'Documento de Identificação Oficial (RG ou CNH)',
-                    'cpf' => 'CPF',
-                    'diploma' => 'Diploma ou Declaração',
-                    'curriculo' => 'Currículo Lattes',
-                    'historico' => 'Histórico Escolar',
-                    'outro' => 'Outros',
-                    'documentacao' => 'Documentação Comprobatória',
-                    'projeto_pesquisa' => 'Projeto de Pesquisa',
-                    'dissertacao_mestrado' => 'Dissertação de Mestrado',
-                    'carta_aceite' => 'Carta de Aceite',
-                    'declaracao_vinculo' => 'Declaração de Vínculo',
-                    'dados_poscomp' => 'Dados do PosComp',
-                    'resumo_intencao' => 'Resumo de Intenção',
-                    'formulario_indicacao' => 'Formulário de Indicação',
-                ]
-            @endphp
-
             @foreach($inscricao->documentos as $index => $doc)
-                <div class="doc-item">
+                @php
+                    $status = is_null($doc->deferido) ? null : ($doc->deferido ? 'deferir' : 'indeferir');
+                @endphp
+
+                <div class="doc-item {{ $status === 'deferir' ? 'ok' : ($status === 'indeferir' ? 'nao-ok' : '') }}">
                     <div class="doc-header">
-                        <span><strong>{{ $tipos[$doc->tipo] }}</strong></span>
+                        <span><strong>{{ $doc->tipo }}</strong></span>
                         <a href="{{ asset('storage/' . $doc->caminho_servidor) }}" target="_blank" class="abrir-btn">
                             📄 Abrir documento
                         </a>
@@ -161,21 +153,49 @@
 
                     <div class="doc-actions">
                         <label>
-                            <input type="radio" name="documentos[{{ $index }}][status]" value="deferir" required> Deferir
+                            <input type="radio" name="documentos[{{ $index }}][status]" 
+                                value="deferir" 
+                                {{ $status === 'deferir' ? 'checked' : '' }}> Deferir
                         </label>
                         <label>
-                            <input type="radio" name="documentos[{{ $index }}][status]" value="indeferir" required> Indeferir
+                            <input type="radio" name="documentos[{{ $index }}][status]" 
+                                value="indeferir" 
+                                {{ $status === 'indeferir' ? 'checked' : '' }}> Indeferir
                         </label>
                     </div>
 
-                    <div class="motivo-container">
+                    <div class="motivo-container" style="display: {{ $status === 'indeferir' ? 'block' : 'none' }}">
                         <label for="motivo_{{ $index }}">Motivo:</label>
-                        <textarea class="comentarios-textarea" name="documentos[{{ $index }}][motivo]" id="motivo_{{ $index }}" placeholder="Descreva o motivo do indeferimento..."></textarea>
+                        <textarea class="comentarios-textarea" name="documentos[{{ $index }}][motivo]" id="motivo_{{ $index }}">{{ $doc->motivo_indeferimento }}</textarea>
                     </div>
 
                     <input type="hidden" name="documentos[{{ $index }}][id]" value="{{ $doc->id_documento }}">
                 </div>
             @endforeach
+
+            <label for="comentario-candidato">Observações feitas pelo candidato:</label>
+            <textarea class="comentarios-textarea" name="comentario-candidato" disabled>{{ $inscricao->comentarios ?? '' }}</textarea>
+   
+            <br><br><hr>
+
+            <h3>Situação da inscrição:</h3>
+            @php
+                $status_inscricao = is_null($inscricao->deferido) ? 'null' : ($inscricao->deferido ? 'deferir' : 'indeferir');
+            @endphp
+            <div class="doc-actions">
+                <label>
+                    <input type="radio" name="inscricao_status" 
+                        value="deferir" 
+                        {{ $status_inscricao === 'deferir' ? 'checked' : '' }}> Deferir
+                </label>
+                <label>
+                    <input type="radio" name="inscricao_status" 
+                        value="indeferir" 
+                        {{ $status_inscricao === 'indeferir' ? 'checked' : '' }}> Indeferir
+                </label>
+            </div>
+            <label for="comentario-geral">Comentários sobre o indeferimento (opcional):</label>
+            <textarea class="comentarios-textarea" name="comentario-geral" placeholder="Descreva aqui...">{{ old('comentario-geral', $inscricao->motivo_indeferimento) }}</textarea>
 
             <div class="btn-grp-form">
                 <a href="{{route('candidato.editais.index')}}">Voltar</a>
@@ -188,27 +208,37 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Mostra/oculta o campo de motivo automaticamente
         document.querySelectorAll('.doc-item').forEach(item => {
             const radios = item.querySelectorAll('input[type="radio"]');
             const motivo = item.querySelector('.motivo-container');
 
-            radios.forEach(r => {
-            r.addEventListener('change', () => {
-                // Limpa classes anteriores
-                item.classList.remove('ok', 'nao-ok');
+            // Inicializa visibilidade do motivo baseado no estado salvo
+            const indeferidoChecked = item.querySelector('input[value="indeferir"]:checked');
+            const deferidoChecked = item.querySelector('input[value="deferir"]:checked');
 
-                if (r.value === 'deferir' && r.checked) {
-                    motivo.style.display = 'none';
-                    item.classList.add('ok'); // verde
-                } 
-                else if (r.value === 'indeferir' && r.checked) {
-                    motivo.style.display = 'block';
-                    item.classList.add('nao-ok'); // vermelho
-                }
+            if (indeferidoChecked) {
+                motivo.style.display = 'block';
+                item.classList.add('nao-ok');
+            } else if (deferidoChecked) {
+                motivo.style.display = 'none';
+                item.classList.add('ok');
+            }
+
+            radios.forEach(r => {
+                r.addEventListener('change', () => {
+                    item.classList.remove('ok', 'nao-ok');
+
+                    if (r.value === 'deferir' && r.checked) {
+                        motivo.style.display = 'none';
+                        item.classList.add('ok');
+                    } else if (r.value === 'indeferir' && r.checked) {
+                        motivo.style.display = 'block';
+                        item.classList.add('nao-ok');
+                    }
+                });
             });
         });
-        });
     });
+
 </script>
 @endpush

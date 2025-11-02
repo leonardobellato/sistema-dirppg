@@ -8,3 +8,6 @@ cp .env.example .env
 
 ### Gerar chave da aplicação
 php artisan key:generate
+
+### Linkar storage
+php artisan storage:link

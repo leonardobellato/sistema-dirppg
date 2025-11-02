@@ -13,6 +13,24 @@ use App\Models\Auditoria;
 class InscricaoController extends Controller
 {
 
+    private $tiposDocumentos = [
+                'ficha_inscricao' => 'Ficha de Inscrição',
+                'documento_identificacao' => 'Documento de Identificação Oficial (RG ou CNH)',
+                'cpf' => 'CPF',
+                'diploma' => 'Diploma ou Declaração',
+                'curriculo' => 'Currículo Lattes',
+                'historico' => 'Histórico Escolar',
+                'outro' => 'Outros',
+                'documentacao' => 'Documentação Comprobatória',
+                'projeto_pesquisa' => 'Projeto de Pesquisa',
+                'dissertacao_mestrado' => 'Dissertação de Mestrado',
+                'carta_aceite' => 'Carta de Aceite',
+                'declaracao_vinculo' => 'Declaração de Vínculo',
+                'dados_poscomp' => 'Dados do PosComp',
+                'resumo_intencao' => 'Resumo de Intenção',
+                'formulario_indicacao' => 'Formulário de Indicação',
+            ];
+
     // Método para listar todos os objetos
     public function listarPorEdital($idEdital)
     {
@@ -41,11 +59,41 @@ class InscricaoController extends Controller
         $inscricao = Inscricao::with([
             'documentos',
             'candidato:id_usuario,nome,email',
-            'candidato.candidato'
+            'candidato.candidato',
+            'avaliador:id_usuario,nome',
             ])->findOrFail($id);
 
         return view('admin.analise-inscricoes.analisar', compact('inscricao'));
     }
+
+    public function salvarAnalise(Request $request, $id)
+    {
+        $inscricao = Inscricao::with('documentos')->findOrFail($id);
+
+        //Atualiza documentos
+        foreach ($request->input('documentos', []) as $docData) {
+            $documento = Documento::find($docData['id']);
+            if ($documento) {
+                $documento->deferido = ($docData['status'] === 'deferir') ? 1 : 0;
+                $documento->motivo_indeferimento = $docData['status'] === 'indeferir'
+                    ? $docData['motivo']
+                    : null;
+                $documento->save();
+            }
+        }
+
+        //Atualiza inscrição
+        $inscricao->deferido = $request->input('inscricao_status') === 'deferir' ? 1 : 0;
+        $inscricao->motivo_indeferimento = $request->input('comentario-geral');
+
+        $inscricao->id_avaliador = auth()->id();
+        $inscricao->save();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Análise salva com sucesso!');
+    }
+
 
     public function filtrarInscricoesPorEdital($idEdital)
     {
@@ -106,21 +154,7 @@ class InscricaoController extends Controller
             ]);
 
             // Salvar os documentos enviados
-            $tipos = [
-                'ficha_inscricao',
-                'documento_identificacao',
-                'cpf',
-                'diploma',
-                'curriculo',
-                'historico',
-                'documentacao',
-                'dissertacao_mestrado',
-                'projeto_pesquisa',
-                'carta_aceite',
-                'outro',
-            ];
-
-            foreach ($tipos as $tipo) {
+            foreach ($this->tiposDocumentos as $tipo => $descricao) {
                 if ($request->hasFile($tipo)) {
                     $arquivo = $request->file($tipo);
                     $caminho = $arquivo->storeAs(
@@ -132,7 +166,7 @@ class InscricaoController extends Controller
                     Documento::create([
                         'id_inscricao' => $inscricao->id_inscricao,
                         'caminho_servidor' => $caminho,
-                        'tipo' => $tipo,
+                        'tipo' => $descricao,
                     ]);
                 }
             }
@@ -202,22 +236,7 @@ class InscricaoController extends Controller
             ]);
 
             // Salvar os documentos enviados
-            $tipos = [
-                'ficha_inscricao',
-                'documento_identificacao',
-                'cpf',
-                'diploma',
-                'curriculo',
-                'historico',
-                'projeto_pesquisa',
-                'declaracao_vinculo',
-                'dados_poscomp',
-                'resumo_intencao',
-                'formulario_indicacao',
-                'outro',
-            ];
-
-            foreach ($tipos as $tipo) {
+            foreach ($this->tiposDocumentos as $tipo => $descricao) {
                 if ($request->hasFile($tipo)) {
                     $arquivo = $request->file($tipo);
                     $caminho = $arquivo->storeAs(
@@ -229,7 +248,7 @@ class InscricaoController extends Controller
                     Documento::create([
                         'id_inscricao' => $inscricao->id_inscricao,
                         'caminho_servidor' => $caminho,
-                        'tipo' => $tipo,
+                        'tipo' => $descricao,
                     ]);
                 }
             }
@@ -289,16 +308,7 @@ class InscricaoController extends Controller
             ]);
 
             // Salvar os documentos enviados
-            $tipos = [
-                'documento_identificacao',
-                'cpf',
-                'curriculo',
-                'projeto_pesquisa',
-                'carta_aceite',
-                'outro',
-            ];
-
-            foreach ($tipos as $tipo) {
+            foreach ($this->tiposDocumentos as $tipo => $descricao) {
                 if ($request->hasFile($tipo)) {
                     $arquivo = $request->file($tipo);
                     $caminho = $arquivo->storeAs(
@@ -310,7 +320,7 @@ class InscricaoController extends Controller
                     Documento::create([
                         'id_inscricao' => $inscricao->id_inscricao,
                         'caminho_servidor' => $caminho,
-                        'tipo' => $tipo,
+                        'tipo' => $descricao,
                     ]);
                 }
             }
@@ -370,16 +380,7 @@ class InscricaoController extends Controller
             ]);
 
             // Salvar os documentos enviados
-            $tipos = [
-                'documento_identificacao',
-                'cpf',
-                'diploma',
-                'curriculo',
-                'historico',
-                'outro',
-            ];
-
-            foreach ($tipos as $tipo) {
+            foreach ($this->tiposDocumentos as $tipo => $descricao) {
                 if ($request->hasFile($tipo)) {
                     $arquivo = $request->file($tipo);
                     $caminho = $arquivo->storeAs(
@@ -391,7 +392,7 @@ class InscricaoController extends Controller
                     Documento::create([
                         'id_inscricao' => $inscricao->id_inscricao,
                         'caminho_servidor' => $caminho,
-                        'tipo' => $tipo,
+                        'tipo' => $descricao,
                     ]);
                 }
             }
