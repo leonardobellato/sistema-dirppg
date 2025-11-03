@@ -239,21 +239,6 @@ ALTER TABLE `documentos`
   ON UPDATE CASCADE;
 
 
-CREATE TABLE recursos (
-  `id_recurso`        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_documento`      INT UNSIGNED NOT NULL,
-  `versao_submetida`  INT UNSIGNED NOT NULL,
-  `data_submissao`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-ALTER TABLE `recursos` 
-  ADD CONSTRAINT fk_recurso_documento
-  FOREIGN KEY (`id_documento`) 
-  REFERENCES `documentos`(`id_documento`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE;
-
-
 CREATE TABLE `entrevistas` (
   `id_entrevista` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_inscricao`  INT UNSIGNED NOT NULL,

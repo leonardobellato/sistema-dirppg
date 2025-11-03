@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
 use App\Models\Edital;
@@ -14,22 +16,22 @@ class InscricaoController extends Controller
 {
 
     private $tiposDocumentos = [
-                'ficha_inscricao' => 'Ficha de Inscrição',
-                'documento_identificacao' => 'Documento de Identificação Oficial (RG ou CNH)',
-                'cpf' => 'CPF',
-                'diploma' => 'Diploma ou Declaração',
-                'curriculo' => 'Currículo Lattes',
-                'historico' => 'Histórico Escolar',
-                'outro' => 'Outros',
-                'documentacao' => 'Documentação Comprobatória',
-                'projeto_pesquisa' => 'Projeto de Pesquisa',
-                'dissertacao_mestrado' => 'Dissertação de Mestrado',
-                'carta_aceite' => 'Carta de Aceite',
-                'declaracao_vinculo' => 'Declaração de Vínculo',
-                'dados_poscomp' => 'Dados do PosComp',
-                'resumo_intencao' => 'Resumo de Intenção',
-                'formulario_indicacao' => 'Formulário de Indicação',
-            ];
+        'ficha_inscricao' => 'Ficha de Inscrição',
+        'documento_identificacao' => 'Documento de Identificação Oficial (RG ou CNH)',
+        'cpf' => 'CPF',
+        'diploma' => 'Diploma ou Declaração',
+        'curriculo' => 'Currículo Lattes',
+        'historico' => 'Histórico Escolar',
+        'outro' => 'Outros',
+        'documentacao' => 'Documentação Comprobatória',
+        'projeto_pesquisa' => 'Projeto de Pesquisa',
+        'dissertacao_mestrado' => 'Dissertação de Mestrado',
+        'carta_aceite' => 'Carta de Aceite',
+        'declaracao_vinculo' => 'Declaração de Vínculo',
+        'dados_poscomp' => 'Dados do PosComp',
+        'resumo_intencao' => 'Resumo de Intenção',
+        'formulario_indicacao' => 'Formulário de Indicação',
+    ];
 
     // Método para listar todos os objetos
     public function listarPorEdital($idEdital)
@@ -91,7 +93,7 @@ class InscricaoController extends Controller
         $inscricao->deferido = $request->input('inscricao_status') === 'deferir' ? 1 : 0;
         $inscricao->motivo_indeferimento = $request->input('comentario-geral');
 
-        $inscricao->id_avaliador = auth()->id();
+        $inscricao->id_avaliador = Auth::id();
         $inscricao->save();
 
         return redirect()
@@ -444,5 +446,79 @@ class InscricaoController extends Controller
 
             return back()->with('failure', 'Erro ao realizar inscrição. Contate suporte do site.');
         }
+    }
+
+    public function visualizar($id){
+        $inscricao = Inscricao::with([
+            'edital:id_edital,id_curso,nome',
+            'edital.curso:id_curso,id_programa,tipo',
+            'edital.curso.programa:id_programa,nome',
+            'edital.fasesEdital',
+            'documentos',
+            'linhaPesquisa:id_linha_pesquisa,nome', 
+            'sublinha:id_sublinha,nome',
+            'disciplina:id_disciplina,nome'
+        ])->findOrFail($id);
+
+        $agora = Carbon::now();
+
+        // Verifica se há fase ativa do tipo "recurso"
+        $podeRecurso = $inscricao->edital->fasesEdital
+            ->where('tipo', 'recurso')
+            ->filter(function ($fase) use ($agora) {
+                return $fase->data_inicio <= $agora && $fase->data_fim >= $agora;
+            })
+            ->isNotEmpty();
+
+        $temRecurso = false;
+
+        return view('candidato.inscricoes.visualizar', compact('inscricao', 'podeRecurso'));
+    }
+
+    public function recurso(Request $request, $id)
+    {
+        $inscricao = Inscricao::with('documentos')->findOrFail($id);
+
+        // Garante que existe o array de documentos vindos do form
+        if (!$request->has('documentos')) {
+            return back()->with('failure', 'Nenhum documento enviado.');
+        }
+
+        foreach ($request->documentos as $docData) {
+            if (isset($docData['arquivo'])) {
+                $documento = Documento::findOrFail($docData['id']);
+                $arquivo = $docData['arquivo'];
+
+                // Remove o arquivo antigo, se existir
+                if (Storage::disk('public')->exists($documento->caminho_servidor)) {
+                    Storage::disk('public')->delete($documento->caminho_servidor);
+                }
+
+                // Gera novo caminho e nome do arquivo
+                $novoCaminho = $arquivo->storeAs(
+                    "inscricoes/{$inscricao->id_inscricao}",
+                    "{$documento->tipo}_v" . ($documento->versao + 1) . '.' . $arquivo->getClientOriginalExtension(),
+                    'public'
+                );
+
+                // Atualiza o documento
+                $documento->update([
+                    'caminho_servidor' => $novoCaminho,
+                    'versao' => $documento->versao + 1,
+                    'deferido' => null, // volta para pendente
+                    'motivo_indeferimento' => null
+                ]);
+            }
+        }
+
+        // Marca a inscrição como pendente novamente
+        $inscricao->update([
+            'deferido' => null,
+            'motivo_indeferimento' => null,
+        ]);
+
+        return redirect()
+            ->route('candidato.inscricoes.visualizar', $inscricao->id_inscricao)
+            ->with('success', 'Recurso enviado com sucesso!');
     }
 }

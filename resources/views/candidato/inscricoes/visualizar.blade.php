@@ -1,136 +1,116 @@
 @extends('layouts.app')
 
-@section('title', 'Inscrição')
+@section('title', 'Minhas Inscrições')
 
 @push('head')
-<link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
-<style>
-    .doc-item {
-        background: #f8f9fa;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .doc-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: .5rem;
-    }
-
-    .status {
-        font-weight: bold;
-        padding: 0.25rem 0.5rem;
-        border-radius: 5px;
-    }
-
-    .status.deferido {
-        color: #0f5132;
-        background: #d1e7dd;
-        border: 1px solid #badbcc;
-    }
-
-    .status.indeferido {
-        color: #842029;
-        background: #f8d7da;
-        border: 1px solid #f5c2c7;
-    }
-
-    .motivo {
-        margin-top: 0.5rem;
-        font-size: 14px;
-        color: #333;
-        background: #fff5f5;
-        padding: 8px;
-        border-radius: 5px;
-        border-left: 3px solid #dc3545;
-    }
-
-    .upload-container {
-        margin-top: 1rem;
-        padding: 1rem;
-        border: 1px dashed #ccc;
-        border-radius: 8px;
-        background-color: #fafafa;
-    }
-
-    input[type="file"] {
-        display: block;
-        margin-top: 0.5rem;
-    }
-
-    .btn-enviar {
-        background: #0076df;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        margin-top: 0.5rem;
-    }
-
-    .btn-enviar:hover {
-        background: #005bb5;
-    }
-
-    .aviso-sucesso {
-        background: #d1e7dd;
-        color: #0f5132;
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tabelas.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/inscricao.css') }}">
 @endpush
 
 @section('content')
+    @if(session('success'))
+        <div class="aviso-sucesso">
+            {{ session('success') }}
+        </div>
+    @endif
 
-@if(session('success'))
-    <div class="aviso-sucesso">{{ session('success') }}</div>
-@endif
+    @if(session('failure'))
+        <div class="aviso-falha">
+            {{ session('failure') }}
+        </div>
+    @endif
 
-<h1>Inscrição</h1>
+    <h1>Minha Inscrição</h1>
 
-<p>Confira abaixo o resultado da análise dos seus documentos. Caso algum tenha sido <strong>indeferido</strong>, você pode interpor recurso enviando uma nova versão.</p>
+    <div class="container-details">
+        <div class="table-wrapper">
+            <table class="details-table">
+                <tbody>
+                    <tr>
+                        <th>Edital</th>
+                        <td>{{ $inscricao->edital->nome }}</td>
+                    </tr>
 
-<div class="container-form">
-    @foreach($inscricao->documentos as $doc)
-        <div class="doc-item">
-            <div class="doc-header">
-                <strong>{{ ucfirst(str_replace('_', ' ', $doc->tipo)) }}</strong>
-                <span class="status {{ $doc->deferido === 1 ? 'deferido' : 'indeferido' }}">
-                    {{ $doc->deferido === 1 ? 'Deferido' : 'Indeferido' }}
-                </span>
-            </div>
+                    <tr>
+                        <th>Programa</th>
+                        <td>{{ $inscricao->edital->curso->programa->nome }}</td>
+                    </tr>
 
-            @if($doc->motivo_indeferimento)
-                <div class="motivo">
-                    <strong>Motivo:</strong> {{ $doc->motivo_indeferimento }}
+                    <tr>
+                        <th>Curso</th>
+                        <td>{{ $inscricao->edital->curso->tipo }}</td>
+                    </tr>
+
+                    @if($inscricao->edital->curso->tipo === 'Aluno Externo')
+                        <tr>
+                            <th>Disciplina</th>
+                            <td>{{ $inscricao->disciplina->nome }}</td>
+                        </tr>
+                    @endif
+
+                    <tr>
+                        <th>Situação</th>
+                        <td id={{ is_null($inscricao->deferido) ? "pendente" : ($inscricao->deferido ? "deferido" : "indeferido") }}>
+                            <b>{{ is_null($inscricao->deferido) ? "Pendente" : ($inscricao->deferido ? "Deferida" : "Indeferida") }}</b>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3>Documentos</h3>
+
+    <div class="container-form">
+        <form action="{{ route('candidato.inscricoes.recurso', $inscricao->id_inscricao) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            @foreach($inscricao->documentos as $index => $doc)
+                @php
+                    $status = is_null($doc->deferido) ? null : ($doc->deferido ? 'deferir' : 'indeferir');
+                @endphp
+
+                <div class="doc-item {{ $status === 'deferir' ? 'ok' : ($status === 'indeferir' ? 'nao-ok' : '') }}">
+                    <div class="doc-header">
+                        <span><strong>{{ $doc->tipo }}</strong></span>
+                        <a href="{{ asset('storage/' . $doc->caminho_servidor) }}" target="_blank" class="abrir-btn">
+                            📄 Abrir documento
+                        </a>
+                    </div>
+
+                    @if($status === 'indeferir')
+                        <div class="motivo-container" style="display: {{ $status === 'indeferir' ? 'block' : 'none' }}">
+                            <label for="motivo_{{ $index }}">Motivo do indeferimento:</label>
+                            <textarea class="comentarios-textarea" name="documentos[{{ $index }}][motivo]" id="motivo_{{ $index }}" readonly>{{ $doc->motivo_indeferimento }}</textarea>
+                        </div>
+
+                        @if($podeRecurso)
+                            <div>
+                                <label for="novo_doc_{{ $index }}">Reenviar documento:</label>
+                                <input type="file" name="documentos[{{ $index }}][arquivo]" id="novo_doc_{{ $index }}" accept="application/pdf">
+                            </div>
+                        @endif
+                    @endif
+
+                    <input type="hidden" name="documentos[{{ $index }}][id]" value="{{ $doc->id_documento}}">
+                </div>
+            @endforeach
+
+
+            @if($inscricao->motivo_indeferimento)
+                <label for="comentario-geral">Comentários sobre o indeferimento:</label>
+                <textarea class="comentarios-textarea" name="comentario-geral" readonly>{{$inscricao->motivo_indeferimento}}</textarea>
+            @endif
+
+            @if($podeRecurso)
+                <div class="btn-grp-form">
+                    <a href="{{ route('candidato.inscricoes.index') }}">Voltar</a>
+                    <button type="submit">Enviar recurso</button>
                 </div>
             @endif
-
-            <p><a href="{{ asset('storage/' . $doc->caminho_servidor) }}" target="_blank">📄 Ver documento enviado</a></p>
-
-            {{-- Permitir recurso apenas se indeferido --}}
-            @if($doc->deferido === 0)
-                <form action="{{ route('candidato.recursos.enviar', $doc->id_documento) }}" method="POST" enctype="multipart/form-data" class="upload-container">
-                    @csrf
-                    <label for="arquivo_{{ $doc->id_documento }}">Enviar nova versão (PDF, até 5 MB):</label>
-                    <input type="file" name="arquivo" id="arquivo_{{ $doc->id_documento }}" accept="application/pdf" required>
-
-                    <button type="submit" class="btn-enviar">Enviar Recurso</button>
-                </form>
-            @endif
-
-            @if($doc->recursos->count() > 0)
-                <p style="margin-top:0.8rem; font-size: 13px; color:#555;">
-                    📤 <strong>{{ $doc->recursos->count() }}</strong> recurso(s) já submetido(s), último em {{ $doc->recursos->last()->data_submissao->format('d/m/Y H:i') }}.
-                </p>
-            @endif
-        </div>
-    @endforeach
-</div>
-
+        </form>
+    </div>
 @endsection
+
+

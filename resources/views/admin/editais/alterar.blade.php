@@ -51,7 +51,7 @@
 			<hr>
 
 			<fieldset>
-				<legend>Período de inscrição no edital<span class="required-content">*</span><span class="tag-context candidato">candidato</span></legend>
+				<legend>Período de inscrição no edital<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
         			<div class="campo-data">
@@ -85,7 +85,7 @@
 			<div class="space"></div>
 
 			<fieldset>
-				<legend>Período de interposição do 1º recurso<span class="required-content">*</span><span class="tag-context candidato">candidato</span></legend>
+				<legend>Período de interposição do 1º recurso<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
 					<div class="campo-data">
@@ -126,7 +126,7 @@
             </label>
 
 			<fieldset class="fieldset-2rec disabled-fieldset">
-				<legend>Período de interposição do 2º recurso<span class="required-content">*</span><span class="tag-context candidato">candidato</span></legend>
+				<legend>Período de interposição do 2º recurso<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
 					<div class="campo-data">

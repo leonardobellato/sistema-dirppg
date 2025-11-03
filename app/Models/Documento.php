@@ -22,8 +22,4 @@ class Documento extends Model
     public function inscricao(){
         return $this->belongsTo(Inscricao::class, 'id_inscricao', 'id_inscricao');
     }
-
-    public function recursos(){
-        return $this->hasMany(Recurso::class, 'id_documento', 'id_documento');
-    }
 }
