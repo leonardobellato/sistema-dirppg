@@ -1,7 +1,21 @@
 - análise de inscricoes
-    salvar analise
     recursos
-    disciplinas - dividir
+    visao candidato
 - entrevistas
 - professores
 - atualizar imagem BD
+
+
+
+ALTER TABLE `inscricoes` DROP `nome_orientador`;
+
+ALTER TABLE `inscricoes` ADD COLUMN `id_disciplina` INT UNSIGNED DEFAULT NULL;
+
+ALTER TABLE `inscricoes` 
+  ADD CONSTRAINT fk_inscricao_disciplinas 
+  FOREIGN KEY (`id_disciplina`) 
+  REFERENCES `disciplinas`(`id_disciplina`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+DROP TABLE `inscricao_disciplina`;

@@ -28,6 +28,9 @@
 				<option value="">Selecione...</option>		
 			</select>
 
+			<p id="aviso-aluno-externo" style="display: none;"><br>Disciplinas atualmente visíveis para o curso selecionado:</p>
+			<ul id="lista-disciplinas"></ul>
+
 			<label for="input-nome">Nome do edital:<span class="required-content">*</span></label>
 			<input type="text" id="input-nome" name="nome" placeholder="Digite o nome aqui" required
                 value="{{ old('nome') }}" {{-- mantém o valor se der erro --}}
@@ -181,6 +184,39 @@
                 cursoSelect.disabled = true;
             }
         });
+
+		document.getElementById('input-curso').addEventListener('change', function() {
+			const idCurso = this.value;
+			const tipoCurso = this.options[this.selectedIndex].textContent;
+			const avisoAlunoExterno = document.getElementById('aviso-aluno-externo');
+			const listaDisciplinas = document.getElementById('lista-disciplinas');
+			listaDisciplinas.innerHTML = '';
+
+			if(idCurso && tipoCurso === 'Aluno Externo') {
+				avisoAlunoExterno.style.display = 'block';
+
+				const baseUrl = "{{ url('/') }}";
+				fetch(`${baseUrl}/cursos/${idCurso}/disciplinas-aluno-externo`)
+					.then(response => response.json())
+					.then(data => {
+						if(data.length === 0) {
+							listaDisciplinas.innerHTML = '<li>Nenhuma disciplina disponível.</li>';
+						} else {
+							data.forEach(disciplina => {
+								const li = document.createElement('li');
+								li.textContent = disciplina.nome;
+								listaDisciplinas.appendChild(li);
+							});
+						}
+					})
+					.catch(() => {
+						listaDisciplinas.innerHTML = '<li>Erro ao carregar disciplinas.</li>';
+					});
+			}
+			else {
+				avisoAlunoExterno.style.display = 'none';
+			}
+		});
 
 		// Esta função define que a data final deve ser pelo menos 1 dia após a data inicial
 		function vincularDatas(idInicio, idFim) {

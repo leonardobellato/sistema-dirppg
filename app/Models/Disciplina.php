@@ -15,4 +15,8 @@ class Disciplina extends Model
     public function curso(){
         return $this->belongsTo(Curso::class, 'id_curso', 'id_curso');
     }
+
+    public function inscricoes(){
+        return $this->hasMany(Inscricao::class, 'id_disciplina', 'id_disciplina');
+    }
 }

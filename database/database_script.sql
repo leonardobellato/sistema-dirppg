@@ -173,7 +173,6 @@ CREATE TABLE `inscricoes` (
   `id_sublinha`          INT UNSIGNED NULL,
   `deferido`             TINYINT(1) DEFAULT NULL,
   `motivo_indeferimento` VARCHAR(600) DEFAULT NULL,
-  `nome_orientador`      VARCHAR(100) DEFAULT NULL,
   `comentarios`          VARCHAR(600) DEFAULT NULL,
   `criado_em`            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -213,27 +212,8 @@ ALTER TABLE `inscricoes`
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 
-
-CREATE TABLE `inscricao_disciplina` (
-  `id_inscricao`         INT UNSIGNED NOT NULL,
-  `id_disciplina`        INT UNSIGNED NOT NULL,
-  `deferido`             TINYINT(1) DEFAULT NULL,
-  `motivo_indeferimento` VARCHAR(600) DEFAULT NULL
-);
-
-ALTER TABLE `inscricao_disciplina`
-  ADD CONSTRAINT pk_inscricao_disciplina 
-  PRIMARY KEY (`id_inscricao`, `id_disciplina`);
-
-ALTER TABLE `inscricao_disciplina` 
-  ADD CONSTRAINT fk_isd_inscricao
-  FOREIGN KEY (`id_inscricao`) 
-  REFERENCES `inscricoes`(`id_inscricao`)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE;
-
-ALTER TABLE `inscricao_disciplina` 
-  ADD CONSTRAINT fk_isd_disciplina
+ALTER TABLE `inscricoes` 
+  ADD CONSTRAINT fk_inscricao_disciplinas 
   FOREIGN KEY (`id_disciplina`) 
   REFERENCES `disciplinas`(`id_disciplina`)
   ON DELETE CASCADE

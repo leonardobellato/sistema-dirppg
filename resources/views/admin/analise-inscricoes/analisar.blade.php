@@ -127,6 +127,13 @@
                         <th>Telefone</th>
                         <td>{{ $inscricao->candidato->candidato->telefone }}</td>
                     </tr>
+
+                    @if($inscricao->edital->curso->tipo === 'Aluno Externo')
+                        <tr>
+                            <th>Disciplina</th>
+                            <td>{{ $inscricao->disciplina->nome }}</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -198,7 +205,7 @@
             <textarea class="comentarios-textarea" name="comentario-geral" placeholder="Descreva aqui...">{{ old('comentario-geral', $inscricao->motivo_indeferimento) }}</textarea>
 
             <div class="btn-grp-form">
-                <a href="{{route('candidato.editais.index')}}">Voltar</a>
+                <a href="{{route('analise-inscricoes.index')}}">Voltar</a>
                 <button type="submit">Salvar análise</button>
             </div>
         </form>

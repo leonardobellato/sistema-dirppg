@@ -53,11 +53,7 @@
                         { headerName: "Linha de Pesquisa", field: "linha_pesquisa.nome", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 160 },
                         { headerName: "Sublinha", field: "sublinha.nome", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 160 },
                     @elseif($tipoCurso === 'Aluno Externo')
-                        { headerName: "Disciplinas", field: "disciplinas", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 160, valueFormatter: (params) => {
-                                if (!params.value) return '';
-                                return params.value.map((prog) => prog.nome).join(', ');
-                            }
-                        },
+                        { headerName: "Disciplina", field: "disciplina.nome", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 160 },
                     @endif
                     
                     { headerName: "Status", field: "deferido", filter: "agTextColumnFilter", sortable: true, flex: 1,  minWidth: 100, 

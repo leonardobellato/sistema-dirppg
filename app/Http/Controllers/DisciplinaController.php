@@ -29,7 +29,12 @@ class DisciplinaController extends Controller
     // Rota para AJAX
     public function filtrarDisciplinasPorCurso($idCurso)
     {
-        return response()->json(Curso::findOrFail($idCurso)->disciplinas);
+        return response()->json(
+            Curso::findOrFail($idCurso)
+                ->disciplinas()
+                ->where('visivel', true)
+                ->get()
+        );
     }
 
     // Método para salvar no banco

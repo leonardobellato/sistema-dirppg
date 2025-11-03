@@ -40,7 +40,7 @@ class InscricaoController extends Controller
             'candidato.candidato:id_usuario,cpf',
             'linhaPesquisa:id_linha_pesquisa,nome', 
             'sublinha:id_sublinha,nome',
-            'disciplinas:id_disciplina,nome'
+            'disciplina:id_disciplina,nome'
         ])->where('id_edital', $idEdital)->get();
 
         $tipoCurso = Edital::findOrFail($idEdital)->curso->tipo;
@@ -50,13 +50,18 @@ class InscricaoController extends Controller
 
     public function listarPeloCandidato()
     {
-        $inscricoes = Inscricao::with('edital.curso.programa')->where('id_candidato', Auth::id())->get();
+        $inscricoes = Inscricao::with([
+            'edital.curso',
+            'edital.curso.programa:id_programa,sigla', 
+            'disciplina:id_disciplina,nome'
+        ])->where('id_candidato', Auth::id())->get();
 
         return view('candidato.inscricoes.index', compact('inscricoes'));
     }
 
     public function analisar($id){
         $inscricao = Inscricao::with([
+            'edital.curso',
             'documentos',
             'candidato:id_usuario,nome,email',
             'candidato.candidato',
@@ -372,34 +377,40 @@ class InscricaoController extends Controller
         DB::beginTransaction();
 
         try {
-            // Criar a inscrição
-            $inscricao = Inscricao::create([
-                'id_candidato' => Auth::id(),
-                'id_edital' => $request->id_edital,
-                'comentarios' => $request->comentarios,
-            ]);
+            // Verifica se há disciplinas selecionadas
+            $disciplinasSelecionadas = $request->input('disciplinas', []);
 
-            // Salvar os documentos enviados
-            foreach ($this->tiposDocumentos as $tipo => $descricao) {
-                if ($request->hasFile($tipo)) {
-                    $arquivo = $request->file($tipo);
-                    $caminho = $arquivo->storeAs(
-                        "inscricoes/{$inscricao->id_inscricao}", 
-                        $tipo . '.' . $arquivo->getClientOriginalExtension(),
-                        'public'
-                    );
-
-                    Documento::create([
-                        'id_inscricao' => $inscricao->id_inscricao,
-                        'caminho_servidor' => $caminho,
-                        'tipo' => $descricao,
-                    ]);
-                }
+            if (empty($disciplinasSelecionadas)) {
+                return back()->with('failure', 'Selecione ao menos uma disciplina.');
             }
 
-            // Salvar as disciplinas selecionadas
-            if ($request->has('disciplinas')) {
-                $inscricao->disciplinas()->sync($request->input('disciplinas'));
+            // Para cada disciplina selecionada, criar uma inscrição separada
+            foreach ($disciplinasSelecionadas as $idDisciplina) {
+                // Criar nova inscrição
+                $inscricao = Inscricao::create([
+                    'id_candidato' => Auth::id(),
+                    'id_edital'    => $request->id_edital,
+                    'id_disciplina'=> $idDisciplina,
+                    'comentarios'  => $request->comentarios,
+                ]);
+
+                // Salvar os documentos enviados (duplicando os mesmos arquivos para cada inscrição)
+                foreach ($this->tiposDocumentos as $tipo => $descricao) {
+                    if ($request->hasFile($tipo)) {
+                        $arquivo = $request->file($tipo);
+                        $caminho = $arquivo->storeAs(
+                            "inscricoes/{$inscricao->id_inscricao}",
+                            $tipo . '.' . $arquivo->getClientOriginalExtension(),
+                            'public'
+                        );
+
+                        Documento::create([
+                            'id_inscricao'     => $inscricao->id_inscricao,
+                            'caminho_servidor' => $caminho,
+                            'tipo'             => $descricao,
+                        ]);
+                    }
+                }
             }
 
 

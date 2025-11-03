@@ -16,9 +16,9 @@ class Inscricao extends Model
         'id_edital', 
         'id_linha_pesquisa', 
         'id_sublinha', 
+        'id_disciplina',
         'deferido',
         'motivo_indeferimento',
-        'nome_orientador',
         'comentarios'
     ];
 
@@ -45,14 +45,8 @@ class Inscricao extends Model
     public function documentos(){
         return $this->hasMany(Documento::class, 'id_inscricao', 'id_inscricao');
     }
-
-    public function disciplinas()
-    {
-        return $this->belongsToMany(
-            Disciplina::class,
-            'inscricao_disciplina', // tabela pivô
-            'id_inscricao',         // chave estrangeira desta tabela
-            'id_disciplina'         // chave estrangeira da tabela relacionada
-        )->withPivot('deferido', 'motivo_indeferimento'); // campos extras da pivô
+    
+    public function disciplina(){
+        return $this->belongsTo(Disciplina::class, 'id_disciplina', 'id_disciplina');
     }
 }
