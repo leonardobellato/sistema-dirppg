@@ -99,3 +99,6 @@
     </div>
     
 @endsection
+
+@push('scripts')
+    <script> console.log(@json($fases)); </script>

@@ -46,7 +46,9 @@ class EditalController extends Controller
         $jaInscrito = Inscricao::where('id_candidato', Auth::id())->where('id_edital', $edital->id_edital)->exists();
 
         // Verificar se ainda está no período de inscrição
-        $podeInscrever = \Carbon\Carbon::parse($fases['inscricao_1'][0]->data_fim)->isFuture();
+        $podeInscrever = \Carbon\Carbon::now()->lessThanOrEqualTo(
+            \Carbon\Carbon::parse($fases['inscricao_1'][0]->data_fim)->endOfDay()
+        );
 
         return view('candidato.editais.details', compact(
             'edital',
@@ -255,4 +257,6 @@ class EditalController extends Controller
             return response()->json(['success' => false, 'message' => 'Erro ao excluir: ' . $e->getMessage()], 500);
         }
     }
+
+    
 }

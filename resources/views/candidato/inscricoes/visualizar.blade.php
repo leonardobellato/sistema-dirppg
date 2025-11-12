@@ -51,14 +51,26 @@
 
                     <tr>
                         <th>Situação</th>
-                        <td id={{ is_null($inscricao->deferido) ? "pendente" : ($inscricao->deferido ? "deferido" : "indeferido") }}>
-                            <b>{{ is_null($inscricao->deferido) ? "Pendente" : ($inscricao->deferido ? "Deferida" : "Indeferida") }}</b>
+
+                        @php
+                            $situacao = 'pendente';
+
+                            if($faseAtual && in_array($faseAtual->tipo, ['resultadoInsc', 'resultadoRec'])) {
+                                $situacao = is_null($inscricao->deferido) ? 'pendente' : ($inscricao->deferido ? 'deferido' : 'indeferido');
+                            }
+
+                        @endphp
+
+                        <td id={{ $situacao }}>
+                            <b>{{ ucfirst($situacao) }}</b>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>Fase atual: {{ $faseAtual->tipo ?? 'Nenhuma fase ativa' }}</p>
 
     <h3>Documentos</h3>
 
@@ -85,12 +97,14 @@
                             <textarea class="comentarios-textarea" name="documentos[{{ $index }}][motivo]" id="motivo_{{ $index }}" readonly>{{ $doc->motivo_indeferimento }}</textarea>
                         </div>
 
+                        {{--
                         @if($podeRecurso)
                             <div>
                                 <label for="novo_doc_{{ $index }}">Reenviar documento:</label>
                                 <input type="file" name="documentos[{{ $index }}][arquivo]" id="novo_doc_{{ $index }}" accept="application/pdf">
                             </div>
                         @endif
+                        --}}
                     @endif
 
                     <input type="hidden" name="documentos[{{ $index }}][id]" value="{{ $doc->id_documento}}">
@@ -103,12 +117,15 @@
                 <textarea class="comentarios-textarea" name="comentario-geral" readonly>{{$inscricao->motivo_indeferimento}}</textarea>
             @endif
 
-            @if($podeRecurso)
+            {{--@if($podeRecurso)
                 <div class="btn-grp-form">
                     <a href="{{ route('candidato.inscricoes.index') }}">Voltar</a>
                     <button type="submit">Enviar recurso</button>
                 </div>
-            @endif
+            @endif --}}
+
+             <div class="btn-grp-form">
+                <a href="{{ route('candidato.inscricoes.index') }}">Voltar</a>
         </form>
     </div>
 @endsection

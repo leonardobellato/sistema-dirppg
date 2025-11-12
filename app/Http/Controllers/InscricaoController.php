@@ -460,19 +460,9 @@ class InscricaoController extends Controller
             'disciplina:id_disciplina,nome'
         ])->findOrFail($id);
 
-        $agora = Carbon::now();
+        $faseAtual = $inscricao->edital->faseAtual();
 
-        // Verifica se há fase ativa do tipo "recurso"
-        $podeRecurso = $inscricao->edital->fasesEdital
-            ->where('tipo', 'recurso')
-            ->filter(function ($fase) use ($agora) {
-                return $fase->data_inicio <= $agora && $fase->data_fim >= $agora;
-            })
-            ->isNotEmpty();
-
-        $temRecurso = false;
-
-        return view('candidato.inscricoes.visualizar', compact('inscricao', 'podeRecurso'));
+        return view('candidato.inscricoes.visualizar', compact('inscricao', 'faseAtual'));
     }
 
     public function recurso(Request $request, $id)
