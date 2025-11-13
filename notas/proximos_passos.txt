@@ -1,6 +1,11 @@
 - análise de inscricoes
-    gerar listas
+    gerar listas preliminar e final
+    email para candidatos
 - entrevistas
 - professores
+- comunicacao via email
+- melhorar dashboard
 
 
+Para alunos externos, automatizar o envio do link do formulário de cadastro após o
+deferimento da matrícula, atualmente feito de forma manual.
