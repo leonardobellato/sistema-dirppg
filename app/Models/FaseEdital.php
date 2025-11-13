@@ -13,7 +13,6 @@ class FaseEdital extends Model
     protected $fillable = [
         'id_edital',
         'tipo',
-        'ordem',
         'data_inicio',
         'data_fim',
     ];

@@ -60,9 +60,9 @@ window.openModalEditais = function(edital) {
 
     const tituloFase = {
         inscricao: 'Inscrição',
-        resultadoInsc: 'Resultado da inscrição',
-        recurso: 'Interposição de recurso',
-        resultadoRec: 'Resultado do recurso',
+        resultado: 'Resultado da inscrição',
+        recurso1: 'Interposição do 1º recurso',
+        recurso2: 'Interposição do 2º recurso',
     };
 
     // Monta as fases

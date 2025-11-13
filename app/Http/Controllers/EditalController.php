@@ -37,17 +37,15 @@ class EditalController extends Controller
     {
         $edital = Edital::with(['curso.programa', 'fasesEdital'])->findOrFail($id);
 
-        // Separar por tipo + ordem para facilitar no Blade
-        $fases = $edital->fasesEdital->groupBy(function($fase) {
-            return $fase->tipo.'_'.$fase->ordem;
-        });
+        // Separar por tipo para facilitar no Blade
+        $fases = $edital->fasesEdital->groupBy('tipo')->map->first();
 
         // Verificar se candidato já está inscrito
         $jaInscrito = Inscricao::where('id_candidato', Auth::id())->where('id_edital', $edital->id_edital)->exists();
 
         // Verificar se ainda está no período de inscrição
         $podeInscrever = \Carbon\Carbon::now()->lessThanOrEqualTo(
-            \Carbon\Carbon::parse($fases['inscricao_1'][0]->data_fim)->endOfDay()
+            \Carbon\Carbon::parse($fases['inscricao']->data_fim)->endOfDay()
         );
 
         return view('candidato.editais.details', compact(
@@ -91,43 +89,27 @@ class EditalController extends Controller
         $fases = [
             [
                 'tipo' => 'inscricao',
-                'ordem' => 1,
                 'data_inicio' => $request->input('input-dt-insc-inicio'),
                 'data_fim' => $request->input('input-dt-insc-fim'),
             ],
             [
-                'tipo' => 'resultadoInsc',
-                'ordem' => 1,
+                'tipo' => 'resultado',
                 'data_inicio' => $request->input('input-dt-div-insc'),
                 'data_fim' => $request->input('input-dt-div-insc'),
             ],
             [
-                'tipo' => 'recurso',
-                'ordem' => 1,
+                'tipo' => 'recurso1',
                 'data_inicio' => $request->input('input-dt-1rec-inicio'),
                 'data_fim' => $request->input('input-dt-1rec-fim'),
-            ],
-            [
-                'tipo' => 'resultadoRec',
-                'ordem' => 1,
-                'data_inicio' => $request->input('input-dt-div-1rec'),
-                'data_fim' => $request->input('input-dt-div-1rec'),
             ],
         ];
 
         // 2º recurso (opcional)
         if ($request->has('input-enable-2rec')) {
             $fases[] = [
-                'tipo' => 'recurso',
-                'ordem' => 2,
+                'tipo' => 'recurso2',
                 'data_inicio' => $request->input('input-dt-2rec-inicio'),
                 'data_fim' => $request->input('input-dt-2rec-fim'),
-            ];
-            $fases[] = [
-                'tipo' => 'resultadoRec',
-                'ordem' => 2,
-                'data_inicio' => $request->input('input-dt-div-2rec'),
-                'data_fim' => $request->input('input-dt-div-2rec'),
             ];
         }
 
@@ -135,7 +117,6 @@ class EditalController extends Controller
             FaseEdital::create([
                 'id_edital' => $edital->id_edital,
                 'tipo' => $fase['tipo'],
-                'ordem' => $fase['ordem'],
                 'data_inicio' => $fase['data_inicio'],
                 'data_fim' => $fase['data_fim'],
             ]);
@@ -150,10 +131,8 @@ class EditalController extends Controller
     {
         $edital = Edital::with(['curso.programa', 'fasesEdital'])->findOrFail($id);
 
-        // Separar por tipo + ordem para facilitar no Blade
-        $fases = $edital->fasesEdital->groupBy(function($fase) {
-            return $fase->tipo.'_'.$fase->ordem;
-        });
+        // Separar por tipo para facilitar no Blade
+        $fases = $edital->fasesEdital->groupBy('tipo')->map->first();
 
         return view('admin.editais.alterar', compact('edital', 'fases'));
     }
@@ -178,43 +157,27 @@ class EditalController extends Controller
         $fases = [
             [
                 'tipo' => 'inscricao',
-                'ordem' => 1,
                 'data_inicio' => $request->input('input-dt-insc-inicio'),
                 'data_fim' => $request->input('input-dt-insc-fim'),
             ],
             [
-                'tipo' => 'resultadoInsc',
-                'ordem' => 1,
+                'tipo' => 'resultado',
                 'data_inicio' => $request->input('input-dt-div-insc'),
                 'data_fim' => $request->input('input-dt-div-insc'),
             ],
             [
-                'tipo' => 'recurso',
-                'ordem' => 1,
+                'tipo' => 'recurso1',
                 'data_inicio' => $request->input('input-dt-1rec-inicio'),
                 'data_fim' => $request->input('input-dt-1rec-fim'),
-            ],
-            [
-                'tipo' => 'resultadoRec',
-                'ordem' => 1,
-                'data_inicio' => $request->input('input-dt-div-1rec'),
-                'data_fim' => $request->input('input-dt-div-1rec'),
-            ],
+            ]
         ];
 
         // 2º recurso (opcional)
         if ($request->has('input-enable-2rec')) {
             $fases[] = [
-                'tipo' => 'recurso',
-                'ordem' => 2,
+                'tipo' => 'recurso2',
                 'data_inicio' => $request->input('input-dt-2rec-inicio'),
                 'data_fim' => $request->input('input-dt-2rec-fim'),
-            ];
-            $fases[] = [
-                'tipo' => 'resultadoRec',
-                'ordem' => 2,
-                'data_inicio' => $request->input('input-dt-div-2rec'),
-                'data_fim' => $request->input('input-dt-div-2rec'),
             ];
         }
 
@@ -224,7 +187,6 @@ class EditalController extends Controller
                 [
                     'id_edital' => $edital->id_edital,
                     'tipo' => $fase['tipo'],
-                    'ordem' => $fase['ordem'],
                 ],
                 [
                     'data_inicio' => $fase['data_inicio'],
@@ -234,13 +196,11 @@ class EditalController extends Controller
         }
 
         // Excluir as fases opcionais se foram desmarcadas
-        $tiposOrdensAtuais = collect($fases)->map(function($fase) {
-            return $fase['tipo'].'_'.$fase['ordem'];
-        })->toArray();
-        FaseEdital::where('id_edital', $edital->id_edital)
-            ->whereNotIn(DB::raw("CONCAT(tipo, '_', ordem)"), $tiposOrdensAtuais)
-            ->delete();
+        $tiposOrdensAtuais = collect($fases)->map(function($fase) { return $fase['tipo']; })->toArray();
 
+        FaseEdital::where('id_edital', $edital->id_edital)
+            ->whereNotIn('tipo', $tiposOrdensAtuais)
+            ->delete();
 
         return redirect()->route('admin.editais.index')
                         ->with('success', 'Edital atualizado com sucesso!');

@@ -57,13 +57,13 @@
         			<div class="campo-data">
 						<label for="input-dt-insc-inicio">Data de início:<span class="required-content">*</span></label>
 						<input type="date" id="input-dt-insc-inicio" name="input-dt-insc-inicio" required
-							value="{{ old('input-dt-insc-inicio', $fases['inscricao_1'][0]->data_inicio) }}"
+							value="{{ old('input-dt-insc-inicio', $fases['inscricao']->data_inicio) }}"
 						>
 					</div>
 					<div class="campo-data">
 						<label for="input-dt-insc-fim">Data de fim:<span class="required-content">*</span></label>
 						<input type="date" id="input-dt-insc-fim" name="input-dt-insc-fim" required
-							value="{{ old('input-dt-insc-fim', $fases['inscricao_1'][0]->data_fim) }}"
+							value="{{ old('input-dt-insc-fim', $fases['inscricao']->data_fim) }}"
 						>
 					</div>
 				</div>
@@ -76,13 +76,11 @@
         			<div class="campo-data">
 						<label for="input-dt-div-insc">Data: <span class="required-content">*</span></label>
 						<input type="date" id="input-dt-div-insc" name="input-dt-div-insc" required
-							value="{{ old('input-dt-div-insc', $fases['resultadoInsc_1'][0]->data_inicio) }}"
+							value="{{ old('input-dt-div-insc', $fases['resultado']->data_inicio) }}"
 						>
 					</div>
 				</div>
 			</fieldset>
-
-			<div class="space"></div>
 
 			<fieldset>
 				<legend>Período de interposição do 1º recurso<span class="required-content">*</span></legend>
@@ -91,26 +89,13 @@
 					<div class="campo-data">
 						<label for="input-dt-1rec-inicio">Data de início:<span class="required-content">*</span></label>
 						<input type="date" id="input-dt-1rec-inicio" name="input-dt-1rec-inicio" required
-							value="{{ old('input-dt-1rec-inicio', $fases['recurso_1'][0]->data_inicio) }}"
+							value="{{ old('input-dt-1rec-inicio', $fases['recurso1']->data_inicio) }}"
 						>
 					</div>
 					<div class="campo-data">
 						<label for="input-dt-1rec-fim">Data de fim:<span class="required-content">*</span></label>
 						<input type="date" id="input-dt-1rec-fim" name="input-dt-1rec-fim" required
-							value="{{ old('input-dt-1rec-fim', $fases['recurso_1'][0]->data_fim) }}"
-						>
-					</div>
-				</div>
-			</fieldset>
-
-			<fieldset>
-				<legend>Divulgação do resultado do 1º recurso<span class="required-content">*</span></legend>
-
-				<div class="field-linha">
-        			<div class="campo-data">
-						<label for="input-dt-div-1rec">Data: <span class="required-content">*</span></label>
-						<input type="date" id="input-dt-div-1rec" name="input-dt-div-1rec" required
-							value="{{ old('input-dt-div-1rec', $fases['resultadoRec_1'][0]->data_inicio) }}"
+							value="{{ old('input-dt-1rec-fim', $fases['recurso1']->data_fim) }}"
 						>
 					</div>
 				</div>
@@ -121,37 +106,24 @@
 			<label for="input-enable-2rec">(Opcional) Habilitar segundo recurso:</label>
             <label class="toggle">
                 <input type="checkbox" id="input-enable-2rec" name="input-enable-2rec" value="1" 
-					{{ isset($fases['recurso_2'][0]) ? 'checked' : '' }}>
+					{{ isset($fases['recurso2']) ? 'checked' : '' }}>
                 <span class="slider"></span>
             </label>
 
-			<fieldset class="fieldset-2rec disabled-fieldset">
+			<fieldset class="disabled-fieldset" id="fieldset-2rec">
 				<legend>Período de interposição do 2º recurso<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
 					<div class="campo-data">
 						<label for="input-dt-2rec-inicio">Data de início:<span class="required-content">*</span></label>
 						<input type="date" id="input-dt-2rec-inicio" name="input-dt-2rec-inicio" disabled
-							value="{{ old('input-dt-2rec-inicio', isset($fases['recurso_2'][0]) ? $fases['recurso_2'][0]->data_inicio : '') }}"
+							value="{{ old('input-dt-2rec-inicio', isset($fases['recurso2']) ? $fases['recurso2']->data_inicio : '') }}"
 						>
 					</div>
 					<div class="campo-data">
 						<label for="input-dt-2rec-fim">Data de fim:<span class="required-content">*</span></label>
 						<input type="date" id="input-dt-2rec-fim" name="input-dt-2rec-fim" disabled
-							value="{{ old('input-dt-2rec-fim', isset($fases['recurso_2'][0]) ? $fases['recurso_2'][0]->data_fim : '') }}"
-						>
-					</div>
-				</div>
-			</fieldset>
-
-			<fieldset class="fieldset-2rec disabled-fieldset">
-				<legend>Divulgação do resultado do 2º recurso<span class="required-content">*</span></legend>
-
-				<div class="field-linha">
-        			<div class="campo-data">
-						<label for="input-dt-div-2rec">Data:<span class="required-content">*</span></label>
-						<input type="date" id="input-dt-div-2rec" name="input-dt-div-2rec" disabled
-							value="{{ old('input-dt-div-2rec', isset($fases['resultadoRec_2'][0]) ? $fases['resultadoRec_2'][0]->data_inicio : '') }}"
+							value="{{ old('input-dt-2rec-fim', isset($fases['recurso2']) ? $fases['recurso2']->data_fim : '') }}"
 						>
 					</div>
 				</div>
@@ -171,7 +143,7 @@
 
 @push('scripts')
     <script>
-		// Esta função define que a data final deve ser pelo menos 1 dia após a data inicial
+		// Esta função define que a data final deve ser sempre igual ou posterior à data inicial
 		function vincularDatas(idInicio, idFim) {
 			const inicio = document.getElementById(idInicio);
 			const fim = document.getElementById(idFim);
@@ -180,9 +152,6 @@
 				inicio.addEventListener('change', function () {
 					const dataInicio = new Date(this.value);
 					if (isNaN(dataInicio)) return;
-
-					// Adiciona 1 dia
-					dataInicio.setDate(dataInicio.getDate() + 1);
 
 					// Formata para yyyy-mm-dd
 					const minDate = dataInicio.toISOString().split('T')[0];
@@ -202,21 +171,18 @@
 		vincularDatas('input-dt-insc-fim', 'input-dt-div-insc');
 		vincularDatas('input-dt-div-insc', 'input-dt-1rec-inicio');
 		vincularDatas('input-dt-1rec-inicio', 'input-dt-1rec-fim');
-		vincularDatas('input-dt-1rec-fim', 'input-dt-div-1rec');
-		vincularDatas('input-dt-div-1rec', 'input-dt-2rec-inicio');
+		vincularDatas('input-dt-1rec-fim', 'input-dt-2rec-inicio');
 		vincularDatas('input-dt-2rec-inicio', 'input-dt-2rec-fim');
-		vincularDatas('input-dt-2rec-fim', 'input-dt-div-2rec');
 
 		// --------------------------------------------------------
 		// 2 recurso
 		const toggle = document.getElementById('input-enable-2rec');
-		const fieldsets = document.querySelectorAll('.fieldset-2rec');
+		const fieldset = document.getElementById('fieldset-2rec');
 		
 		// IDs dos inputs que fazem parte do grupo
 		const inputIds = [
 			'input-dt-2rec-inicio',
-			'input-dt-2rec-fim',
-			'input-dt-div-2rec'
+			'input-dt-2rec-fim'
 		];
 
 		function atualizarEstado2Recurso() {
@@ -234,13 +200,14 @@
 				}
 			});
 
-			// Alterna classe nos fieldsets
-			fieldsets.forEach(fs => {
-				fs.classList.toggle('disabled-fieldset', !ativar);
-			});
+			// Alterna classe no fieldset
+			if (fieldset) {
+				fieldset.classList.toggle('disabled-fieldset', !ativar);
+			}
 		}
 
 		toggle.addEventListener('change', atualizarEstado2Recurso);
+
 		// Chama a função ao carregar a página para definir o estado inicial correto
 		document.addEventListener('DOMContentLoaded', atualizarEstado2Recurso);
     </script>

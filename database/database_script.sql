@@ -1,9 +1,9 @@
 /* Script para criar o banco de dados e as respectivas tabelas,
    bem como já inserir dados cruciais da aplicação. */
 
-CREATE DATABASE IF NOT EXISTS `dirppg_inscricao_v2` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `dirppg_inscricao` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-USE `dirppg_inscricao_v2`;
+USE `dirppg_inscricao`;
 
 CREATE TABLE `programas` (
   `id_programa` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -99,7 +99,8 @@ CREATE TABLE `candidatos` (
   `id_usuario` INT UNSIGNED PRIMARY KEY,
   `cpf`        CHAR(14) NOT NULL UNIQUE,
   `brasileiro` TINYINT(1) NOT NULL DEFAULT 1,
-  `telefone`   VARCHAR(20) NOT NULL
+  `telefone`   VARCHAR(20) NOT NULL,
+  `permitir_emails` TINYINT(1) NOT NULL DEFAULT 1
 );
 
 ALTER TABLE `candidatos`
@@ -150,8 +151,7 @@ ALTER TABLE `editais`
 CREATE TABLE `fases_edital` (
   `id_fase` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_edital` INT UNSIGNED NOT NULL,
-  `tipo` ENUM('inscricao','resultadoInsc','recurso','resultadoRec') NOT NULL,
-  `ordem` TINYINT NOT NULL,
+  `tipo` ENUM('inscricao','resultado','recurso1','recurso2') NOT NULL,
   `data_inicio` DATE NOT NULL,
   `data_fim` DATE NOT NULL
 );
@@ -171,6 +171,7 @@ CREATE TABLE `inscricoes` (
   `id_edital`            INT UNSIGNED NOT NULL,
   `id_linha_pesquisa`    INT UNSIGNED NULL,
   `id_sublinha`          INT UNSIGNED NULL,
+  `id_disciplina`        INT UNSIGNED NULL,
   `deferido`             TINYINT(1) DEFAULT NULL,
   `motivo_indeferimento` VARCHAR(600) DEFAULT NULL,
   `comentarios`          VARCHAR(600) DEFAULT NULL,
@@ -268,8 +269,8 @@ ALTER TABLE `entrevistas`
 CREATE TABLE `auditorias` (
   `id_auditoria` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   `id_usuario`   INT UNSIGNED NULL,
-  `tipo`         VARCHAR(50) NOT NULL, -- 'inscricao', 'documento'
-  `operacao`     VARCHAR(50) NOT NULL, -- created, updated, deleted, login, erro_upload
+  `tipo`         VARCHAR(50) NOT NULL, -- ex.: inscricao, documento
+  `operacao`     VARCHAR(50) NOT NULL, -- ex.: criação, edição, atualização, exclusão, login, erro_upload
   `sucesso`      BOOLEAN NOT NULL DEFAULT 0,
   `detalhes`     TEXT NULL,
   `ip`           VARCHAR(45) NULL,

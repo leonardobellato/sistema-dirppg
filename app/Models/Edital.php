@@ -23,22 +23,28 @@ class Edital extends Model
 
     public function faseAtual()
     {
-        $agora = Carbon::now();
+        $agora = Carbon::now()->startOfDay();
 
         return $this->fasesEdital
             ->sortByDesc('data_inicio')
             ->first(function ($fase) use ($agora) {
-                // Fases com início e fim (ex: inscrição ou recurso)
                 if ($fase->data_inicio && $fase->data_fim) {
-                    return $fase->data_inicio <= $agora && $fase->data_fim >= $agora;
+                    $inicio = Carbon::parse($fase->data_inicio)->startOfDay();
+                    $fim = Carbon::parse($fase->data_fim)->endOfDay();
+                    return $inicio <= $agora && $fim >= $agora;
                 }
-
-                // Fases com apenas data (ex: resultadoInsc, resultadoRec)
-                if ($fase->data_inicio && !$fase->data_fim) {
-                    return $fase->data_inicio->isSameDay($agora) || $fase->data_inicio <= $agora;
-                }
-
                 return false;
+            });
+    }
+
+    public function resultadoDisponivel()
+    {
+        $agora = Carbon::now()->startOfDay();
+
+        return $this->fasesEdital
+            ->where('tipo', 'resultado')
+            ->first(function ($fase) use ($agora) {
+                return Carbon::parse($fase->data_fim)->endOfDay() <= $agora;
             });
     }
 }

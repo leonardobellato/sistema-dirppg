@@ -46,7 +46,7 @@
                     }
                 },
                 columnDefs: [
-                    { headerName: "Candidato", field: "candidato.nome", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: 'asc', minWidth: 160},
+                    { headerName: "Candidato", field: "candidato.nome", filter: "agTextColumnFilter", sortable: true, flex: 1, sort: 'asc', sortIndex: 1, minWidth: 160},
                     { headerName: "CPF", field: "candidato.candidato.cpf", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 100 },
                     
                     @if(in_array($tipoCurso, ['Doutorado', 'Mestrado']))
@@ -70,7 +70,16 @@
                                 return { color: 'lightgreen', fontWeight: 'bold' }; // deferido
                             }
                             return { color: 'red', fontWeight: 'bold' }; // indeferido
-                        }}
+                        },
+                        comparator: (a, b) => {
+                            const order = { null: 0, 1: 1, 0: 2 }; // pendente -> deferido -> indeferido
+                            const valA = a === null ? order.null : order[a];
+                            const valB = b === null ? order.null : order[b];
+                            return valA - valB;
+                        },
+                        sort: 'asc',
+                        sortIndex: 0
+                    }
                 ],
                 rowData: tableData,
                 pagination: true,

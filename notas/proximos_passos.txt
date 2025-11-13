@@ -1,9 +1,6 @@
--- erro ao salvar inscricao mestrado
 - análise de inscricoes
-    recursos - eerro file stream
-    visao candidato
+    gerar listas
 - entrevistas
 - professores
-- atualizar imagem BD
 
 

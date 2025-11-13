@@ -3,7 +3,7 @@
 @section('title', 'Usuário')
 
 @push('head')
-    <link rel="stylesheet" href="{{ asset('css/crud.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
 @endpush
 
 @section('content')
@@ -75,6 +75,12 @@
                 <span class="campo-invalido">A senha deve ter no mínimo 8 caracteres.</span>
             @enderror
 
+            <label for="input-permitir-emails">Receber alertas de novos editais por e-mail:</label>
+            <label class="toggle">
+                <input type="checkbox" id="input-permitir-emails" name="permitir-emails" value="1"
+                    {{ $usuario->candidato->permitir_emails ? 'checked' : '' }}>
+                <span class="slider"></span>
+            </label>
 
 			<div class="pos-form">
 				<p><span class="required-content">*</span> Campos OBRIGATÓRIOS</p>

@@ -104,9 +104,9 @@
 
             <h3>Situação da inscrição:</h3>
             @php
-                $status_inscricao = is_null($inscricao->deferido) ? 'null' : ($inscricao->deferido ? 'deferir' : 'indeferir');
+                $status_inscricao = is_null($inscricao->deferido) ? null : ($inscricao->deferido ? 'deferir' : 'indeferir');
             @endphp
-            <div class="doc-actions">
+            <div class="doc-actions v2">
                 <label>
                     <input type="radio" name="inscricao_status" 
                         value="deferir" 
@@ -115,11 +115,14 @@
                 <label>
                     <input type="radio" name="inscricao_status" 
                         value="indeferir" 
-                        {{ $status_inscricao === 'indeferir' ? 'checked' : '' }}> Indeferir
+                        {{ is_null($status_inscricao) ? 'checked' : ($status_inscricao === 'indeferir' ? 'checked' : '') }}> Indeferir
                 </label>
             </div>
-            <label for="comentario-geral">Comentários sobre o indeferimento (opcional):</label>
-            <textarea class="comentarios-textarea" name="comentario-geral" placeholder="Descreva aqui...">{{ old('comentario-geral', $inscricao->motivo_indeferimento) }}</textarea>
+
+            <div id="comentario-container" style="display: none;">
+                <label for="comentario-geral">Comentários sobre o indeferimento (opcional):</label>
+                <textarea class="comentarios-textarea" name="comentario-geral" id="comentario-geral" placeholder="Descreva aqui...">{{ old('comentario-geral', $inscricao->motivo_indeferimento) }}</textarea>
+            </div>
 
             <div class="btn-grp-form">
                 <a href="{{route('analise-inscricoes.index')}}">Voltar</a>
@@ -162,6 +165,20 @@
                 });
             });
         });
+
+        const inscricaoRadios = document.querySelectorAll('input[name="inscricao_status"]');
+        const comentarioContainer = document.getElementById('comentario-container');
+
+        function toggleComentario() {
+            const indeferido = document.querySelector('input[name="inscricao_status"][value="indeferir"]').checked;
+            comentarioContainer.style.display = indeferido ? 'block' : 'none';
+        }
+
+        // Executa ao carregar a página (mantém visível se já estava selecionado)
+        toggleComentario();
+
+        // Executa quando o usuário troca a seleção
+        inscricaoRadios.forEach(radio => radio.addEventListener('change', toggleComentario));
     });
 
 </script>

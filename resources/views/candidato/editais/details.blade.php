@@ -55,26 +55,26 @@
             @php
                 $tituloFase = [
                     'inscricao' => 'Inscrição',
-                    'resultadoInsc' => 'Resultado da inscrição',
-                    'recurso' => 'Interposição de recurso',
-                    'resultadoRec' => 'Resultado do recurso',
+                    'resultado' => 'Resultado da inscrição',
+                    'recurso1' => 'Interposição do 1º recurso',
+                    'recurso2' => 'Interposição do 2º recurso',
                 ];
             @endphp
 
             @foreach($fases as $fase)
                 <div class="fase">
                     <div class="fase-titulo">
-                        {{ $tituloFase[$fase[0]->tipo] ?? $fase[0]->tipo }} ({{ $fase[0]->ordem }}º)
+                        {{ $tituloFase[$fase->tipo] }}
                     </div>
 
-                    @if($fase[0]->data_inicio == $fase[0]->data_fim)
+                    @if($fase->data_inicio == $fase->data_fim)
                         <div class="fase-data">
-                            {{ \Carbon\Carbon::parse($fase[0]->data_inicio)->format('d/m/Y') }}
+                            {{ \Carbon\Carbon::parse($fase->data_inicio)->format('d/m/Y') }}
                         </div>
                     @else
                         <div class="fase-data">
-                            De {{ \Carbon\Carbon::parse($fase[0]->data_inicio)->format('d/m/Y') }}
-                            até {{ \Carbon\Carbon::parse($fase[0]->data_fim)->format('d/m/Y') }}
+                            De {{ \Carbon\Carbon::parse($fase->data_inicio)->format('d/m/Y') }}
+                            até {{ \Carbon\Carbon::parse($fase->data_fim)->format('d/m/Y') }}
                         </div>
                     @endif
                 </div>

@@ -80,8 +80,6 @@
 				</div>
 			</fieldset>
 
-			<div class="space"></div>
-
 			<fieldset>
 				<legend>Período de interposição do 1º recurso<span class="required-content">*</span></legend>
 
@@ -97,17 +95,6 @@
 				</div>
 			</fieldset>
 
-			<fieldset>
-				<legend>Divulgação do resultado do 1º recurso<span class="required-content">*</span></legend>
-
-				<div class="field-linha">
-        			<div class="campo-data">
-						<label for="input-dt-div-1rec">Data: <span class="required-content">*</span></label>
-						<input type="date" id="input-dt-div-1rec" name="input-dt-div-1rec" required>
-					</div>
-				</div>
-			</fieldset>
-
 			<div class="space"></div>
 
 			<label for="input-enable-2rec">(Opcional) Habilitar segundo recurso:</label>
@@ -116,7 +103,7 @@
                 <span class="slider"></span>
             </label>
 
-			<fieldset class="fieldset-2rec disabled-fieldset">
+			<fieldset class="disabled-fieldset" id="fieldset-2rec">
 				<legend>Período de interposição do 2º recurso<span class="required-content">*</span></legend>
 
 				<div class="field-linha">
@@ -130,18 +117,6 @@
 					</div>
 				</div>
 			</fieldset>
-
-			<fieldset class="fieldset-2rec disabled-fieldset">
-				<legend>Divulgação do resultado do 2º recurso<span class="required-content">*</span></legend>
-
-				<div class="field-linha">
-        			<div class="campo-data">
-						<label for="input-dt-div-2rec">Data:<span class="required-content">*</span></label>
-						<input type="date" id="input-dt-div-2rec" name="input-dt-div-2rec" disabled>
-					</div>
-				</div>
-			</fieldset>
-
 
 			<div class="pos-form">
 				<p><span class="required-content">*</span> Campos OBRIGATÓRIOS</p>
@@ -218,7 +193,7 @@
 			}
 		});
 
-		// Esta função define que a data final deve ser pelo menos 1 dia após a data inicial
+		// Esta função define que a data final deve ser sempre igual ou posterior à data inicial
 		function vincularDatas(idInicio, idFim) {
 			const inicio = document.getElementById(idInicio);
 			const fim = document.getElementById(idFim);
@@ -227,9 +202,6 @@
 				inicio.addEventListener('change', function () {
 					const dataInicio = new Date(this.value);
 					if (isNaN(dataInicio)) return;
-
-					// Adiciona 1 dia
-					dataInicio.setDate(dataInicio.getDate() + 1);
 
 					// Formata para yyyy-mm-dd
 					const minDate = dataInicio.toISOString().split('T')[0];
@@ -249,21 +221,18 @@
 		vincularDatas('input-dt-insc-fim', 'input-dt-div-insc');
 		vincularDatas('input-dt-div-insc', 'input-dt-1rec-inicio');
 		vincularDatas('input-dt-1rec-inicio', 'input-dt-1rec-fim');
-		vincularDatas('input-dt-1rec-fim', 'input-dt-div-1rec');
-		vincularDatas('input-dt-div-1rec', 'input-dt-2rec-inicio');
+		vincularDatas('input-dt-1rec-fim', 'input-dt-2rec-inicio');
 		vincularDatas('input-dt-2rec-inicio', 'input-dt-2rec-fim');
-		vincularDatas('input-dt-2rec-fim', 'input-dt-div-2rec');
 
 		// --------------------------------------------------------
 		// 2 recurso
 		const toggle = document.getElementById('input-enable-2rec');
-		const fieldsets = document.querySelectorAll('.fieldset-2rec');
+		const fieldset = document.getElementById('fieldset-2rec');
 		
 		// IDs dos inputs que fazem parte do grupo
 		const inputIds = [
 			'input-dt-2rec-inicio',
-			'input-dt-2rec-fim',
-			'input-dt-div-2rec'
+			'input-dt-2rec-fim'
 		];
 
 		toggle.addEventListener('change', function () {
@@ -281,10 +250,10 @@
 				}
 			});
 
-			// Alterna classe nos fieldsets
-			fieldsets.forEach(fs => {
-				fs.classList.toggle('disabled-fieldset', !ativar);
-			});
+			// Alterna classe no fieldset
+			if (fieldset) {
+				fieldset.classList.toggle('disabled-fieldset', !ativar);
+			}
 		});
     </script>
 @endpush

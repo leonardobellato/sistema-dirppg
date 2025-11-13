@@ -55,7 +55,7 @@
                         @php
                             $situacao = 'pendente';
 
-                            if($faseAtual && in_array($faseAtual->tipo, ['resultadoInsc', 'resultadoRec'])) {
+                            if($inscricao->edital->resultadoDisponivel()) {
                                 $situacao = is_null($inscricao->deferido) ? 'pendente' : ($inscricao->deferido ? 'deferido' : 'indeferido');
                             }
 
@@ -70,17 +70,34 @@
         </div>
     </div>
 
-    <p>Fase atual: {{ $faseAtual->tipo ?? 'Nenhuma fase ativa' }}</p>
-
     <h3>Documentos</h3>
 
     <div class="container-form">
         <form action="{{ route('candidato.inscricoes.recurso', $inscricao->id_inscricao) }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            @php
+                // Verifica se o candidato pode interpor recurso em algum documento
+                $algumPodeRecurso = false;
+            @endphp
+
             @foreach($inscricao->documentos as $index => $doc)
                 @php
-                    $status = is_null($doc->deferido) ? null : ($doc->deferido ? 'deferir' : 'indeferir');
+                    $status = null;
+
+                    if($situacao !== 'pendente')
+                        $status = is_null($doc->deferido) ? null : ($doc->deferido ? 'deferir' : 'indeferir');
+
+                    
+                    // Só poderá interpor recurso se estiver na fase de recurso e o documento ainda não tiver sido reenviado nessa fase
+                    $podeRecurso = $status === 'indeferir' && $faseAtual && (
+                        ($faseAtual->tipo === 'recurso1' && $doc->versao < 2) ||
+                        ($faseAtual->tipo === 'recurso2' && $doc->versao < 3)
+                    );
+
+                    if($podeRecurso) 
+                        $algumPodeRecurso = true;
+                    
                 @endphp
 
                 <div class="doc-item {{ $status === 'deferir' ? 'ok' : ($status === 'indeferir' ? 'nao-ok' : '') }}">
@@ -96,15 +113,14 @@
                             <label for="motivo_{{ $index }}">Motivo do indeferimento:</label>
                             <textarea class="comentarios-textarea" name="documentos[{{ $index }}][motivo]" id="motivo_{{ $index }}" readonly>{{ $doc->motivo_indeferimento }}</textarea>
                         </div>
-
-                        {{--
+                        
                         @if($podeRecurso)
                             <div>
                                 <label for="novo_doc_{{ $index }}">Reenviar documento:</label>
                                 <input type="file" name="documentos[{{ $index }}][arquivo]" id="novo_doc_{{ $index }}" accept="application/pdf">
                             </div>
                         @endif
-                        --}}
+                        
                     @endif
 
                     <input type="hidden" name="documentos[{{ $index }}][id]" value="{{ $doc->id_documento}}">
@@ -117,15 +133,10 @@
                 <textarea class="comentarios-textarea" name="comentario-geral" readonly>{{$inscricao->motivo_indeferimento}}</textarea>
             @endif
 
-            {{--@if($podeRecurso)
-                <div class="btn-grp-form">
-                    <a href="{{ route('candidato.inscricoes.index') }}">Voltar</a>
-                    <button type="submit">Enviar recurso</button>
-                </div>
-            @endif --}}
-
-             <div class="btn-grp-form">
+            <div class="btn-grp-form">
                 <a href="{{ route('candidato.inscricoes.index') }}">Voltar</a>
+                <button type="submit" {{ $algumPodeRecurso ? '' : 'disabled' }}>Enviar recurso</button>
+            </div>
         </form>
     </div>
 @endsection

@@ -156,7 +156,7 @@ class UsuarioController extends Controller
         // Prepara os dados para atualizar
         $updateData = [
             'nome' => $data['nome'],
-            'email' => $data['email']
+            'email' => $data['email'],
         ];
 
         if (!empty($data['senha'])) {
@@ -165,10 +165,11 @@ class UsuarioController extends Controller
 
         $usuario->update($updateData);
 
-        if (!empty($data['telefone'])) {
+        if ($usuario->tipo === 'candidato') {
             $usuario->candidato->update([
-            'telefone' => $data['telefone']
-        ]);
+                'telefone' => $data['telefone'],
+                'permitir_emails' => $request->has('permitir-emails') ? 1 : 0
+            ]);
         }
 
         return redirect()->route('usuarios.alterar')->with('success', 'Dados atualizados com sucesso!');
