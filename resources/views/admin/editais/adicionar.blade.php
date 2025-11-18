@@ -175,7 +175,7 @@
 					.then(response => response.json())
 					.then(data => {
 						if(data.length === 0) {
-							listaDisciplinas.innerHTML = '<li>Nenhuma disciplina disponível.</li>';
+							listaDisciplinas.innerHTML = '<li>Nenhuma disciplina disponível. É necessário habilitá-las.</li>';
 						} else {
 							data.forEach(disciplina => {
 								const li = document.createElement('li');

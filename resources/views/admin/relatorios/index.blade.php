@@ -37,7 +37,6 @@
             div.header-text {
                 text-align: center;
                 line-height: 1.2;
-                font-family: "DejaVu Sans", Arial, Helvetica, sans-serif;
             }
 
             main{
@@ -79,7 +78,7 @@
     <body>
         <div class="header">
             <div class="header-left">
-                <img src="{{asset('BR_logo.png')}}" width="115px">
+                <img src="{{ public_path('BR_logo.png') }}" width="115px">
             </div>
 
             <div class="header-center">
@@ -91,7 +90,7 @@
             </div>
 
             <div class="header-right">
-                <img src="{{asset('UTFPR_logo.png')}}" width="170px">
+                <img src="{{ public_path('UTFPR_logo.png') }}" width="170px">
             </div>
         </div>
         
@@ -112,16 +111,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($inscricoes as $inscricao)
+                    @forelse($inscricoes as $inscricao)
                         <tr>
                             <td>{{ strtoupper($inscricao->candidato->nome) }}</td>
                         </tr>
-                    @endforeach
+                    
+                    @empty
+                        <tr>
+                            <td colspan="1"><i>Nenhuma inscrição deferida.</i></td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
 
             @else
-                @foreach ($inscricoes as $disciplina => $inscricoes)
+                @foreach($inscricoes as $disciplina => $inscricoes)
                     <p><strong>Disciplina: {{ $disciplina }}</strong></p>
                     <table>
                         <thead>
@@ -130,15 +134,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($inscricoes as $inscricao)
+                        @forelse($inscricoes as $inscricao)
                             <tr>
-                                <td>{{ $inscricao }}</td>
+                                <td>{{ strtoupper($inscricao->candidato->nome) }}</td>
                             </tr>
-                        @endforeach
+
+                        @empty
+                            <tr>
+                                <td colspan="1"><i>Nenhuma inscrição deferida.</i></td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
-                    
-                    <div class="page-break"></div>
+                    <br>
                 @endforeach
             @endif
 

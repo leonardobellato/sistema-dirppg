@@ -59,8 +59,8 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::get('/analise-inscricoes/{id}', [InscricaoController::class, 'listarPorEdital'])->name('analise-inscricoes.listar');
     Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('analise-inscricoes.analisar');
     Route::post('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'salvarAnalise'])->name('analise-inscricoes.salvar');
-
-    Route::get('/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('relatorios.gerar');
+    Route::get('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicar'])->name('analise-inscricoes.comunicar');
+    Route::get('/analise-inscricoes/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('relatorios.gerar');
 
     Route::get('/editais', [EditalController::class, 'listar'])->name('admin.editais.index');
     Route::get('/editais/adicionar', [EditalController::class, 'criar'])->name('admin.editais.adicionar');
@@ -129,7 +129,9 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
 });
 
 
+
 /* ACESSO RESTRITO - Candidato */
+
 Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('candidato.editais.index');

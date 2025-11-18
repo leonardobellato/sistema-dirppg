@@ -27,8 +27,8 @@
                     <span>Relatórios</span>
 
                     <div class="link-dropdown" id="dropdown-trigger">
-                        <a href="{{ url('admin/relatorio') . '/' . $edital->id_edital . '?tipo=preliminar' }}" target="_blank">Preliminar</a>
-                        <a href="{{ url('admin/relatorio') . '/' . $edital->id_edital . '?tipo=definitivo' }}" target="_blank">Definitivo</a>
+                        <a href="{{ url('admin/analise-inscricoes/relatorio') . '/' . $edital->id_edital . '?tipo=preliminar' }}" target="_blank">Preliminar</a>
+                        <a href="{{ url('admin/analise-inscricoes/relatorio') . '/' . $edital->id_edital . '?tipo=definitivo' }}" target="_blank">Definitivo</a>
                     </div>
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="0.8" viewBox="0 0 16 16" id="username-dropdown">
