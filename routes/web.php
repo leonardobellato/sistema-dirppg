@@ -12,6 +12,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RelatorioController;
 
 /* AUTENTICAÇÃO */
 Route::get('/', function () {
@@ -49,6 +50,8 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::get('/analise-inscricoes/{id}', [InscricaoController::class, 'listarPorEdital'])->name('analise-inscricoes.listar');
     Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('analise-inscricoes.analisar');
     Route::post('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'salvarAnalise'])->name('analise-inscricoes.salvar');
+
+    Route::get('/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('relatorios.gerar');
 
     Route::get('/editais', [EditalController::class, 'listar'])->name('admin.editais.index');
     Route::get('/editais/adicionar', [EditalController::class, 'criar'])->name('admin.editais.adicionar');

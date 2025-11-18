@@ -45,9 +45,9 @@ class InscricaoController extends Controller
             'disciplina:id_disciplina,nome'
         ])->where('id_edital', $idEdital)->get();
 
-        $tipoCurso = Edital::findOrFail($idEdital)->curso->tipo;
+        $edital = Edital::with('curso')->findOrFail($idEdital, ['id_edital', 'id_curso']);
 
-        return view('admin.analise-inscricoes.listar', compact('inscricoes', 'tipoCurso'));
+        return view('admin.analise-inscricoes.listar', compact('inscricoes', 'edital'));
     }
 
     public function listarPeloCandidato()

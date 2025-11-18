@@ -121,6 +121,8 @@
 #btn-visualizar { background-color: #f0ad4e; color: white; }
 #btn-limpar-filtros { background-color: #bbbbbb; color: white; }
 #btn-vincular, #btn-visibilidade { background-color: #eea6db; color: white; }
+.link-dropdown > a { background-color: #dedede; color: white; }
+#btn-comunicar { background-color: #dedede; color: #000000; }
 
 .btn-grp-tabela button:disabled {
     opacity: 0.5;
@@ -445,4 +447,66 @@ textarea {
 
 #indeferido{
     color: red;
+}
+
+
+.dropdown-content {
+    all: unset;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 12px;
+    background: #dedede;
+    color: #000000;
+    border-radius: 8px;
+    gap: 5px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+.dropdown-content svg{
+	margin-left: 5px;
+	cursor: pointer;
+}
+
+.link-dropdown {
+    position: absolute;
+    top: 110%; /* aparece logo abaixo do avatar */
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    display: none;
+    flex-direction: column;
+    min-width: 150px;
+    z-index: 2000;
+}
+
+.dropdown-content span{
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.link-dropdown a {
+    all: unset;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #000000;
+    transition: background 0.2s;
+}
+
+.link-dropdown a:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom: 0.5px solid rgb(189, 189, 189);
+}
+
+.link-dropdown a:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.link-dropdown a:hover {
+    background: #f0f0f0;
 }
