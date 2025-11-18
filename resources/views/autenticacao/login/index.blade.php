@@ -9,20 +9,26 @@
 <body>
     <main>
         <div class="login-container">
-        {{-- Exibe erros de validação do Laravel --}}
-@if ($errors->any())
-    <div class="aviso-falha">
-        <ul>
-            @foreach ($errors->all() as $erro)
-                <li>{{ $erro }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+            {{-- Exibe erros de validação do Laravel --}}
+            @if ($errors->any())
+                <div class="aviso-falha">
+                    <ul>
+                        @foreach ($errors->all() as $erro)
+                            <li>{{ $erro }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             @if(session('failure'))
                 <div class="aviso-falha">
                     {{ session('failure') }}
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="aviso-sucesso">
+                    {{ session('success') }}
                 </div>
             @endif
 
@@ -51,7 +57,7 @@
 
                 <div class="actions">
                     <a href="{{ route('autenticacao.cadastro.index') }}">Criar conta</a>
-                    <a href="#">Esqueci a senha</a>
+                    <a href="{{ route('autenticacao.solicitarRedefinicaoSenha') }}">Esqueci a senha</a>
                 </div>
             </form>
         </div>

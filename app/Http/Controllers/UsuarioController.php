@@ -207,5 +207,30 @@ class UsuarioController extends Controller
 
         return redirect()->route('pessoas.professores.index')->with('success', 'Programa vinculado com sucesso!');
     }
+
+    public function redefinirSenha(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|exists:usuarios,email',
+        ]);
+
+        try{
+            $usuario = Usuario::where('email', $request->input('email'))->firstOrFail();
+
+            // Gera uma nova senha temporária
+            $novaSenha = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 10);
+
+            // Atualiza a senha do usuário no banco de dados
+            $usuario->senha = bcrypt($novaSenha);
+            $usuario->save();
+
+            // Envia o e-mail de redefinição de senha
+            app(EmailController::class)->redefinicaoSenha($usuario->email, $novaSenha);
+
+            return redirect()->route('login')->with('success', 'Senha redefinida e e-mail enviado com sucesso!');
+        } catch (\Exception $e){
+            return redirect()->back()->with('failure', 'Ocorreu um erro ao redefinir a senha: ' . $e->getMessage());
+        }
+    }
 }
 

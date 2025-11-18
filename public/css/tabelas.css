@@ -121,8 +121,8 @@
 #btn-visualizar { background-color: #f0ad4e; color: white; }
 #btn-limpar-filtros { background-color: #bbbbbb; color: white; }
 #btn-vincular, #btn-visibilidade { background-color: #eea6db; color: white; }
+#btn-comunicar, #btn-entrevista { background-color: #dedede; color: #000000; }
 .link-dropdown > a { background-color: #dedede; color: white; }
-#btn-comunicar { background-color: #dedede; color: #000000; }
 
 .btn-grp-tabela button:disabled {
     opacity: 0.5;

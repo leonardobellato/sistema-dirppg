@@ -259,6 +259,14 @@ button:disabled {
 }
 
 /* Avisos */
+.aviso-sucesso{
+    background-color: #24dd80;
+    color: rgb(51, 51, 51);
+    padding: 10px 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
 .aviso-falha{
     background-color: #f0525a;
     color: rgb(51, 51, 51);

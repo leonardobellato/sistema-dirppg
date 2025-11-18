@@ -14,7 +14,9 @@ use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RelatorioController;
 
-/* AUTENTICAÇÃO */
+
+/*--------- ROTAS DE AUTENTICAÇÃO ---------- */
+
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -25,8 +27,14 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('autenticacao.lo
 Route::get('/cadastro', function () { return view('autenticacao.cadastro.index');})->name('autenticacao.cadastro.index');
 Route::post('/cadastro', [UsuarioController::class, 'salvarCandidato'])->name('autenticacao.cadastro.salvar');
 
+Route::get('/redefinir-senha', [LoginController::class, 'solicitarRedefinicaoSenha'])->name('autenticacao.solicitarRedefinicaoSenha');
+Route::post('/redefinir-senha', [UsuarioController::class, 'redefinirSenha'])->name('autenticacao.redefinirSenha');
 
-/* ACESSO RESTRITO - Qualquer usuário logado */
+
+
+
+/* Rotas que qualquer tipo de usuário LOGADO tem acesso */
+
 Route::middleware('auth')->group(function () {
     Route::get('/usuario', [UsuarioController::class, 'alterar'])->name('usuarios.alterar');
     Route::put('/usuario', [UsuarioController::class, 'atualizar'])->name('usuarios.atualizar');
@@ -41,9 +49,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-/* ACESSO RESTRITO - Admin */
-Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function () {
 
+/* ACESSO RESTRITO - Admin */
+
+Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('inicio');
 
     Route::get('/analise-inscricoes', [EditalController::class, 'listarVigentes'])->name('analise-inscricoes.index');
@@ -122,7 +131,6 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
 
 /* ACESSO RESTRITO - Candidato */
 Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(function () {
-    
     Route::get('/', function () {
         return redirect()->route('candidato.editais.index');
     });
