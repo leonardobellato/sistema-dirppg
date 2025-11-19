@@ -78,7 +78,7 @@
     <body>
         <div class="header">
             <div class="header-left">
-                <img src="{{ public_path('BR_logo.png') }}" width="115px">
+                <img src="{{ asset('BR_logo.png') }}" width="115px">
             </div>
 
             <div class="header-center">
@@ -90,7 +90,7 @@
             </div>
 
             <div class="header-right">
-                <img src="{{ public_path('UTFPR_logo.png') }}" width="170px">
+                <img src="{{ asset('UTFPR_logo.png') }}" width="170px">
             </div>
         </div>
         
@@ -103,7 +103,7 @@
 
             <h3>Inscrições Deferidas</h3>
             
-            @if($edital->curso->tipo != 'Aluno externo')  
+            @if($edital->curso->tipo != 'Aluno Externo')  
                 <table>
                     <thead>
                         <tr>
@@ -126,7 +126,7 @@
 
             @else
                 @foreach($inscricoes as $disciplina => $inscricoes)
-                    <p><strong>Disciplina: {{ $disciplina }}</strong></p>
+                    <p><b>Disciplina:</b> {{ $disciplina }}</p>
                     <table>
                         <thead>
                             <tr>

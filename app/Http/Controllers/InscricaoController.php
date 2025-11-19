@@ -511,4 +511,19 @@ class InscricaoController extends Controller
             ->route('candidato.inscricoes.visualizar', $inscricao->id_inscricao)
             ->with('success', 'Recurso enviado com sucesso!');
     }
+
+    public function comunicar($id){
+        $edital = Edital::findOrFail($id);
+        $emails = Inscricao::where('id_edital', $edital->id_edital)
+            ->with('candidato:id_usuario,nome,email')
+            ->get()
+            ->pluck('candidato.email')
+            ->unique()
+            ->values();
+
+        return view('admin.analise-inscricoes.comunicar', [
+            'edital' => $edital,
+            'emails' => $emails
+        ]);
+    }
 }

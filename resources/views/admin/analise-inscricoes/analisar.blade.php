@@ -14,6 +14,12 @@
         </div>
     @endif
 
+    @if(session('failure'))
+        <div class="aviso-falha">
+            {{ session('failure') }}
+        </div>
+    @endif
+
     <h1>Análise de Inscrição</h1>
 
     @if($inscricao->id_avaliador)
@@ -69,7 +75,7 @@
 
                 <div class="doc-item {{ $status === 'deferir' ? 'ok' : ($status === 'indeferir' ? 'nao-ok' : '') }}">
                     <div class="doc-header">
-                        <span><strong>{{ $doc->tipo }}</strong></span>
+                        <span><strong>{{ $doc->tipo }}</strong><span class="required-content">*</span></span>
                         <a href="{{ asset('storage/' . $doc->caminho_servidor) }}" target="_blank" class="abrir-btn">
                             📄 Abrir documento
                         </a>

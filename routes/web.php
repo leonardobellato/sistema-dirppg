@@ -13,6 +13,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\EmailController;
 
 
 /*--------- ROTAS DE AUTENTICAÇÃO ---------- */
@@ -60,6 +61,7 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('analise-inscricoes.analisar');
     Route::post('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'salvarAnalise'])->name('analise-inscricoes.salvar');
     Route::get('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicar'])->name('analise-inscricoes.comunicar');
+    Route::post('/analise-inscricoes/comunicar/{id}', [EmailController::class, 'comunicacaoGeral'])->name('analise-inscricoes.comunicacaoGeral');
     Route::get('/analise-inscricoes/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('relatorios.gerar');
 
     Route::get('/editais', [EditalController::class, 'listar'])->name('admin.editais.index');

@@ -14,15 +14,16 @@ class Email extends Mailable
     use Queueable, SerializesModels;
 
 
-    public function __construct($mensagem)
+    public function __construct($assunto, $mensagem)
     {
+        $this->assunto = $assunto;
         $this->mensagem = $mensagem;
     }
 
  
     public function build()
     {
-        return $this->subject('Aviso – DIRPPG UTFPR-PG')
+        return $this->subject($this->assunto)
                     ->view('admin.emails.index')
                     ->with([
                         'mensagem' => $this->mensagem,

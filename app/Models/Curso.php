@@ -24,6 +24,10 @@ class Curso extends Model
         return $this->hasMany(Disciplina::class, 'id_curso', 'id_curso');
     }
 
+    public function disciplinasVisiveis(){
+        return $this->hasMany(Disciplina::class, 'id_curso', 'id_curso')->where('visivel', true);
+    }
+
     public function editais(){
         return $this->hasMany(Edital::class, 'id_curso', 'id_curso');
     }

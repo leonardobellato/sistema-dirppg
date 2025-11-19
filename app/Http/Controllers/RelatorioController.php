@@ -20,7 +20,7 @@ class RelatorioController extends Controller
             abort(400, 'Tipo de relatório inválido.');
         }
 
-        $edital = Edital::with(['curso.programa'])->findOrFail($idEdital);
+        $edital = Edital::with(['curso.programa', 'curso.disciplinasVisiveis'])->findOrFail($idEdital);
         $inscricoes = Inscricao::with([
             'candidato:id_usuario,nome,email',
             'candidato.candidato',
@@ -31,8 +31,25 @@ class RelatorioController extends Controller
             ->where('deferido', 1)
             ->get();
         
-        if($edital->curso->tipo === 'Aluno externo'){
-            $inscricoes = $inscricoes->groupBy('disciplina.nome');
+        // Só para aluno externo
+        if ($edital->curso->tipo === 'Aluno Externo') {
+
+            // Pega todas as disciplinas do edital
+            $disciplinas = $edital->curso->disciplinasVisiveis;
+
+            // cria array base com todas disciplinas vazias
+            $base = collect();
+            foreach ($disciplinas as $disc) {
+                $base[$disc->nome] = collect(); // lista vazia
+            }
+
+            // GroupBy das inscrições existentes
+            $agrupadas = $inscricoes->groupBy(function ($inscricao) {
+                return $inscricao->disciplina->nome;
+            });
+
+            // Mescla: garantimos que TODAS existam
+            $inscricoes = $base->merge($agrupadas);
         }
 
         $pdf = Pdf::setOptions([

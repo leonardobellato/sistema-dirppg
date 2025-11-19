@@ -369,3 +369,12 @@ form h4:nth-of-type(2){
 .doc-actions.v2{
     margin-bottom: 20px;
 }
+
+.emails-box{
+    border:1px solid #ccc; 
+    padding:10px; 
+    background:#f9f9f9; 
+    max-height:180px; 
+    overflow-y:auto;
+    margin-top: 10px;
+}
