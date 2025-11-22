@@ -378,3 +378,44 @@ form h4:nth-of-type(2){
     overflow-y:auto;
     margin-top: 10px;
 }
+
+.status-selector {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+}
+
+.status-option {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    border: 2px solid #d1d1d1;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+    background: #f8f8f8;
+    margin-top: 10px;
+}
+
+/* Esconde o radio real */
+.status-option input[type="radio"] {
+    display: none;
+}
+
+/* Quando selecionado */
+.status-option input:checked + span {
+    background: #3b82f6;
+    color: white;
+    border-color: #2563eb;
+}
+
+.status-option span {
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+    border-radius: 4px;
+    transition: 0.2s ease;
+}

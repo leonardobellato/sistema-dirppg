@@ -242,7 +242,8 @@ ALTER TABLE `documentos`
 
 CREATE TABLE `entrevistas` (
   `id_entrevista` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `id_inscricao`  INT UNSIGNED NOT NULL,
+  `id_edital`     INT UNSIGNED NOT NULL,
+  `id_candidato`  INT UNSIGNED NOT NULL,
   `id_agendador`  INT UNSIGNED NULL, -- admin/professor que agendou
   `data_hora`     DATETIME NOT NULL,
   `local`         VARCHAR(200) NOT NULL,
@@ -252,9 +253,16 @@ CREATE TABLE `entrevistas` (
 );
 
 ALTER TABLE `entrevistas` 
-  ADD CONSTRAINT fk_entrevista_inscricao
-  FOREIGN KEY (`id_inscricao`) 
-  REFERENCES `inscricoes`(`id_inscricao`)
+  ADD CONSTRAINT fk_entrevista_edital
+  FOREIGN KEY (`id_edital`) 
+  REFERENCES `editais`(`id_edital`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `entrevistas` 
+  ADD CONSTRAINT fk_entrevista_candidato
+  FOREIGN KEY (`id_candidato`) 
+  REFERENCES `usuarios`(`id_usuario`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
 

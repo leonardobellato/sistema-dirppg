@@ -10,14 +10,20 @@ class Entrevista extends Model
     protected $primaryKey = 'id_entrevista';
     public $timestamps = false;
 
-    protected $fillable = ['id_inscricao', 'id_agendador', 'data_hora', 'local', 'status', 'observacoes'];
+    protected $fillable = ['id_edital', 'id_candidato', 'id_agendador', 'data_hora', 'local', 'status', 'observacoes'];
 
-    public function inscricao(){
-        return $this->belongsTo(Inscricao::class, 'id_inscricao', 'id_inscricao');
+    public function edital()
+    {
+        return $this->belongsTo(Edital::class, 'id_edital', 'id_edital');
     }
 
     public function agendador()
     {
         return $this->belongsTo(Usuario::class, 'id_agendador', 'id_usuario');
+    }
+
+    public function candidato()
+    {
+        return $this->belongsTo(Usuario::class, 'id_candidato', 'id_usuario');
     }
 }

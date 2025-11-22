@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\Email;
 use App\Models\Inscricao;
+use App\Models\Entrevista;
+use Carbon\Carbon;
 
 class EmailController extends Controller
 {
@@ -34,5 +36,33 @@ class EmailController extends Controller
         Mail::to($emails)->send(new Email("DIRPPG-PG: Comunicação Geral", $mensagem));
 
         return back()->with('success', 'Mensagem enviada com sucesso!');
+    }
+
+    public function agendamentoEntrevista($idEntrevista)
+    {
+        $entrevista = Entrevista::with('candidato:id_usuario,email')->findOrFail($idEntrevista);
+
+        $dataHora = $entrevista->data_hora ? Carbon::parse($entrevista->data_hora)->format('d/m/Y H:i') : '—';
+
+        $mensagem = Str::markdown(
+            "<p>Nova entrevista agendada para <b>" . $dataHora . "</b> </p>"
+            . "<p>Por favor, verifique os detalhes no sistema.</p>"
+        );
+
+        Mail::to($entrevista->candidato->email)->send(new Email("DIRPPG-PG: Nova entrevista", $mensagem));
+
+        return back()->with('success', 'Aviso enviado com sucesso!');
+    }
+
+    public function atualizacaoEntrevista($emailUsuario)
+    {
+        $mensagem = Str::markdown(
+            "<p>Sua entrevista foi atualizada.</p>"
+            . "<p>Por favor, verifique os detalhes no sistema.</p>"
+        );
+
+        Mail::to($emailUsuario)->send(new Email("DIRPPG-PG: Atualização de entrevista", $mensagem));
+
+        return back()->with('success', 'Aviso enviado com sucesso!');
     }
 }

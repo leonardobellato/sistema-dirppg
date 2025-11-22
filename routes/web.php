@@ -1,19 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EditalController;
-use App\Http\Controllers\ProgramaController;
-use App\Http\Controllers\CursoController;
 use App\Http\Controllers\AreaConcentracaoController;
-use App\Http\Controllers\LinhaPesquisaController;
-use App\Http\Controllers\SublinhaController;
-use App\Http\Controllers\DisciplinaController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\DisciplinaController;
+use App\Http\Controllers\EditalController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\EntrevistaController;
+use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\LinhaPesquisaController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProgramaController;
+use App\Http\Controllers\RelatorioController;
+use App\Http\Controllers\SublinhaController;
+use App\Http\Controllers\UsuarioController;
 
 
 /*--------- ROTAS DE AUTENTICAÇÃO ---------- */
@@ -124,9 +125,12 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
     Route::post('/administradores', [UsuarioController::class, 'salvarAdministrador'])->name('pessoas.administradores.salvar');
     Route::delete('/administradores/{id}', [UsuarioController::class, 'excluir'])->name('pessoas.administradores.excluir');
 
-    Route::get('/entrevistas', function () {
-        return view('admin.entrevistas.index');
-    })->name('admin.entrevistas.index');
+    Route::get('/entrevistas', [EntrevistaController::class, 'listar'])->name('admin.entrevistas.index');
+    Route::get('/entrevistas/adicionar/{id}', [EntrevistaController::class, 'criar'])->name('admin.entrevistas.adicionar');
+    Route::get('/entrevistas/alterar/{id}', [EntrevistaController::class, 'alterar'])->name('admin.entrevistas.alterar');
+    Route::post('/entrevistas', [EntrevistaController::class, 'salvar'])->name('admin.entrevistas.salvar');
+    Route::put('/entrevistas/{id}', [EntrevistaController::class, 'atualizar'])->name('admin.entrevistas.atualizar');
+    Route::delete('/entrevistas/{id}', [EntrevistaController::class, 'excluir'])->name('admin.entrevistas.excluir');
 
 });
 

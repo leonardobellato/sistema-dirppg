@@ -513,8 +513,7 @@ class InscricaoController extends Controller
     }
 
     public function comunicar($id){
-        $edital = Edital::findOrFail($id);
-        $emails = Inscricao::where('id_edital', $edital->id_edital)
+        $emails = Inscricao::where('id_edital', $id)
             ->with('candidato:id_usuario,nome,email')
             ->get()
             ->pluck('candidato.email')
