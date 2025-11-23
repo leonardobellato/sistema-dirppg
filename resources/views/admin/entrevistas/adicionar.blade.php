@@ -20,10 +20,14 @@
         </div>
     @endif
 
+    @php
+        $tipoUsuario = auth()->user()->tipo;
+    @endphp
+
     <h1>Agendar entrevista</h1>
 
     <div class="container-form">
-		<form action="{{ route('admin.entrevistas.salvar') }}" method="POST">
+		<form action="{{ route($tipoUsuario . '.entrevistas.salvar') }}" method="POST">
             @csrf
 
             <input type="hidden" name="id_edital" value="{{ $id_edital }}">
@@ -66,7 +70,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<a href={{ route('analise-inscricoes.index') }}>Cancelar</a>
+				<a href={{ route($tipoUsuario . '.analise-inscricoes.listar', $id_edital)  }}>Cancelar</a>
 				<button type="submit">Agendar</button>
 			</div>
 		</form>

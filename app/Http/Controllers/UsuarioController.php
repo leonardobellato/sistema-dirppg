@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Usuario;
 use App\Models\Candidato;
 use App\Models\Programa;
@@ -225,7 +226,11 @@ class UsuarioController extends Controller
             $usuario->save();
 
             // Envia o e-mail de redefinição de senha
-            app(EmailController::class)->redefinicaoSenha($usuario->email, $novaSenha);
+            Mail::to($usuario->email)->queue(new Email(
+                "DIRPPG-PG: Redefinição de senha",
+                "<p>Sua senha foi redefinida para: <b>$novaSenha</b></p>"
+                . "<p>Por favor, altere sua senha no menu do usuário após o login.</p>"
+            ));
 
             return redirect()->route('login')->with('success', 'Senha redefinida e e-mail enviado com sucesso!');
         } catch (\Exception $e){

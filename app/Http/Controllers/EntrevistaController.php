@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Mail\Email;
 use App\Models\Entrevista;
 use App\Models\Inscricao;
 
@@ -17,6 +22,26 @@ class EntrevistaController extends Controller
         ])->get();
 
         return view('admin.entrevistas.index', compact('entrevistas'));
+    }
+
+    public function listarPeloCandidato()
+    {
+        $idCandidato = auth()->user()->id_usuario;
+
+        $entrevistas = Entrevista::with([
+            'agendador:id_usuario,nome'
+        ])->where('id_candidato', $idCandidato)->get();
+
+        return view('candidato.entrevistas.index', compact('entrevistas'));
+    }
+
+    public function detalhar($id)
+    {
+        $entrevista = Entrevista::with([
+            'agendador:id_usuario,nome'
+        ])->findOrFail($id);
+
+        return view('candidato.entrevistas.details', compact('entrevista'));
     }
 
     // Método para mostrar o formulário de criação
@@ -51,7 +76,16 @@ class EntrevistaController extends Controller
             'observacoes' => $request->input('observacoes')
         ]);
 
-        app(EmailController::class)->agendamentoEntrevista($entrevista->id_entrevista);
+
+        // --- Envia o email através da fila ---
+        $dataHora = $entrevista->data_hora ? Carbon::parse($entrevista->data_hora)->format('d/m/Y H:i') : '—';
+
+        $mensagem = Str::markdown(
+            "<p>Nova entrevista agendada para <b>" . $dataHora . "</b> </p>"
+            . "<p>Por favor, verifique os detalhes no sistema.</p>"
+        );
+
+        Mail::to($entrevista->candidato->email)->queue(new Email("DIRPPG-PG: Nova entrevista", $mensagem));
 
         return back()->with('success', 'Entrevista agendada com sucesso!');
     }
@@ -83,9 +117,17 @@ class EntrevistaController extends Controller
             'status'      => $request->input('status'),
         ]);
 
-        app(EmailController::class)->atualizacaoEntrevista($entrevista->candidato->email);
+         // --- Envia o email através da fila ---
+        $mensagem = Str::markdown(
+            "<p>Sua entrevista foi atualizada.</p>"
+            . "<p>Por favor, verifique os detalhes no sistema.</p>"
+        );
 
-        return redirect()->route('admin.entrevistas.index')->with('success', 'Entrevista atualizada com sucesso!');
+        Mail::to($entrevista->candidato->email)
+            ->queue(new Email("DIRPPG-PG: Atualização de entrevista", $mensagem));
+
+        return redirect()->route(Auth::user()->tipo . '.entrevistas.index')
+            ->with('success', 'Entrevista atualizada com sucesso!');
     }
 
     public function excluir($id)

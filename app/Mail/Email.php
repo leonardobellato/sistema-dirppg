@@ -9,17 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Email extends Mailable
+class Email extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public $assunto;
+    public $mensagem;
 
     public function __construct($assunto, $mensagem)
     {
         $this->assunto = $assunto;
         $this->mensagem = $mensagem;
     }
-
  
     public function build()
     {

@@ -14,6 +14,10 @@
         </div>
     @endif
 
+    @php
+        $tipoUsuario = auth()->user()->tipo;
+    @endphp
+
     <h1>Entrevistas</h1>
 
     <div class="container-tabela">
@@ -82,10 +86,26 @@
                         const day = String(date.getDate()).padStart(2, '0');
                         const month = String(date.getMonth() + 1).padStart(2, '0');
                         const year = date.getFullYear();
-                        return `${day}/${month}/${year}`;
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        return `${day}/${month}/${year} ${hours}:${minutes}`;
                     }},
-
-                    STATUS COLORIDO, TAMBEM MODAL Visualizar, VISAO CANDIDATO, 
+                    { headerName: "Status", field: "status", filter: "agTextColumnFilter", sortable: true, flex: 1, minWidth: 100,
+                        valueFormatter: params => {
+                            if(params.value) return params.value.charAt(0).toUpperCase() + params.value.slice(1);
+                        },
+                        cellStyle: params => {
+                                if (params.value === 'agendada') {
+                                    return { color: 'orange', fontWeight: 'bold' };
+                                }
+                                if (params.value === 'realizada') {
+                                    return { color: 'lightgreen', fontWeight: 'bold' }; 
+                                }
+                                
+                                return { color: 'red', fontWeight: 'bold' }; 
+                            }
+                    },
+                    
                 ],
                 rowData: tableData,
                 rowSelection: { mode: "singleRow" },
@@ -96,22 +116,19 @@
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnAlterar = document.getElementById("btn-alterar");
-                    const btnVisualizar = document.getElementById("btn-visualizar");
 
                     // Ao mudar a seleção, alguns botões são ativados/inativados
                     if(event.selectedNodes.length > 0){
                         btnExcluir.disabled = false;
-                        btnVisualizar.disabled = false;
                         
                         // Atualiza o link para alterar o objeto específico
                         btnAlterar.classList.remove("disabled-link");
 
-                        const baseUrl = "{{ url('admin/editais/alterar') }}";
-                        btnAlterar.href = `${baseUrl}/${gridApi.getSelectedRows()[0].id_edital}`;
+                        const baseUrl = "{{ url($tipoUsuario . '/entrevistas/alterar') }}";
+                        btnAlterar.href = `${baseUrl}/${gridApi.getSelectedRows()[0].id_entrevista}`;
                     } 
                     else{
                         btnExcluir.disabled = true;
-                        btnVisualizar.disabled = true;
                         btnAlterar.classList.add("disabled-link");
                         btnAlterar.removeAttribute("href");
                     }                
@@ -127,20 +144,13 @@
                 gridApi.onFilterChanged();  
             });
 
-            // Visualizar
-            document.getElementById("btn-visualizar").addEventListener("click", function () {
-                const object = gridApi.getSelectedRows()[0];
-
-                openModalEditais(object, null);
-            });
-
             // Excluir
             document.getElementById("btn-excluir").addEventListener("click", function () {
                 const object = gridApi.getSelectedRows()[0];
 
-                const baseUrl = "{{ url('admin/editais') }}";
-                openModalDelete(object.nome, () => {
-                    fetch(`${baseUrl}/${object.id_edital}`, {
+                const baseUrl = "{{ url($tipoUsuario . '/entrevistas') }}";
+                openModalDelete('Entrevista com ' + object.candidato.nome, () => {
+                    fetch(`${baseUrl}/${object.id_entrevista}`, {
                         method: "DELETE",
                         headers: {
                             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content

@@ -81,22 +81,14 @@
             @endforeach
         </div>
 
-        @if($jaInscrito)
-            <p class="warning"> Candidato já inscrito.</p>
-        @elseif(!$podeInscrever)
-            <p class="warning"> As inscrições estão encerradas.</p>
-        @endif
-
         <div class="btn-grp-details">
-            <a href={{ route('candidato.editais.index') }}>Voltar</a>
+            <a href={{ route('professor.analise-inscricoes.index') }}>Voltar</a>
             
-            <a 
-                href={{ url('candidato/editais/'.$edital->id_edital.'/inscrever') }} class="confirm {{ $podeInscrever && !$jaInscrito ? '' : 'disabled-link' }}"
-            >   
-                Inscrever-se
+            <a href={{ url('professor/analise-inscricoes/edital/'.$edital->id_edital) }} class="confirm">   
+                Analisar inscrições
             </a>
         </div>
+        <br>
     </div>
     
 @endsection
-

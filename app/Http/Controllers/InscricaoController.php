@@ -6,6 +6,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Email;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
 use App\Models\Edital;
@@ -47,7 +50,7 @@ class InscricaoController extends Controller
 
         $edital = Edital::with('curso')->findOrFail($idEdital, ['id_edital', 'id_curso']);
 
-        return view('admin.analise-inscricoes.listar', compact('inscricoes', 'edital'));
+        return view('analise-inscricoes.listar', compact('inscricoes', 'edital'));
     }
 
     public function listarPeloCandidato()
@@ -70,7 +73,7 @@ class InscricaoController extends Controller
             'avaliador:id_usuario,nome',
             ])->findOrFail($id);
 
-        return view('admin.analise-inscricoes.analisar', compact('inscricao'));
+        return view('analise-inscricoes.analisar', compact('inscricao'));
     }
 
     public function salvarAnalise(Request $request, $id)
@@ -513,6 +516,7 @@ class InscricaoController extends Controller
     }
 
     public function comunicar($id){
+        $edital = Edital::findOrFail($id, ['id_edital', 'nome']);
         $emails = Inscricao::where('id_edital', $id)
             ->with('candidato:id_usuario,nome,email')
             ->get()
@@ -520,9 +524,27 @@ class InscricaoController extends Controller
             ->unique()
             ->values();
 
-        return view('admin.analise-inscricoes.comunicar', [
+        return view('analise-inscricoes.comunicar', [
             'edital' => $edital,
             'emails' => $emails
         ]);
+    }
+
+    public function comunicacaoGeral(Request $request, $idEdital)
+    {
+        $mensagem = Str::markdown($request->input('mensagem'));
+        $emails = Inscricao::where('id_edital', $idEdital)
+            ->with('candidato:id_usuario,nome,email')
+            ->get()
+            ->pluck('candidato.email')
+            ->unique()
+            ->values()
+            ->toArray();
+        
+        Mail::to($emails)->queue(new Email("DIRPPG-PG: Comunicação Geral", $mensagem));
+
+        return redirect()
+            ->route(Auth::user()->tipo . '.analise-inscricoes.comunicar', $idEdital)
+            ->with('success', 'E-mails enviados com sucesso!');
     }
 }

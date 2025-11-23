@@ -23,13 +23,32 @@ class EditalController extends Controller
 
     public function listarVigentes(Request $request)
     {
+        // Verifica se quem está acessando é professor
+        if ($request->user()->eProfessor()) {
+        
+            // Deve retornar apenas os editais dos programas aos quais o professor está vinculado
+            $programasProfessor = $request->user()->programas->pluck('id_programa');
+
+            $editais = Edital::with(['curso.programa'])
+                ->where('vigente', true)
+                ->whereHas('curso.programa', function ($query) use ($programasProfessor) {
+                    $query->whereIn('id_programa', $programasProfessor);
+                })
+                ->orderBy('data_publicacao', 'desc')
+                ->get();
+
+            return view('analise-inscricoes.index', compact('editais'));
+        }
+
+        // Buscar apenas os editais vigentes
         $editais = Edital::with(['curso.programa'])->where('vigente', true)->orderBy('data_publicacao', 'desc')->get();
 
         // Verifica quem está acessando
         if ($request->user()->eCandidato()) {
             return view('candidato.editais.index', compact('editais'));
-        } else {
-            return view('admin.analise-inscricoes.index', compact('editais'));
+        }
+        else {
+            return view('analise-inscricoes.index', compact('editais'));
         }
     }
 
@@ -39,6 +58,12 @@ class EditalController extends Controller
 
         // Separar por tipo para facilitar no Blade
         $fases = $edital->fasesEdital->groupBy('tipo')->map->first();
+
+        // Verifica se quem está acessando é o professor
+        if (Auth::user()->eProfessor()) {
+            return view('professor.editais.details', compact('edital', 'fases'));
+        }
+
 
         // Verificar se candidato já está inscrito
         $jaInscrito = Inscricao::where('id_candidato', Auth::id())->where('id_edital', $edital->id_edital)->exists();

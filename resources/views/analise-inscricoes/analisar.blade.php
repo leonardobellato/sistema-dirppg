@@ -20,6 +20,10 @@
         </div>
     @endif
 
+    @php
+        $tipoUsuario = auth()->user()->tipo;
+    @endphp
+
     <h1>Análise de Inscrição</h1>
 
     @if($inscricao->id_avaliador)
@@ -65,7 +69,7 @@
     <h3>Documentos</h3>
 
     <div class="container-form">
-        <form action="{{ route('analise-inscricoes.salvar', $inscricao->id_inscricao) }}" method="POST">
+        <form action="{{ route($tipoUsuario . '.analise-inscricoes.salvar', $inscricao->id_inscricao) }}" method="POST">
             @csrf
 
             @foreach($inscricao->documentos as $index => $doc)
@@ -131,7 +135,7 @@
             </div>
 
             <div class="btn-grp-form">
-                <a href="{{route('analise-inscricoes.index')}}">Voltar</a>
+                <a href="{{route($tipoUsuario . '.analise-inscricoes.listar', $inscricao->id_edital)}}">Voltar</a>
                 <button type="submit">Salvar análise</button>
             </div>
         </form>

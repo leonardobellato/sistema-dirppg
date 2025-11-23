@@ -20,11 +20,15 @@
         </div>
     @endif
 
+    @php
+        $tipoUsuario = auth()->user()->tipo;
+    @endphp
+
 
     <h1>Comunicar via e-mail</h1>
 
     <div class="container-form">
-        <form action="{{ route('analise-inscricoes.comunicacaoGeral', $edital->id_edital) }}" method="POST">
+        <form action="{{ route($tipoUsuario . '.analise-inscricoes.comunicacaoGeral', $edital->id_edital) }}" method="POST">
             @csrf
 
             {{-- 🔹 Lista de e-mails --}}
@@ -50,7 +54,7 @@
             ></textarea>
 
             <div class="btn-grp-form">
-                <a href="{{route('analise-inscricoes.index')}}">Voltar</a>
+                <a href="{{route($tipoUsuario . '.analise-inscricoes.index')}}">Voltar</a>
                 <button type="submit" {{ empty($emails) ? 'disabled' : '' }}>Enviar mensagem</button>
             </div>
         </form>

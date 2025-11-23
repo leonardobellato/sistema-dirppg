@@ -23,7 +23,7 @@
     <h1>Alterar entrevista</h1>
 
     <div class="container-form">
-		<form action="{{ route('admin.entrevistas.atualizar', $entrevista->id_entrevista) }}" method="POST">
+		<form action="{{ route(Auth::user()->tipo . '.entrevistas.atualizar', $entrevista->id_entrevista) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -88,7 +88,7 @@
 			</div>
 
 			<div class="btn-grp-form">
-				<a href={{ route('admin.entrevistas.index') }}>Cancelar</a>
+				<a href={{ route(Auth::user()->tipo . '.entrevistas.index') }}>Cancelar</a>
 				<button type="submit">Atualizar</button>
 			</div>
 		</form>

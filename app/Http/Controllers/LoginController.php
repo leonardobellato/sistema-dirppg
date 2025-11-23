@@ -35,6 +35,8 @@ class LoginController extends Controller
                 return redirect()->route('inicio'); // nome da rota /admin/
             } elseif (Auth::user()->tipo === 'candidato') {
                 return redirect()->route('candidato.editais.index');
+            } elseif (Auth::user()->tipo === 'professor') {
+                return redirect()->route('professor.editais.index');
             } else {
                 Auth::logout();
                 return back()->with('failure', 'Usuário sem permissão válida.');

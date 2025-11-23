@@ -13,6 +13,10 @@
         </div>
     @endif
 
+    @php
+        $tipoUsuario = auth()->user()->tipo;
+    @endphp
+
     <h1>Análise de inscrições</h1>
 
     <div class="container-tabela">
@@ -27,8 +31,8 @@
                     <span>Relatórios</span>
 
                     <div class="link-dropdown" id="dropdown-trigger">
-                        <a href="{{ url('admin/analise-inscricoes/relatorio') . '/' . $edital->id_edital . '?tipo=preliminar' }}" target="_blank">Preliminar</a>
-                        <a href="{{ url('admin/analise-inscricoes/relatorio') . '/' . $edital->id_edital . '?tipo=definitivo' }}" target="_blank">Definitivo</a>
+                        <a href="{{ url($tipoUsuario . '/analise-inscricoes/relatorio') . '/' . $edital->id_edital . '?tipo=preliminar' }}" target="_blank">Preliminar</a>
+                        <a href="{{ url($tipoUsuario . '/analise-inscricoes/relatorio') . '/' . $edital->id_edital . '?tipo=definitivo' }}" target="_blank">Definitivo</a>
                     </div>
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="0.8" viewBox="0 0 16 16" id="username-dropdown">
@@ -36,14 +40,14 @@
                     </svg> 
                 </div>
 
-                <a href="{{ route('analise-inscricoes.comunicar', $edital->id_edital) }}" id="btn-comunicar">
+                <a href="{{ route($tipoUsuario . '.analise-inscricoes.comunicar', $edital->id_edital) }}" id="btn-comunicar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
                         <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z"/>
                     </svg>
                     Comunicar candidatos
                 </a>
 
-                <a href="{{ route('admin.entrevistas.adicionar', $edital->id_edital) }}" id="btn-entrevista">
+                <a href="{{ route($tipoUsuario . '.entrevistas.adicionar', $edital->id_edital) }}" id="btn-entrevista">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots-fill" viewBox="0 0 16 16">
                         <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
                     </svg>
@@ -138,7 +142,7 @@
                 domLayout: 'autoHeight',
                 onRowClicked: function(event) {
                     const inscricaoId = event.data.id_inscricao;
-                    const baseUrl = "{{ url('admin/analise-inscricoes/analisar') }}";
+                    const baseUrl = "{{ url($tipoUsuario . '/analise-inscricoes/analisar') }}";
                     window.location.href = `${baseUrl}/${inscricaoId}`;
                 }
             };

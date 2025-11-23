@@ -7,11 +7,15 @@
 @endpush
 
 @section('content')
+    @php
+        $tipoUsuario = auth()->user()->tipo;
+    @endphp
+
     <h1>Editais abertos</h1>
 
     <div class="container-vigentes">
         @forelse($editais as $edital)
-            <div class="card-edital" onclick="window.location.href='{{ url('admin/analise-inscricoes/'.$edital->id_edital) }}'">
+            <div class="card-edital" onclick="window.location.href='{{ url($tipoUsuario . '/analise-inscricoes/'.$edital->id_edital) }}'">
                 <h2>{{ $edital->nome }}</h2>
                 <p class="data">
                     <strong>Publicado em:</strong> 

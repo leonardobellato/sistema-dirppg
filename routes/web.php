@@ -6,7 +6,6 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DisciplinaController;
 use App\Http\Controllers\EditalController;
-use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EntrevistaController;
 use App\Http\Controllers\InscricaoController;
 use App\Http\Controllers\LinhaPesquisaController;
@@ -57,13 +56,13 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('inicio');
 
-    Route::get('/analise-inscricoes', [EditalController::class, 'listarVigentes'])->name('analise-inscricoes.index');
-    Route::get('/analise-inscricoes/{id}', [InscricaoController::class, 'listarPorEdital'])->name('analise-inscricoes.listar');
-    Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('analise-inscricoes.analisar');
-    Route::post('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'salvarAnalise'])->name('analise-inscricoes.salvar');
-    Route::get('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicar'])->name('analise-inscricoes.comunicar');
-    Route::post('/analise-inscricoes/comunicar/{id}', [EmailController::class, 'comunicacaoGeral'])->name('analise-inscricoes.comunicacaoGeral');
-    Route::get('/analise-inscricoes/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('relatorios.gerar');
+    Route::get('/analise-inscricoes', [EditalController::class, 'listarVigentes'])->name('admin.analise-inscricoes.index');
+    Route::get('/analise-inscricoes/{id}', [InscricaoController::class, 'listarPorEdital'])->name('admin.analise-inscricoes.listar');
+    Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('admin.analise-inscricoes.analisar');
+    Route::post('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'salvarAnalise'])->name('admin.analise-inscricoes.salvar');
+    Route::get('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicar'])->name('admin.analise-inscricoes.comunicar');
+    Route::post('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicacaoGeral'])->name('admin.analise-inscricoes.comunicacaoGeral');
+    Route::get('/analise-inscricoes/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('admin.relatorios.gerar');
 
     Route::get('/editais', [EditalController::class, 'listar'])->name('admin.editais.index');
     Route::get('/editais/adicionar', [EditalController::class, 'criar'])->name('admin.editais.adicionar');
@@ -136,6 +135,33 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
 
 
 
+/* ACESSO RESTRITO - Professor */
+
+Route::prefix('professor')->middleware(['auth', 'permissao:professor'])->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('analise-inscricoes.index');
+    });
+
+    Route::get('/analise-inscricoes', [EditalController::class, 'listarVigentes'])->name('professor.analise-inscricoes.index');
+    Route::get('/analise-inscricoes/{id}', [EditalController::class, 'detalhar'])->name('professor.analise-inscricoes.detalhar');
+    Route::get('/analise-inscricoes/edital/{id}', [InscricaoController::class, 'listarPorEdital'])->name('professor.analise-inscricoes.listar');
+    Route::get('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'analisar'])->name('professor.analise-inscricoes.analisar');
+    Route::post('/analise-inscricoes/analisar/{id}', [InscricaoController::class, 'salvarAnalise'])->name('professor.analise-inscricoes.salvar');
+    Route::get('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicar'])->name('professor.analise-inscricoes.comunicar');
+    Route::post('/analise-inscricoes/comunicar/{id}', [InscricaoController::class, 'comunicacaoGeral'])->name('professor.analise-inscricoes.comunicacaoGeral');
+    Route::get('/analise-inscricoes/relatorio/{id}', [RelatorioController::class, 'gerar'])->name('professor.relatorios.gerar');
+
+    Route::get('/entrevistas', [EntrevistaController::class, 'listar'])->name('professor.entrevistas.index');
+    Route::get('/entrevistas/adicionar/{id}', [EntrevistaController::class, 'criar'])->name('professor.entrevistas.adicionar');
+    Route::get('/entrevistas/alterar/{id}', [EntrevistaController::class, 'alterar'])->name('professor.entrevistas.alterar');
+    Route::post('/entrevistas', [EntrevistaController::class, 'salvar'])->name('professor.entrevistas.salvar');
+    Route::put('/entrevistas/{id}', [EntrevistaController::class, 'atualizar'])->name('professor.entrevistas.atualizar');
+    Route::delete('/entrevistas/{id}', [EntrevistaController::class, 'excluir'])->name('professor.entrevistas.excluir');
+
+});
+
+
+
 /* ACESSO RESTRITO - Candidato */
 
 Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(function () {
@@ -155,8 +181,6 @@ Route::prefix('candidato')->middleware(['auth', 'permissao:candidato'])->group(f
     Route::get('/inscricoes/{id}', [InscricaoController::class, 'visualizar'])->name('candidato.inscricoes.visualizar');
     Route::post('/inscricoes/{id}', [InscricaoController::class, 'recurso'])->name('candidato.inscricoes.recurso');
 
-    Route::get('/entrevistas', function () {
-        return view('candidato.entrevistas.index');
-    })->name('candidato.entrevistas.index');
-
+    Route::get('/entrevistas', [EntrevistaController::class, 'listarPeloCandidato'])->name('candidato.entrevistas.index');
+    Route::get('/entrevistas/{id}', [EntrevistaController::class, 'detalhar'])->name('candidato.entrevistas.detalhar');
 });

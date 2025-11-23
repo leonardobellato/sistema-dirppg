@@ -11,3 +11,9 @@ php artisan key:generate
 
 ### Linkar storage
 php artisan storage:link
+
+### Migrar tabelas do laravel
+php artisan migrate
+
+### Iniciar thread da queue de emails
+php artisan queue:work
