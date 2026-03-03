@@ -12,6 +12,7 @@
     width: 900px;
     max-width: 100%;
     text-align: left;
+    margin-top: 10px;
 }
 
 .title-welcome span{
@@ -67,6 +68,79 @@
 #card-entrevistas{
     background-color: #cadfee;
     color: #2e6bc6;
+}
+
+.pizzas-container {
+    display: flex;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+    width: 900px;
+    height: 400px;
+    max-width: 100%;
+    border-radius: 20px;
+}
+
+.pizza-box {
+    flex: 1;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.filtros-dashboard {
+    display: flex;
+    flex-wrap: wrap; /* permite quebrar linha se necessário */
+    gap: 10px;
+    margin-top: 20px;
+    width: 900px;
+    max-width: 100%;
+    margin-bottom: 15px;
+}
+
+.filtros-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Botão */
+.filtro-option {
+    display: inline-flex; /* importante */
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px; /* visual mais moderno */
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+    background: #f1f1f1;
+    font-size: 14px;
+    white-space: nowrap; /* 🔥 impede quebra de linha */
+}
+
+/* Esconde o radio real */
+.filtro-option input[type="radio"] {
+    display: none;
+}
+
+/* Texto interno */
+.filtro-option span {
+    white-space: nowrap; /* 🔥 impede wrap */
+    padding: 6px 14px;
+}
+
+/* Estado selecionado */
+.filtro-option input:checked + span {
+    background: #979797;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+/* Hover */
+.filtro-option:hover {
+    background: #e2e2e2;
 }
 
 @media screen and (max-width: 768px) {
