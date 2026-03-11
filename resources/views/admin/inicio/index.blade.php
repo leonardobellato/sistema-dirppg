@@ -43,63 +43,241 @@
             <span class="text">Entrevistas agendadas</span>
         </div>
     </div>
-    
+    <div class="filtros-dashboard">
+        <div class="filtros-selector">
+            <label class="filtro-option">
+                <input type="radio" name="filtro" value="todos" checked>
+                <span>Todos editais abertos</span>
+            </label>
+
+            <label class="filtro-option">
+                <input type="radio" name="filtro" value="1">
+                <span>Edital Doutorado PPGCC</span>
+            </label>
+
+            <label class="filtro-option">
+                <input type="radio" name="filtro" value="2">
+                <span>Edital Mestrado PPGECT</span>
+            </label>
+        </div>
+    </div>
+
+
     <div class="canva-container">
         <canvas id="histograma"></canvas>
     </div>
+
+    <div class="pizzas-container">
+    <div class="pizza-box">
+        <canvas id="graficoPizza"></canvas>
+    </div>
+
+    <div class="pizza-box">
+        <canvas id="graficoModalidade"></canvas>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
     <script src="{{ asset('js/chart.umd.js') }}"></script>
 
     <script>
+    const dadosInscricoes = [
+        { data: '2026-02-24', edital_id: 1 },
+        { data: '2026-02-24', edital_id: 2 },
+        { data: '2026-02-25', edital_id: 1 },
+        { data: '2026-02-26', edital_id: 1 },
+        { data: '2026-02-27', edital_id: 2 },
+        { data: '2026-02-28', edital_id: 1 },
+        { data: '2026-03-01', edital_id: 1 },
+        { data: '2026-03-02', edital_id: 2 },
+    ];
+
         const ctx = document.getElementById('histograma');
+    const radios = document.querySelectorAll('input[name="filtro"]');
+    const PERIODO = 7;
 
-        // Dados enviados pelo controller
-        const inscricoesPorDia = @json($inscricoesPorDia);
-        const dias = @json($dias);
+    let grafico;
 
-        new Chart(ctx, {
-            type: 'bar',
+    function gerarDados(editalSelecionado) {
+        const hoje = new Date();
+        const labels = [];
+        const diarios = [];
+        const acumulado = [];
+
+        let somaProgressiva = 0;
+
+        for (let i = PERIODO - 1; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(hoje.getDate() - i);
+
+            const dataFormatada = d.toISOString().split('T')[0];
+            labels.push(dataFormatada);
+
+            const totalDia = dadosInscricoes.filter(item => {
+                const mesmoDia = item.data === dataFormatada;
+                const mesmoEdital =
+                    editalSelecionado === 'todos' ||
+                    item.edital_id == editalSelecionado;
+
+                return mesmoDia && mesmoEdital;
+            }).length;
+
+            diarios.push(totalDia);
+
+            somaProgressiva += totalDia;
+            acumulado.push(somaProgressiva);
+        }
+
+        return { labels, diarios, acumulado };
+    }
+
+    function atualizarGrafico() {
+        const editalSelecionado =
+            document.querySelector('input[name="filtro"]:checked').value;
+
+        const { labels, diarios, acumulado } =
+            gerarDados(editalSelecionado);
+
+        const maxValor = Math.max(...diarios, ...acumulado);
+
+        if (grafico) grafico.destroy();
+
+        grafico = new Chart(ctx, {
             data: {
-                labels: dias,
-                datasets: [{
-                label: 'Inscrições',
-                data: inscricoesPorDia,
-                    backgroundColor: '#68c3b7',
-                    borderRadius: 6,
-                }]
+                labels: labels,
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Inscrições por dia',
+                        data: diarios,
+                        backgroundColor: '#68c3b7',
+                        borderRadius: 6,
+                    },
+                    {
+                        type: 'line',
+                        label: 'Total acumulado',
+                        data: acumulado,
+                        borderColor: '#717171',
+                        backgroundColor: '#717171',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4,
+                    }
+                ]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     title: {
                         display: true,
                         text: 'Inscrições nos últimos 7 dias',
-                        font: {
-                            size: 16,
-                            weight: 'bold',
-                            family: 'Arial'
-                        },
-                        padding: {
-                            top: 10,
-                            bottom: 30
-                        },
-                        align: 'center', // 'start' | 'center' | 'end'
-                        position: 'top'  // 'top' (default) ou 'bottom'
-                    },
-                    legend: {
-                        display: false
+                        font: { size: 16, weight: 'bold' }
                     }
                 },
                 scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { precision: 0 }
+                    y: {
+                        beginAtZero: true,
+                        max: maxValor + 2,
+                        ticks: { precision: 0 }
+                    }
                 }
-                },
-                responsive: true,
-                maintainAspectRatio: false, // permite preencher o container
             }
         });
+    }
+
+    // 🔥 Evento para todos os radios
+    radios.forEach(radio => {
+        radio.addEventListener('change', atualizarGrafico);
+    });
+
+    atualizarGrafico();
+
+
+        const ctxPizza = document.getElementById('graficoPizza');
+
+    // Dados fictícios agregados
+    const dadosProgramas = {
+        PPGEE: 45,
+        PPGCC: 30,
+        PPGEM: 15,
+        PPGEQ: 10
+    };
+
+    new Chart(ctxPizza, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(dadosProgramas),
+            datasets: [{
+                data: Object.values(dadosProgramas)
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Porcentagem de procura por programa',
+                    font: { size: 16, weight: 'bold' }
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    const ctxModalidade = document.getElementById('graficoModalidade');
+
+    // 🔥 Dados fictícios
+    const dadosModalidade = {
+        Mestrado: 40,
+        Doutorado: 25,
+        PAPOS: 20,
+        "Aluno Externo": 15
+    };
+
+    new Chart(ctxModalidade, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(dadosModalidade),
+            datasets: [{
+                data: Object.values(dadosModalidade),
+                backgroundColor: [
+                    '#4CAF50',
+                    '#2196F3',
+                    '#FF9800',
+                    '#9C27B0'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Procura por Modalidade',
+                    font: { size: 16, weight: 'bold' }
+                },
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a,b)=>a+b,0);
+                            const valor = context.raw;
+                            const porcentagem = ((valor/total)*100).toFixed(1);
+                            return `${context.label}: ${porcentagem}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     </script>
 @endpush

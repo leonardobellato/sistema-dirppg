@@ -1,10 +1,11 @@
-- análise de inscricoes
-    gerar listas preliminar e final
-    email para candidatos
-- entrevistas
-- professores
-- comunicacao via email
+
+
 - melhorar dashboard
+
+
+mais auditoria
+
+testes 
 
 
 Para alunos externos, automatizar o envio do link do formulário de cadastro após o
