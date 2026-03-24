@@ -78,30 +78,49 @@ class InscricaoController extends Controller
 
     public function salvarAnalise(Request $request, $id)
     {
-        $inscricao = Inscricao::with('documentos')->findOrFail($id);
+        try{
+            DB::beginTransaction();
+            $inscricao = Inscricao::with('documentos')->findOrFail($id);
 
-        //Atualiza documentos
-        foreach ($request->input('documentos', []) as $docData) {
-            $documento = Documento::find($docData['id']);
-            if ($documento) {
-                $documento->deferido = ($docData['status'] === 'deferir') ? 1 : 0;
-                $documento->motivo_indeferimento = $docData['status'] === 'indeferir'
-                    ? $docData['motivo']
-                    : null;
-                $documento->save();
+            //Atualiza documentos
+            foreach ($request->input('documentos', []) as $docData) {
+                $documento = Documento::find($docData['id']);
+                if ($documento) {
+                    $documento->deferido = ($docData['status'] === 'deferir') ? 1 : 0;
+                    $documento->motivo_indeferimento = $docData['status'] === 'indeferir'
+                        ? $docData['motivo']
+                        : null;
+                    $documento->save();
+                }
             }
+
+            //Atualiza inscrição
+            $inscricao->deferido = $request->input('inscricao_status') === 'deferir' ? 1 : 0;
+            $inscricao->motivo_indeferimento = $request->input('comentario-geral');
+
+            $inscricao->id_avaliador = Auth::id();
+            $inscricao->save();
+
+            DB::commit();
+
+            return redirect()
+                ->back()
+                ->with('success', 'Análise salva com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Auditoria::create([
+                'id_usuario' => Auth::id(),
+                'tipo' => 'analise',
+                'operacao' => 'salvar',
+                'sucesso' => false,
+                'detalhes' => $e->getMessage(),
+                'ip' => $request->ip(),
+                'navegador' => $request->header('User-Agent'),
+            ]);
+
+            return back()->with('failure', 'Erro ao realizar análise. Contate suporte do site.');
         }
-
-        //Atualiza inscrição
-        $inscricao->deferido = $request->input('inscricao_status') === 'deferir' ? 1 : 0;
-        $inscricao->motivo_indeferimento = $request->input('comentario-geral');
-
-        $inscricao->id_avaliador = Auth::id();
-        $inscricao->save();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Análise salva com sucesso!');
     }
 
 
@@ -470,49 +489,69 @@ class InscricaoController extends Controller
 
     public function recurso(Request $request, $id)
     {
-        $inscricao = Inscricao::with('documentos')->findOrFail($id);
+        try{
+            $inscricao = Inscricao::with('documentos')->findOrFail($id);
 
-        // Garante que existe o array de documentos vindos do form
-        if (!$request->has('documentos')) {
-            return back()->with('failure', 'Nenhum documento enviado.');
-        }
-
-        foreach ($request->documentos as $docData) {
-            if (isset($docData['arquivo'])) {
-                $documento = Documento::findOrFail($docData['id']);
-                $arquivo = $docData['arquivo'];
-
-                // Remove o arquivo antigo, se existir
-                if (Storage::disk('public')->exists($documento->caminho_servidor)) {
-                    Storage::disk('public')->delete($documento->caminho_servidor);
-                }
-
-                // Gera novo caminho e nome do arquivo
-                $novoCaminho = $arquivo->storeAs(
-                    "inscricoes/{$inscricao->id_inscricao}",
-                    "{$documento->tipo}_v" . ($documento->versao + 1) . '.' . $arquivo->getClientOriginalExtension(),
-                    'public'
-                );
-
-                // Atualiza o documento
-                $documento->update([
-                    'caminho_servidor' => $novoCaminho,
-                    'versao' => $documento->versao + 1,
-                    'deferido' => null, // volta para pendente
-                    'motivo_indeferimento' => null
-                ]);
+            // Garante que existe o array de documentos vindos do form
+            if (!$request->has('documentos')) {
+                return back()->with('failure', 'Nenhum documento enviado.');
             }
+
+            DB::beginTransaction();
+
+            foreach ($request->documentos as $docData) {
+                if (isset($docData['arquivo'])) {
+                    $documento = Documento::findOrFail($docData['id']);
+                    $arquivo = $docData['arquivo'];
+
+                    // Remove o arquivo antigo, se existir
+                    if (Storage::disk('public')->exists($documento->caminho_servidor)) {
+                        Storage::disk('public')->delete($documento->caminho_servidor);
+                    }
+
+                    // Gera novo caminho e nome do arquivo
+                    $novoCaminho = $arquivo->storeAs(
+                        "inscricoes/{$inscricao->id_inscricao}",
+                        "{$documento->tipo}_v" . ($documento->versao + 1) . '.' . $arquivo->getClientOriginalExtension(),
+                        'public'
+                    );
+
+                    // Atualiza o documento
+                    $documento->update([
+                        'caminho_servidor' => $novoCaminho,
+                        'versao' => $documento->versao + 1,
+                        'deferido' => null, // volta para pendente
+                        'motivo_indeferimento' => null
+                    ]);
+                }
+            }
+
+            // Marca a inscrição como pendente novamente
+            $inscricao->update([
+                'deferido' => null,
+                'motivo_indeferimento' => null,
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('candidato.inscricoes.visualizar', $inscricao->id_inscricao)
+                ->with('success', 'Recurso enviado com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Auditoria::create([
+                'id_usuario' => Auth::id(),
+                'tipo' => 'recurso',
+                'operacao' => 'salvar',
+                'sucesso' => false,
+                'detalhes' => $e->getMessage(),
+                'ip' => $request->ip(),
+                'navegador' => $request->header('User-Agent'),
+            ]);
+
+            return back()->with('failure', 'Erro ao realizar recurso. Contate suporte do site.');
         }
-
-        // Marca a inscrição como pendente novamente
-        $inscricao->update([
-            'deferido' => null,
-            'motivo_indeferimento' => null,
-        ]);
-
-        return redirect()
-            ->route('candidato.inscricoes.visualizar', $inscricao->id_inscricao)
-            ->with('success', 'Recurso enviado com sucesso!');
     }
 
     public function comunicar($id){
@@ -532,19 +571,34 @@ class InscricaoController extends Controller
 
     public function comunicacaoGeral(Request $request, $idEdital)
     {
-        $mensagem = Str::markdown($request->input('mensagem'));
-        $emails = Inscricao::where('id_edital', $idEdital)
-            ->with('candidato:id_usuario,nome,email')
-            ->get()
-            ->pluck('candidato.email')
-            ->unique()
-            ->values()
-            ->toArray();
-        
-        Mail::to($emails)->queue(new Email("DIRPPG-PG: Comunicação Geral", $mensagem));
+        try{
+            $mensagem = Str::markdown($request->input('mensagem'));
+            $emails = Inscricao::where('id_edital', $idEdital)
+                ->with('candidato:id_usuario,nome,email')
+                ->get()
+                ->pluck('candidato.email')
+                ->unique()
+                ->values()
+                ->toArray();
+            
+            Mail::to($emails)->queue(new Email("DIRPPG-PG: Comunicação Geral", $mensagem));
 
-        return redirect()
-            ->route(Auth::user()->tipo . '.analise-inscricoes.comunicar', $idEdital)
-            ->with('success', 'E-mails enviados com sucesso!');
+            return redirect()
+                ->route(Auth::user()->tipo . '.analise-inscricoes.comunicar', $idEdital)
+                ->with('success', 'E-mails enviados com sucesso!');
+
+        } catch (\Exception $e) {
+            Auditoria::create([
+                'id_usuario' => Auth::id(),
+                'tipo' => 'comunicacao',
+                'operacao' => 'enviar',
+                'sucesso' => false,
+                'detalhes' => $e->getMessage(),
+                'ip' => $request->ip(),
+                'navegador' => $request->header('User-Agent'),
+            ]);
+
+            return back()->with('failure', 'Erro ao realizar comunicação. Contate suporte do site.');
+        }
     }
 }

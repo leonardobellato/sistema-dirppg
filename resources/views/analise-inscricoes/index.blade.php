@@ -23,7 +23,7 @@
                 </p>
             </div>
         @empty
-            <p>Nenhum edital disponível no momento.</p>
+            <p class="text-center">Nenhum edital disponível no momento.</p>
         @endforelse
     </div>
 @endsection

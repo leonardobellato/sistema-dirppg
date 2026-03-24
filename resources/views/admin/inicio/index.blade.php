@@ -59,6 +59,11 @@
                 <input type="radio" name="filtro" value="2">
                 <span>Edital Mestrado PPGECT</span>
             </label>
+
+            <label class="filtro-option">
+                <input type="radio" name="filtro" value="2">
+                <span>Edital PAPOS PPGEE</span>
+            </label>
         </div>
     </div>
 
@@ -68,14 +73,14 @@
     </div>
 
     <div class="pizzas-container">
-    <div class="pizza-box">
-        <canvas id="graficoPizza"></canvas>
-    </div>
+        <div class="pizza-box">
+            <canvas id="graficoPizza"></canvas>
+        </div>
 
-    <div class="pizza-box">
-        <canvas id="graficoModalidade"></canvas>
+        <div class="pizza-box">
+            <canvas id="graficoModalidade"></canvas>
+        </div>
     </div>
-</div>
 @endsection
 
 @push('scripts')

@@ -1,7 +1,7 @@
 .canva-container{
     width: 900px;
+    max-width: 90%;
     height: 400px;
-    max-width: 100%;
     background-color: #FFFFFF;
     padding: 15px;
     border-radius: 20px;
@@ -10,7 +10,7 @@
 
 .title-welcome{
     width: 900px;
-    max-width: 100%;
+    max-width: 95%;
     text-align: left;
     margin-top: 10px;
 }
@@ -37,7 +37,8 @@
 }
 
 .dashcard {
-    width: 290px;   
+    width: 290px;
+    max-width: 90%;   
     padding: 10px 20px;
     border-radius: 8px;
     box-sizing: border-box;
@@ -76,8 +77,7 @@
     margin: 30px 0;
     flex-wrap: wrap;
     width: 900px;
-    height: 400px;
-    max-width: 100%;
+    max-width: 90%;
     border-radius: 20px;
 }
 
@@ -87,6 +87,7 @@
     padding: 15px;
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 100%;
 }
 
 .filtros-dashboard {
@@ -95,7 +96,7 @@
     gap: 10px;
     margin-top: 20px;
     width: 900px;
-    max-width: 100%;
+    max-width: 95%;
     margin-bottom: 15px;
 }
 

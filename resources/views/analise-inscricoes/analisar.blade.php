@@ -9,15 +9,9 @@
 
 @section('content')
     @if(session('success'))
-        <div class="aviso-sucesso">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('failure'))
-        <div class="aviso-falha">
-            {{ session('failure') }}
-        </div>
+        @include('components.alert', ['type' => 'success', 'message' => session('success')])
+    @elseif(session('failure'))
+        @include('components.alert', ['type' => 'failure', 'message' => session('failure')])
     @endif
 
     @php

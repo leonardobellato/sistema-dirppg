@@ -8,10 +8,10 @@
 @endpush
 
 @section('content')
-    @if(session('failure'))
-        <div class="aviso-falha">
-            {{ session('failure') }}
-        </div>
+    @if(session('success'))
+        @include('components.alert', ['type' => 'success', 'message' => session('success')])
+    @elseif(session('failure'))
+        @include('components.alert', ['type' => 'failure', 'message' => session('failure')])
     @endif
 
     <h2>Inscrição no {{ $edital->curso->programa->nome }}</br>({{ $edital->curso->tipo }})</h2>

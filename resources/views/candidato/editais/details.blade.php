@@ -8,9 +8,9 @@
 
 @section('content')
     @if(session('success'))
-        <div class="aviso-sucesso">
-            {{ session('success') }}
-        </div>
+        @include('components.alert', ['type' => 'success', 'message' => session('success')])
+    @elseif(session('failure'))
+        @include('components.alert', ['type' => 'failure', 'message' => session('failure')])
     @endif
 
     <h1>Detalhes do edital</h1>
