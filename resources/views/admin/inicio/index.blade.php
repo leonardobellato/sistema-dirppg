@@ -16,7 +16,7 @@
     <div class="card-group">
         <div class="dashcard" id="card-editais">
             <span class="number">
-                {{$editaisAbertos}} 
+                {{$qntEditaisAbertos}}
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16">
                     <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z"/>
                 </svg>
@@ -34,7 +34,7 @@
         </div>
         <div class="dashcard" id="card-entrevistas">
             <span class="number">
-                {{$entrevistasAgendadas}}
+                {{$entrevistasAgendadas}} 
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-calendar-week" viewBox="0 0 16 16">
                     <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
                     <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
@@ -49,21 +49,12 @@
                 <input type="radio" name="filtro" value="todos" checked>
                 <span>Todos editais abertos</span>
             </label>
-
-            <label class="filtro-option">
-                <input type="radio" name="filtro" value="1">
-                <span>Edital Doutorado PPGCC</span>
-            </label>
-
-            <label class="filtro-option">
-                <input type="radio" name="filtro" value="2">
-                <span>Edital Mestrado PPGECT</span>
-            </label>
-
-            <label class="filtro-option">
-                <input type="radio" name="filtro" value="2">
-                <span>Edital PAPOS PPGEE</span>
-            </label>
+            @foreach ($editaisAbertos as $edital)
+                <label class="filtro-option">
+                    <input type="radio" name="filtro" value="{{ $edital->id_edital }}">
+                    <span>Edital {{ $edital->curso->programa->sigla }} - {{ $edital->curso->tipo }}</span>
+                </label>
+             @endforeach
         </div>
     </div>
 
@@ -87,87 +78,55 @@
     <script src="{{ asset('js/chart.umd.js') }}"></script>
 
     <script>
-    const dadosInscricoes = [
-        { data: '2026-02-24', edital_id: 1 },
-        { data: '2026-02-24', edital_id: 2 },
-        { data: '2026-02-25', edital_id: 1 },
-        { data: '2026-02-26', edital_id: 1 },
-        { data: '2026-02-27', edital_id: 2 },
-        { data: '2026-02-28', edital_id: 1 },
-        { data: '2026-03-01', edital_id: 1 },
-        { data: '2026-03-02', edital_id: 2 },
-    ];
-
-        const ctx = document.getElementById('histograma');
+    // HISTOGRAMA
+    const ctx = document.getElementById('histograma');
     const radios = document.querySelectorAll('input[name="filtro"]');
-    const PERIODO = 7;
+    const dadosHistograma = @json($histograma);
+
+    // Soma acumulada dos valores diários
+    const acumulado = arr =>
+        arr.map((_, i) =>
+            arr.slice(0, i + 1).reduce((a, b) => a + b, 0)
+        );
+
+    const acumuladoGeral = acumulado(dadosHistograma.geral);
+
+    const acumuladoPorEdital = Object.fromEntries(
+        Object.entries(dadosHistograma.por_edital)
+            .map(([id, valores]) => [id, acumulado(valores)])
+    );
+
+    const maxValorGrafico = Math.max(...dadosHistograma.geral, ...acumuladoGeral);
 
     let grafico;
 
-    function gerarDados(editalSelecionado) {
-        const hoje = new Date();
-        const labels = [];
-        const diarios = [];
-        const acumulado = [];
-
-        let somaProgressiva = 0;
-
-        for (let i = PERIODO - 1; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(hoje.getDate() - i);
-
-            const dataFormatada = d.toISOString().split('T')[0];
-            labels.push(dataFormatada);
-
-            const totalDia = dadosInscricoes.filter(item => {
-                const mesmoDia = item.data === dataFormatada;
-                const mesmoEdital =
-                    editalSelecionado === 'todos' ||
-                    item.edital_id == editalSelecionado;
-
-                return mesmoDia && mesmoEdital;
-            }).length;
-
-            diarios.push(totalDia);
-
-            somaProgressiva += totalDia;
-            acumulado.push(somaProgressiva);
-        }
-
-        return { labels, diarios, acumulado };
-    }
-
     function atualizarGrafico() {
-        const editalSelecionado =
-            document.querySelector('input[name="filtro"]:checked').value;
-
-        const { labels, diarios, acumulado } =
-            gerarDados(editalSelecionado);
-
-        const maxValor = Math.max(...diarios, ...acumulado);
+        const editalSelecionado = document.querySelector('input[name="filtro"]:checked').value;
 
         if (grafico) grafico.destroy();
 
         grafico = new Chart(ctx, {
             data: {
-                labels: labels,
+                labels: dadosHistograma.labels,
                 datasets: [
                     {
                         type: 'bar',
                         label: 'Inscrições por dia',
-                        data: diarios,
+                        data: editalSelecionado === 'todos' ? dadosHistograma.geral : dadosHistograma.por_edital[editalSelecionado],
                         backgroundColor: '#68c3b7',
                         borderRadius: 6,
+                        order: 2,
                     },
                     {
                         type: 'line',
                         label: 'Total acumulado',
-                        data: acumulado,
+                        data: editalSelecionado === 'todos' ? acumuladoGeral : acumuladoPorEdital[editalSelecionado],
                         borderColor: '#717171',
                         backgroundColor: '#717171',
                         tension: 0.3,
                         fill: false,
                         pointRadius: 4,
+                        order: 1,
                     }
                 ]
             },
@@ -184,7 +143,7 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: maxValor + 2,
+                        max: maxValorGrafico + 2,
                         ticks: { precision: 0 }
                     }
                 }
@@ -192,7 +151,7 @@
         });
     }
 
-    // 🔥 Evento para todos os radios
+    // Evento para todos os radios
     radios.forEach(radio => {
         radio.addEventListener('change', atualizarGrafico);
     });
@@ -200,15 +159,11 @@
     atualizarGrafico();
 
 
-        const ctxPizza = document.getElementById('graficoPizza');
+    // GRÁFICOS DE PIZZA
+    const ctxPizza = document.getElementById('graficoPizza');
 
     // Dados fictícios agregados
-    const dadosProgramas = {
-        PPGEE: 45,
-        PPGCC: 30,
-        PPGEM: 15,
-        PPGEQ: 10
-    };
+    const dadosProgramas = @json($programas);
 
     new Chart(ctxPizza, {
         type: 'pie',
@@ -234,15 +189,10 @@
         }
     });
 
+    // Gráfico de pizza para modalidades/cursos
     const ctxModalidade = document.getElementById('graficoModalidade');
 
-    // 🔥 Dados fictícios
-    const dadosModalidade = {
-        Mestrado: 40,
-        Doutorado: 25,
-        PAPOS: 20,
-        "Aluno Externo": 15
-    };
+    const dadosModalidade = @json($cursos);
 
     new Chart(ctxModalidade, {
         type: 'pie',

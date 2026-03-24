@@ -14,67 +14,95 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $ttl = 1800; // 30 minutos
+        $ttl = 300; // 5 minutos
 
-        $editaisAbertos = Edital::where('vigente', true)->count();
+        $editaisAbertos = Edital::where('vigente', true)->with([
+            'curso',
+            'curso.programa'
+        ])->get(['id_edital', 'id_curso']);
+        $qntEditaisAbertos = Edital::where('vigente', true)->count();
 
         $analisesPendentes = Inscricao::whereNull('deferido')->count();
 
         $entrevistasAgendadas = Entrevista::whereDate('data_hora', '>=', now())->count();
 
         // Histograma: inscrições por dia nos últimos 7 dias
-        $histograma = Cache::remember('dashboard.inscricoes_7dias', $ttl, function () {
+        $histograma = Cache::remember('dashboard.inscricoes_7dias', $ttl, function () use ($editaisAbertos) {
 
-            $inscricoesPorDia = Inscricao::select(
+            $raw = Inscricao::select(
                     DB::raw('DATE(criado_em) as data'),
+                    'id_edital',
                     DB::raw('COUNT(*) as total')
                 )
                 ->where('criado_em', '>=', Carbon::now()->subDays(6))
-                ->groupBy('data')
+                ->groupBy('data', 'id_edital')
                 ->orderBy('data')
-                ->get()
-                ->mapWithKeys(fn($item) => [$item->data => $item->total])
-                ->toArray();
+                ->get();
+            
+            $dias = collect(range(0,6))->map(fn($i) => Carbon::now()->subDays(6 - $i)->format('Y-m-d'));
 
-            $dias = collect(range(0,6))
-                ->map(fn($i) => Carbon::now()->subDays(6 - $i)->format('Y-m-d'))
-                ->mapWithKeys(fn($d) => [$d => $inscricoesPorDia[$d] ?? 0]);
+            // Inicializa todos os editais com zero
+            $resultado = [];
+            foreach ($editaisAbertos as $edital) {
+                $resultado[$edital->id_edital] = array_fill(0, 7, 0);
+            }
+
+            foreach ($raw->groupBy('id_edital') as $idEdital => $items) {
+                $map = $items->mapWithKeys(fn($item) => [
+                    $item->data => $item->total
+                ]);
+
+                $valores = $dias->map(fn($d) => $map[$d] ?? 0)->values();
+
+                $resultado[$idEdital] = $valores;
+            }
 
             return [
-                'valores' => array_values($dias->toArray()),
-                'labels' => $dias->keys()
+                'labels' => $dias
                     ->map(fn($d) => Carbon::parse($d)->format('d/m'))
-                    ->toArray()
+                    ->toArray(),
+
+                'geral' => array_values(
+                    collect($resultado)
+                        ->reduce(fn($carry, $item) =>
+                            collect($carry)->zip($item)->map(fn($v) => $v[0] + $v[1])->toArray(),
+                            array_fill(0, 7, 0)
+                        )
+                ),
+
+                'por_edital' => $resultado
             ];
         });
-
+           
+        // Procura por programas e cursos mais populares
         $programas = Cache::remember('dashboard.programas', $ttl, function () {
-            return DB::table('inscricoes as i')
-                ->join('editais as e', 'e.id_edital', '=', 'i.id_edital')
-                ->join('cursos as c', 'c.id_curso', '=', 'e.id_curso')
-                ->join('programas as p', 'p.id_programa', '=', 'c.id_programa')
-                ->select('p.nome', DB::raw('COUNT(i.id_inscricao) as total'))
-                ->groupBy('p.id_programa', 'p.nome')
+            return DB::table('programas as p')
+                ->leftJoin('cursos as c', 'c.id_programa', '=', 'p.id_programa')
+                ->leftJoin('editais as e', 'e.id_curso', '=', 'c.id_curso')
+                ->leftJoin('inscricoes as i', 'i.id_edital', '=', 'e.id_edital')
+                ->select('p.sigla', DB::raw('COUNT(i.id_inscricao) as total'))
+                ->groupBy('p.sigla')
                 ->orderByDesc('total')
-                ->pluck('total', 'nome');
+                ->pluck('total', 'sigla');
         });
 
         $cursos = Cache::remember('dashboard.cursos', $ttl, function () {
-            return DB::table('inscricoes as i')
-                ->join('editais as e', 'e.id_edital', '=', 'i.id_edital')
-                ->join('cursos as c', 'c.id_curso', '=', 'e.id_curso')
+            return DB::table('cursos as c')
+                ->leftJoin('editais as e', 'e.id_curso', '=', 'c.id_curso')
+                ->leftJoin('inscricoes as i', 'i.id_edital', '=', 'e.id_edital')
                 ->select('c.tipo', DB::raw('COUNT(i.id_inscricao) as total'))
-                ->groupBy('c.id_curso', 'c.tipo')
+                ->groupBy('c.tipo')
                 ->orderByDesc('total')
                 ->pluck('total', 'tipo');
         });
+             
 
         return view('admin.inicio.index', [
             'editaisAbertos' => $editaisAbertos,
+            'qntEditaisAbertos' => $qntEditaisAbertos,
             'analisesPendentes' => $analisesPendentes,
             'entrevistasAgendadas' => $entrevistasAgendadas,
-            'inscricoesPorDia' => $histograma['valores'],
-            'dias' => $histograma['labels'],
+            'histograma' => $histograma,
             'programas' => $programas,
             'cursos' => $cursos
         ]);

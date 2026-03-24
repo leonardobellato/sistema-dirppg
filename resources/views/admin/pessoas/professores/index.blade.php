@@ -101,6 +101,9 @@
                 paginationPageSizeSelector: [10, 20, 50, 100],
                 paginationPageSize: 10,
                 domLayout: 'autoHeight',
+                onRowClicked: function(event) {
+                    event.node.setSelected(true);
+                },
                 onSelectionChanged: function(event) {
                     const btnExcluir = document.getElementById("btn-excluir");
                     const btnVincular = document.getElementById("btn-vincular");
