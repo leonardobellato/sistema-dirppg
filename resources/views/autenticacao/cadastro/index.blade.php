@@ -76,7 +76,7 @@
 
                 {{-- erro específico do campo email --}}
                 @error('email')
-                    <span class="campo-invalido">O email deve ter até 100 caracteres.</span>
+                    <span class="campo-invalido">O email deve ter até 100 caracteres e ser único na base de dados.</span>
                 @enderror
 
                 <label for="input-email-confirm">Confirme o e-mail:<span class="required-content">*</span></label>

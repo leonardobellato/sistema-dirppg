@@ -18,7 +18,7 @@
                 </p>
             </div>
         @empty
-            <p>Nenhuma entrevista agendada.</p>
+            <p class="text-center">Nenhuma entrevista agendada.</p>
         @endforelse
     </div>
 @endsection

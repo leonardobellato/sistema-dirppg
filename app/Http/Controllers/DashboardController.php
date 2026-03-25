@@ -14,7 +14,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $ttl = 300; // 5 minutos
+        //$ttl = 300; // 5 minutos de duração do cache
+        $ttl = 60; // 1 minuto para desenvolvimento
 
         $editaisAbertos = Edital::where('vigente', true)->with([
             'curso',

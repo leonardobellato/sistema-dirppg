@@ -11,12 +11,10 @@
         <div class="login-container">
             <img src="{{ asset('./logo_dirppg_preto.png')}}" alt="logo" class="img-logo"/>
             
-            <div class="login-container">
-                <div class="information-container">
-                    <p>Sua conta foi criada com sucesso!</p>   
-                    <a href={{ route('autenticacao.login') }}>Entrar na conta</a> 
-                <div>
-            </div>
+            <div class="information-container">
+                <p>Sua conta foi criada com sucesso!</p>   
+                <a href={{ route('autenticacao.login') }}>Entrar na conta</a> 
+            <div>
         </div>
     </main>
 </body>

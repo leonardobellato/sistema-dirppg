@@ -23,28 +23,27 @@ class Edital extends Model
 
     public function faseAtual()
     {
-        $agora = Carbon::now()->startOfDay();
-
         return $this->fasesEdital
-            ->sortByDesc('data_inicio')
-            ->first(function ($fase) use ($agora) {
+            ->sortByDesc('data_fim')
+            ->first(function ($fase) {
+                $agora = Carbon::now();
+
                 if ($fase->data_inicio && $fase->data_fim) {
                     $inicio = Carbon::parse($fase->data_inicio)->startOfDay();
                     $fim = Carbon::parse($fase->data_fim)->endOfDay();
                     return $inicio <= $agora && $fim >= $agora;
                 }
                 return false;
-            });
+            }); 
     }
 
     public function resultadoDisponivel()
     {
-        $agora = Carbon::now()->startOfDay();
-
         return $this->fasesEdital
             ->where('tipo', 'resultado')
-            ->first(function ($fase) use ($agora) {
-                return Carbon::parse($fase->data_fim)->endOfDay() <= $agora;
+            ->first(function ($fase) {
+                return Carbon::parse($fase->data_fim)->startOfDay() <= Carbon::now();
             });
     }
 }
+

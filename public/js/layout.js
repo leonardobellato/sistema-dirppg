@@ -32,3 +32,15 @@ userMenu.addEventListener("click", (e) => {
 document.addEventListener("click", () => {
   dropdownMenu.style.display = "none";
 });
+
+
+// Comportamento de botões submit dos formulários 
+document.querySelectorAll("form").forEach(form => {
+    form.addEventListener("submit", function() {
+        const btn = form.querySelector("button[type='submit']");
+        if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Carregando...";
+        }
+    });
+});

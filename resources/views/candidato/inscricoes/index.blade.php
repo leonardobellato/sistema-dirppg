@@ -25,7 +25,7 @@
                 </p>
             </div>
         @empty
-            <p>Nenhuma inscrição realizada.</p>
+            <p class="text-center">Nenhuma inscrição realizada.</p>
         @endforelse
     </div>
 @endsection

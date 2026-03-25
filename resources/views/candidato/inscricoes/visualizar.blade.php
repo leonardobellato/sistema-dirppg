@@ -134,5 +134,10 @@
         </form>
     </div>
 @endsection
+@push('scripts')
+    <script>
+    console.log({{$faseAtual->tipo}});
+    </script>
+@endpush
 
 

@@ -310,7 +310,7 @@ main h1, h2{
   	}
 
 	.header-brand {
-		font-size: 16px;
+		font-size: 20px;
 	}
 
 	.header-content svg{
@@ -320,6 +320,11 @@ main h1, h2{
 	.username, #username-dropdown{
 		display: none;
 	}
+
+	main h1:first-child, h2:first-child {
+		font-size: 1.4rem;
+	}
+
 }
 
 
@@ -364,4 +369,8 @@ main h1, h2{
     font-size: 20px;
     cursor: pointer;
     font-weight: bold;
+}
+
+.text-center {
+    text-align: center;
 }

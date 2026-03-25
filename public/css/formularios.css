@@ -300,7 +300,9 @@ form h4:nth-of-type(2){
     font-weight: 600;
     border-radius: 5px;
     text-decoration: none;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-grp-form a:hover{
@@ -418,4 +420,11 @@ form h4:nth-of-type(2){
     padding: 6px 0;
     border-radius: 4px;
     transition: 0.2s ease;
+}
+
+@media screen and (max-width: 768px) {
+    .container-form{
+        max-width: 100%;
+        padding: 10px;
+    }
 }
