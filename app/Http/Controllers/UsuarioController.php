@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Usuario;
 use App\Models\Candidato;
 use App\Models\Programa;
+use App\Mail\Email;
 
 class UsuarioController extends Controller
 {

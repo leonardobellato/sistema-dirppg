@@ -139,7 +139,7 @@ Route::prefix('admin')->middleware(['auth', 'permissao:admin'])->group(function 
 
 Route::prefix('professor')->middleware(['auth', 'permissao:professor'])->group(function () {
     Route::get('/', function () {
-        return redirect()->route('analise-inscricoes.index');
+        return redirect()->route('professor.analise-inscricoes.index');
     });
 
     Route::get('/analise-inscricoes', [EditalController::class, 'listarVigentes'])->name('professor.analise-inscricoes.index');

@@ -81,6 +81,7 @@ class InscricaoController extends Controller
         try{
             DB::beginTransaction();
             $inscricao = Inscricao::with('documentos')->findOrFail($id);
+            $edital = $inscricao->edital;
 
             //Atualiza documentos
             foreach ($request->input('documentos', []) as $docData) {
@@ -103,8 +104,10 @@ class InscricaoController extends Controller
 
             DB::commit();
 
+            $tipoUsuario = Auth::user()->tipo;
+
             return redirect()
-                ->back()
+                ->route("{$tipoUsuario}.analise-inscricoes.listar", $edital->id_edital)
                 ->with('success', 'Análise salva com sucesso!');
         } catch (\Exception $e) {
             DB::rollBack();
